@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
     <title>온라인 간편 계산기</title>
     <!-- 1. 구글 애드센스 심사 코드는 여기에 성공적으로 삽입되었습니다. -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1665611122111123"
@@ -47,10 +47,21 @@
 </head>
 <body class="bg-gray-50">
 
-    <div class="flex">
+    <!-- Overlay for Mobile Sidebar -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-10 hidden lg:hidden"></div>
+
+    <div class="relative min-h-screen lg:flex">
         <!-- Left Sidebar -->
-        <aside class="hidden lg:block w-1/4 h-screen sticky top-0 bg-white shadow-md p-6">
-            <h2 class="text-2xl font-bold text-blue-600 border-b pb-4 mb-6">계산기 목록</h2>
+        <aside id="sidebar" class="fixed top-0 left-0 w-3/4 max-w-xs h-full bg-white shadow-xl p-6 z-20 transform -translate-x-full transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:w-1/4 lg:h-screen lg:shadow-md lg:max-w-none lg:sticky">
+            <div class="flex justify-between items-center border-b pb-4 mb-6">
+                 <h2 class="text-2xl font-bold text-blue-600">계산기 목록</h2>
+                 <button id="closeButton" class="lg:hidden text-gray-500 hover:text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                 </button>
+            </div>
+            
             <nav class="space-y-4">
                 <a href="#" data-tab-link="commission" class="block font-semibold text-gray-700 hover:text-blue-500 tab-link-item">부동산 중개보수</a>
                 <a href="#" data-tab-link="interest" class="block font-semibold text-gray-700 hover:text-blue-500 tab-link-item">예/적금 이자</a>
@@ -60,7 +71,6 @@
             <!-- Coupang Partners Banner -->
             <div class="mt-10 pt-6 border-t">
                 <h3 class="font-bold text-lg mb-4 text-gray-800">오늘의 핫딜!</h3>
-                <!-- 여기에 쿠팡 파트너스 배너 코드를 삽입하세요 -->
                 <a href="여기에_쿠팡_파트너스_링크_삽입" target="_blank" class="block border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
                     <img src="https://placehold.co/300x250/E2E8F0/4A5568?text=Coupang+Banner" alt="쿠팡 파트너스 배너" class="w-full">
                     <div class="p-3 bg-gray-50">
@@ -73,25 +83,35 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 p-4 sm:p-6 md:p-8">
+        <main class="w-full p-4 sm:p-6 md:p-8">
+             <!-- Mobile Header -->
+            <header class="lg:hidden flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-gray-800">온라인 간편 계산기</h1>
+                <button id="menuButton" class="p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </header>
+
             <div class="w-full max-w-4xl mx-auto">
                 <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
-                    <!-- Header -->
-                    <div class="text-center mb-6">
+                    <!-- Header for Desktop -->
+                    <div class="text-center mb-6 hidden lg:block">
                         <h1 class="text-3xl sm:text-4xl font-bold text-gray-800">온라인 간편 계산기</h1>
                         <p class="text-gray-500 mt-2">생활에 필요한 모든 계산을 한 곳에서</p>
                     </div>
 
-                    <!-- Tab Navigation (이제 사이드바가 이 역할을 대신하므로 숨김 처리 또는 다른 용도로 사용 가능) -->
+                    <!-- Tab Navigation for Mobile -->
                     <div class="mb-6 border-b border-gray-200 lg:hidden">
                         <nav class="-mb-px flex space-x-6 overflow-x-auto" id="calculatorTabs">
-                            <a href="#commission" data-tab="commission" class="tab-item text-blue-600 border-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg">
+                            <a href="#commission" data-tab="commission" class="tab-item text-blue-600 border-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
                                 부동산
                             </a>
-                            <a href="#interest" data-tab="interest" class="tab-item text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg">
+                            <a href="#interest" data-tab="interest" class="tab-item text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
                                 예/적금
                             </a>
-                            <a href="#robux" data-tab="robux" class="tab-item text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-lg">
+                            <a href="#robux" data-tab="robux" class="tab-item text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
                                 로벅스
                             </a>
                         </nav>
@@ -336,7 +356,27 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // --- 탭 및 계산기 표시 로직 ---
+    // --- Mobile Sidebar Logic ---
+    const menuButton = document.getElementById('menuButton');
+    const closeButton = document.getElementById('closeButton');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    function openSidebar() {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+    }
+
+    function closeSidebar() {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+    }
+
+    menuButton.addEventListener('click', openSidebar);
+    closeButton.addEventListener('click', closeSidebar);
+    overlay.addEventListener('click', closeSidebar);
+
+    // --- Tab and Calculator Display Logic ---
     const calculatorTabs = document.getElementById('calculatorTabs');
     const sidebarLinks = document.querySelectorAll('.tab-link-item');
     
@@ -352,15 +392,12 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     function showTab(tabName) {
-        // Hide all calculators and info sections
         Object.values(calculators).forEach(calc => calc.classList.add('hidden'));
         Object.values(infoSections).forEach(info => info.classList.add('hidden'));
 
-        // Show the selected one
         if (calculators[tabName]) calculators[tabName].classList.remove('hidden');
         if (infoSections[tabName]) infoSections[tabName].classList.remove('hidden');
 
-        // Update mobile tab styles
         const mobileTabs = calculatorTabs.querySelectorAll('.tab-item');
         mobileTabs.forEach(item => {
             item.classList.remove('text-blue-600', 'border-blue-600');
@@ -370,9 +407,13 @@ document.addEventListener('DOMContentLoaded', function() {
                  item.classList.remove('text-gray-500');
             }
         });
+        
+        // Close sidebar after selection on mobile
+        if (window.innerWidth < 1024) {
+            closeSidebar();
+        }
     }
 
-    // Event listeners for mobile tabs
     calculatorTabs.addEventListener('click', e => {
         e.preventDefault();
         const tab = e.target.closest('.tab-item');
@@ -381,7 +422,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Event listeners for sidebar links
     sidebarLinks.forEach(link => {
         link.addEventListener('click', e => {
             e.preventDefault();
@@ -389,7 +429,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // --- 부동산 중개보수 계산기 로직 ---
+    // --- Real Estate Commission Calculator Logic ---
     const tradeTypeContainer = document.getElementById('tradeTypeContainer');
     const priceContainer = document.getElementById('priceContainer');
     const rentContainer = document.getElementById('rentContainer');
@@ -468,7 +508,7 @@ document.addEventListener('DOMContentLoaded', function() {
         commissionResultDetails.innerHTML = details + '<br>VAT 10%는 별도이며, 실제 보수는 협의를 통해 결정됩니다.';
     }
 
-    // --- 예/적금 이자 계산기 로직 ---
+    // --- Savings Interest Calculator Logic ---
     const interestCalculateBtn = document.getElementById('interestCalculateBtn');
     interestCalculateBtn.addEventListener('click', () => {
         const principal = Number(document.getElementById('principal').value);
@@ -492,7 +532,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('interestResultTax').textContent = `- ${tax.toLocaleString('ko-KR')} 원`;
     });
 
-    // --- 로벅스 환율 계산기 로직 ---
+    // --- Robux Currency Calculator Logic ---
     const robuxInput = document.getElementById('robuxInput');
     const krwInput = document.getElementById('krwInput');
     const usdInput = document.getElementById('usdInput');
@@ -571,7 +611,7 @@ document.addEventListener('DOMContentLoaded', function() {
     krwInput.addEventListener('input', () => updateCalculations('krw'));
     usdInput.addEventListener('input', () => updateCalculations('usd'));
 
-    // 초기 탭 설정
+    // Initialize with the first tab shown
     showTab('commission');
 });
 </script>
