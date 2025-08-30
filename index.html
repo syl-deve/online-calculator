@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>온라인 간편 계산기</title>
     <!-- 1. 구글 애드센스 심사 코드는 여기에 성공적으로 삽입되었습니다. -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1665611122111123"
@@ -71,13 +71,12 @@
             <!-- Coupang Partners Banner for Desktop -->
             <div class="mt-10 pt-6 border-t">
                 <h3 class="font-bold text-lg mb-4 text-gray-800">오늘의 핫딜!</h3>
-                <a href="여기에_쿠팡_파트너스_링크_삽입" target="_blank" class="block border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                    <img src="https://placehold.co/300x250/E2E8F0/4A5568?text=Coupang+Banner" alt="쿠팡 파트너스 배너" class="w-full">
-                    <div class="p-3 bg-gray-50">
-                        <p class="font-semibold text-sm text-gray-700">매일 업데이트 되는 특가 상품!</p>
-                        <p class="text-xs text-gray-500">놓치면 후회할 가격!</p>
-                    </div>
-                </a>
+                <!-- START: 실제 쿠팡 파트너스 배너 코드로 교체 -->
+                <script src="https://ads-partners.coupang.com/g.js"></script>
+                <script>
+                    new PartnersCoupang.G({"id":492946,"trackingCode":"AF3175091","subId":null,"template":"carousel","width":"298","height":"150"});
+                </script>
+                <!-- END: 실제 쿠팡 파트너스 배너 코드로 교체 -->
                  <p class="text-xs text-gray-400 mt-2 text-center">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
             </div>
         </aside>
@@ -98,9 +97,12 @@
                 <!-- Coupang Partners Banner for Mobile -->
                 <div class="lg:hidden mb-6">
                      <h3 class="font-bold text-lg mb-4 text-gray-800">오늘의 핫딜!</h3>
-                     <a href="여기에_쿠팡_파트너스_링크_삽입" target="_blank" class="block border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                        <img src="https://placehold.co/600x150/E2E8F0/4A5568?text=Coupang+Banner+(Mobile)" alt="쿠팡 파트너스 배너" class="w-full">
-                     </a>
+                     <!-- START: 실제 쿠팡 파트너스 배너 코드로 교체 -->
+                     <script src="https://ads-partners.coupang.com/g.js"></script>
+                     <script>
+                         new PartnersCoupang.G({"id":492946,"trackingCode":"AF3175091","subId":null,"template":"carousel","width":"298","height":"150"});
+                     </script>
+                     <!-- END: 실제 쿠팡 파트너스 배너 코드로 교체 -->
                      <p class="text-xs text-gray-400 mt-2 text-center">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
                 </div>
 
@@ -627,3 +629,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </body>
 </html>
+
