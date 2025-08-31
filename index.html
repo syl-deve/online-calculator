@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- START: SEO 최적화 태그 -->
-    <title>온라인 간편 계산기 | 부동산 중개보수, 예적금 이자, 로벅스 환율</title>
-    <meta name="description" content="부동산 중개보수(복비), 예금/적금(단리/복리) 이자, 로블록스 로벅스 환율(원화, 달러)을 간편하게 계산하세요. PC와 모바일 구매가격을 모두 지원합니다.">
-    <meta name="keywords" content="온라인 계산기, 간편 계산기, 부동산 계산기, 중개보수 계산기, 복비 계산기, 예금 이자 계산기, 적금 이자 계산기, 로벅스 계산기, 로벅스 환율">
+    <title>온라인 간편 계산기 | 만나이, 연봉 실수령액, 부동산 중개보수, 예적금 이자, 로벅스 환율</title>
+    <meta name="description" content="만 나이, 2025년 연봉 실수령액, 부동산 중개보수(복비), 예금/적금(단리/복리) 이자, 로블록스 로벅스 환율(원화, 달러)을 간편하게 계산하세요.">
+    <meta name="keywords" content="온라인 계산기, 간편 계산기, 만나이 계산기, 연봉 계산기, 연봉 실수령액, 부동산 계산기, 중개보수 계산기, 예금 이자 계산기, 적금 이자 계산기, 로벅스 계산기">
     <!-- END: SEO 최적화 태그 -->
 
     <!-- 1. 구글 애드센스 심사 코드는 여기에 성공적으로 삽입되었습니다. -->
@@ -46,24 +46,32 @@
         <!-- Left Sidebar -->
         <aside id="sidebar" class="fixed top-0 left-0 w-3/4 max-w-xs h-full bg-white shadow-xl p-6 z-20 transform -translate-x-full transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:w-1/4 lg:h-screen lg:shadow-md lg:max-w-none lg:sticky">
             <div class="flex justify-between items-center border-b pb-4 mb-6">
-                 <h2 class="text-xl font-bold text-slate-800 flex items-center">
+                <h2 class="text-xl font-bold text-slate-800 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-slate-600"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
                     계산기 목록
                 </h2>
-                 <button id="closeButton" class="lg:hidden text-gray-500 hover:text-gray-800">
+                <button id="closeButton" class="lg:hidden text-gray-500 hover:text-gray-800">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                 </button>
+                </button>
             </div>
             
             <nav class="space-y-1">
+                 <a href="#" data-tab-link="age" class="flex items-center p-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 tab-link-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-slate-500"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                    만 나이
+                </a>
+                <a href="#" data-tab-link="salary" class="flex items-center p-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 tab-link-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-slate-500"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    연봉 실수령액
+                </a>
                 <a href="#" data-tab-link="commission" class="flex items-center p-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 tab-link-item active-nav-link">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-slate-500"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                     부동산 중개보수
                 </a>
                 <a href="#" data-tab-link="interest" class="flex items-center p-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 tab-link-item">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-slate-500"><path d="M7 21h10"/><path d="M12 21v-8.5a2.5 2.5 0 0 0-5 0V21"/><path d="M12 3v2.55A2.5 2.5 0 0 1 9.55 8H8.55A2.5 2.5 0 0 1 6 5.45V4.03a2.49 2.49 0 0 1 2-2.45V1"/><path d="M12 21v-8.5a2.5 2.5 0 0 1 5 0V21"/><path d="M12 3v2.55A2.5 2.5 0 0 0 14.45 8h.95a2.5 2.5 0 0 0 2.5-2.55V4.03a2.49 2.49 0 0 0-2-2.45V1"/></svg>
+                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-slate-500"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                     예/적금 이자
                 </a>
                 <a href="#" data-tab-link="robux" class="flex items-center p-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 tab-link-item">
@@ -119,6 +127,59 @@
 
                     <!-- Calculator Container -->
                     <div id="calculatorContainer">
+                        <!-- 만 나이 계산기 -->
+                        <div id="ageCalculator" class="hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                                <div class="space-y-6">
+                                    <div>
+                                        <label for="birthDate" class="font-semibold text-gray-700">생년월일</label>
+                                        <input type="date" id="birthDate" class="w-full p-3 border rounded-lg mt-2">
+                                    </div>
+                                    <button id="ageCalculateBtn" class="w-full bg-purple-500 text-white font-bold py-4 rounded-lg hover:bg-purple-600 transition-colors text-lg">나이 계산하기</button>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-6 flex flex-col justify-center items-center text-center h-full">
+                                    <p class="text-gray-600">만 나이는</p>
+                                    <div id="ageResultText" class="text-4xl sm:text-5xl font-bold my-4 text-gray-800">0 세</div>
+                                    <div id="ageResultDetails" class="text-gray-500">생년월일을 입력해주세요.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 연봉 실수령액 계산기 -->
+                        <div id="salaryCalculator" class="hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="font-semibold text-gray-700">퇴직금</label>
+                                        <div class="flex gap-4 mt-2">
+                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center"><input type="radio" name="severancePay" value="exclude" class="mr-2" checked> 미포함(1/12)</label>
+                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center"><input type="radio" name="severancePay" value="include" class="mr-2"> 포함(1/13)</label>
+                                        </div>
+                                    </div>
+                                    <div><label for="annualSalary" class="font-semibold text-gray-700">연봉</label><div class="relative mt-2"><input type="number" id="annualSalary" class="w-full p-3 border rounded-lg" placeholder="예: 50000000"><span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">원</span></div></div>
+                                    <div><label for="dependents" class="font-semibold text-gray-700">부양가족 수 (본인포함)</label><div class="relative mt-2"><input type="number" id="dependents" class="w-full p-3 border rounded-lg" value="1" placeholder="1"></div></div>
+                                    <div><label for="childrenUnder20" class="font-semibold text-gray-700">20세 이하 자녀 수</label><div class="relative mt-2"><input type="number" id="childrenUnder20" class="w-full p-3 border rounded-lg" value="0" placeholder="0"></div></div>
+                                    <button id="salaryCalculateBtn" class="w-full bg-indigo-500 text-white font-bold py-4 rounded-lg hover:bg-indigo-600 transition-colors text-lg">실수령액 계산하기</button>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-6 flex flex-col justify-center text-center space-y-3">
+                                    <div><p class="text-gray-600 text-lg">월 예상 실수령액</p><div id="salaryResultNet" class="text-4xl font-bold text-gray-800">0 원</div></div>
+                                    <div class="w-full pt-3 border-t text-sm">
+                                        <div class="flex justify-between"><span class="text-gray-500">월 예상 소득</span><span id="salaryResultGross" class="font-semibold text-gray-700">0 원</span></div>
+                                        <div class="flex justify-between mt-2 text-red-600"><span class="text-red-500">월 공제액 합계</span><span id="salaryResultDeductions" class="font-semibold">0 원</span></div>
+                                        <div class="pl-4 mt-1 space-y-1 text-xs">
+                                            <div class="flex justify-between"><span class="text-gray-500">┣ 국민연금 (4.5%)</span><span id="salaryDeductPension">0 원</span></div>
+                                            <div class="flex justify-between"><span class="text-gray-500">┣ 건강보험 (3.545%)</span><span id="salaryDeductHealth">0 원</span></div>
+                                            <div class="flex justify-between"><span class="text-gray-500">┣ 장기요양 (12.95%)</span><span id="salaryDeductCare">0 원</span></div>
+                                            <div class="flex justify-between"><span class="text-gray-500">┣ 고용보험 (0.9%)</span><span id="salaryDeductEmployment">0 원</span></div>
+                                            <div class="flex justify-between"><span class="text-gray-500">┣ 소득세 (간이세액)</span><span id="salaryDeductIncomeTax">0 원</span></div>
+                                            <div class="flex justify-between"><span class="text-gray-500">┗ 지방소득세 (10%)</span><span id="salaryDeductLocalTax">0 원</span></div>
+                                        </div>
+                                    </div>
+                                     <div id="salaryErrorText" class="text-red-500 font-semibold pt-2"></div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- 부동산 중개보수 계산기 -->
                         <div id="commissionCalculator">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -180,7 +241,7 @@
                                     <button id="interestCalculateBtn" class="w-full bg-green-500 text-white font-bold py-4 rounded-lg hover:bg-green-600 transition-colors text-lg">이자 계산하기</button>
                                 </div>
                                 <div class="bg-gray-50 rounded-lg p-6 flex flex-col justify-center text-center space-y-4">
-                                     <div><p class="text-gray-600 text-lg">세후 수령액</p><div id="interestResultTotal" class="text-4xl font-bold text-gray-800">0 원</div></div>
+                                      <div><p class="text-gray-600 text-lg">세후 수령액</p><div id="interestResultTotal" class="text-4xl font-bold text-gray-800">0 원</div></div>
                                     <div class="w-full pt-4 border-t">
                                         <div class="flex justify-between"><span class="text-gray-500">원금 합계</span><span id="interestResultPrincipal" class="font-semibold text-gray-700">0 원</span></div>
                                         <div class="flex justify-between mt-2"><span class="text-gray-500">세전 이자</span><span id="interestResultBeforeTax" class="font-semibold text-gray-700">0 원</span></div>
@@ -193,9 +254,9 @@
                         <!-- 로벅스 환율 계산기 (Initially hidden) -->
                         <div id="robuxCalculator" class="hidden">
                             <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg mb-6" role="alert">
-                              <p class="font-bold">참고</p>
-                              <p id="robuxRateInfo">현재 환율 정보를 불러오는 중입니다...</p>
-                              <p id="robuxStandardInfo"></p>
+                                <p class="font-bold">참고</p>
+                                <p id="robuxRateInfo">현재 환율 정보를 불러오는 중입니다...</p>
+                                <p id="robuxStandardInfo"></p>
                             </div>
                             <div class="mb-6">
                                 <label class="font-semibold text-gray-700">구매 플랫폼</label>
@@ -215,6 +276,30 @@
 
                 <!-- SEO Content Section -->
                 <div class="mt-8 bg-white rounded-2xl shadow-lg p-6 sm:p-8 info-section">
+                    <div id="ageInfo" class="info-content hidden">
+                        <h3>만 나이 계산법 알아보기</h3>
+                        <ul class="space-y-5 text-sm">
+                            <li><strong class="block font-semibold text-gray-800">만 나이란?</strong><p class="mt-1 text-gray-600">출생일을 기준으로 0살로 시작하여, 생일이 지날 때마다 1살씩 더하는 국제 표준 나이 계산법입니다. 2023년 6월 28일부터 대한민국에서도 법적, 사회적 나이 계산법이 '만 나이'로 통일되었습니다.</p></li>
+                            <li><strong class="block font-semibold text-gray-800">간단 계산법</strong><p class="mt-1 text-gray-600">올해 생일이 지났다면: <span class="font-bold text-blue-600">[현재 연도] - [출생 연도]</span><br>올해 생일이 지나지 않았다면: <span class="font-bold text-red-600">[현재 연도] - [출생 연도] - 1</span></p></li>
+                            <li><strong class="block font-semibold text-gray-800">언제 사용할까요?</strong><p class="mt-1 text-gray-600">이제부터는 법령, 계약, 공문서 등 모든 공식적인 서류와 일상생활에서 '나이'를 언급할 때는 특별한 규정이 없는 한 '만 나이'를 의미합니다. (예: 선거권, 연금 수급, 정년 등)</p></li>
+                        </ul>
+                    </div>
+                     <div id="salaryInfo" class="info-content hidden">
+                        <h3>2025년 연봉 실수령액 계산 기준</h3>
+                        <ul class="space-y-5 text-sm">
+                             <li><strong class="block font-semibold text-gray-800">4대 보험 요율 (근로자 부담분 기준)</strong>
+                                <p class="mt-1 text-gray-600">
+                                    - 국민연금: 과세소득의 <span class="font-bold text-indigo-600">4.5%</span> (월 상한액 265,500원)<br>
+                                    - 건강보험: 보수월액의 <span class="font-bold text-indigo-600">3.545%</span><br>
+                                    - 장기요양보험: 건강보험료의 <span class="font-bold text-indigo-600">12.95%</span><br>
+                                    - 고용보험: 과세소득의 <span class="font-bold text-indigo-600">0.9%</span>
+                                </p>
+                            </li>
+                             <li><strong class="block font-semibold text-gray-800">근로소득세 (소득세)</strong><p class="mt-1 text-gray-600">국세청의 '근로소득 간이세액표'에 따라 월 급여와 공제대상 가족 수(부양가족, 20세 이하 자녀)를 기준으로 정해진 세금을 원천징수합니다.</p></li>
+                             <li><strong class="block font-semibold text-gray-800">지방소득세</strong><p class="mt-1 text-gray-600">위에서 계산된 근로소득세의 <span class="font-bold text-indigo-600">10%</span>가 지방소득세로 추가 공제됩니다.</p></li>
+                             <li><strong class="block font-semibold text-gray-800">참고 사항</strong><p class="mt-1 text-gray-600">본 계산기는 비과세 소득(예: 식대, 차량유지비 등)을 고려하지 않은 결과이며, 실제 수령액은 개인의 조건에 따라 다소 차이가 있을 수 있습니다.</p></li>
+                        </ul>
+                    </div>
                     <div id="commissionInfo" class="info-content">
                         <h3>2025년 부동산 중개보수 요율표 (주택 기준)</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -291,17 +376,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const desktopTitle = document.getElementById('currentCalculatorTitle');
     const mobileTitle = document.getElementById('currentCalculatorTitleMobile');
     const calculatorTitles = {
+        age: '만 나이 계산기',
+        salary: '연봉 실수령액 계산기',
         commission: '부동산 중개보수',
         interest: '예/적금 이자',
         robux: '로벅스 환율'
     };
     
     const calculators = {
+        age: document.getElementById('ageCalculator'),
+        salary: document.getElementById('salaryCalculator'),
         commission: document.getElementById('commissionCalculator'),
         interest: document.getElementById('interestCalculator'),
         robux: document.getElementById('robuxCalculator')
     };
     const infoSections = {
+        age: document.getElementById('ageInfo'),
+        salary: document.getElementById('salaryInfo'),
         commission: document.getElementById('commissionInfo'),
         interest: document.getElementById('interestInfo'),
         robux: document.getElementById('robuxInfo')
@@ -336,6 +427,104 @@ document.addEventListener('DOMContentLoaded', function() {
             showTab(link.dataset.tabLink);
         });
     });
+
+    // --- Age Calculator ---
+    const ageCalculateBtn = document.getElementById('ageCalculateBtn');
+    ageCalculateBtn.addEventListener('click', () => {
+        const birthDateInput = document.getElementById('birthDate');
+        const ageResultText = document.getElementById('ageResultText');
+        const ageResultDetails = document.getElementById('ageResultDetails');
+        
+        if (!birthDateInput.value) {
+            ageResultDetails.textContent = "생년월일을 선택해주세요.";
+            return;
+        }
+
+        const birthDate = new Date(birthDateInput.value);
+        const today = new Date();
+        
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        
+        ageResultText.textContent = `${age} 세`;
+        ageResultDetails.textContent = `오늘 날짜: ${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
+    });
+
+    // --- Salary Calculator ---
+    const salaryCalculateBtn = document.getElementById('salaryCalculateBtn');
+    salaryCalculateBtn.addEventListener('click', () => {
+        const annualSalary = Number(document.getElementById('annualSalary').value);
+        const severancePay = document.querySelector('input[name="severancePay"]:checked').value;
+        let dependents = Number(document.getElementById('dependents').value);
+        let childrenUnder20 = Number(document.getElementById('childrenUnder20').value);
+        const salaryErrorText = document.getElementById('salaryErrorText');
+        
+        if(annualSalary <= 0) {
+            salaryErrorText.textContent = "연봉을 정확히 입력해주세요.";
+            return;
+        }
+        if(dependents < 1) {
+            dependents = 1;
+            document.getElementById('dependents').value = 1;
+        }
+        if(childrenUnder20 < 0) {
+            childrenUnder20 = 0;
+            document.getElementById('childrenUnder20').value = 0;
+        }
+        salaryErrorText.textContent = "";
+
+        const monthlySalary = Math.round(annualSalary / (severancePay === 'include' ? 13 : 12));
+        
+        // 4대 보험 계산 (2025년 요율 기준, 상한액 적용)
+        const pensionCap = 5900000; // 국민연금 월 소득 상한액 (2024년 7월 기준)
+        const monthlyPensionBase = Math.min(monthlySalary, pensionCap);
+        const nationalPension = Math.floor(monthlyPensionBase * 0.045 / 10) * 10;
+        
+        const healthInsurance = Math.floor(monthlySalary * 0.03545 / 10) * 10;
+        const longTermCare = Math.floor(healthInsurance * 0.1295 / 10) * 10;
+        const employmentInsurance = Math.floor(monthlySalary * 0.009 / 10) * 10;
+        
+        // 근로소득세 계산 (근로소득 간이세액표 기준)
+        const totalDependents = dependents + childrenUnder20;
+        const incomeTax = calculateIncomeTax(monthlySalary, totalDependents);
+        const localTax = Math.floor(incomeTax * 0.1 / 10) * 10;
+
+        const totalDeductions = nationalPension + healthInsurance + longTermCare + employmentInsurance + incomeTax + localTax;
+        const netIncome = monthlySalary - totalDeductions;
+
+        // 결과 표시
+        document.getElementById('salaryResultNet').textContent = `${netIncome.toLocaleString('ko-KR')} 원`;
+        document.getElementById('salaryResultGross').textContent = `${monthlySalary.toLocaleString('ko-KR')} 원`;
+        document.getElementById('salaryResultDeductions').textContent = `- ${totalDeductions.toLocaleString('ko-KR')} 원`;
+        document.getElementById('salaryDeductPension').textContent = `- ${nationalPension.toLocaleString('ko-KR')} 원`;
+        document.getElementById('salaryDeductHealth').textContent = `- ${healthInsurance.toLocaleString('ko-KR')} 원`;
+        document.getElementById('salaryDeductCare').textContent = `- ${longTermCare.toLocaleString('ko-KR')} 원`;
+        document.getElementById('salaryDeductEmployment').textContent = `- ${employmentInsurance.toLocaleString('ko-KR')} 원`;
+        document.getElementById('salaryDeductIncomeTax').textContent = `- ${incomeTax.toLocaleString('ko-KR')} 원`;
+        document.getElementById('salaryDeductLocalTax').textContent = `- ${localTax.toLocaleString('ko-KR')} 원`;
+    });
+    
+    function calculateIncomeTax(monthlySalary, dependents) {
+        // 2024년 근로소득 간이세액표 기준 단순화된 데이터
+        // 실제로는 더 복잡하지만, 일반적인 구간에 대해 근사치 제공
+        const taxTable = {
+            1: [0, 0, 0, 0, 0, 1630, 6210, 14360, 24360, 36240, 50240, 77240, 105240, 134240, 163240, 203240, 243240, 283240, 323240, 363240, 403240, 448240, 493240, 538240, 583240, 628240, 673240, 718240, 763240, 808240, 853240],
+            2: [0, 0, 0, 0, 0, 0, 0, 2980, 10690, 20690, 32810, 57810, 83810, 110810, 137810, 175310, 212810, 250310, 287810, 325310, 362810, 405310, 447810, 490310, 532810, 575310, 617810, 660310, 702810, 745310, 787810],
+            3: [0, 0, 0, 0, 0, 0, 0, 0, 0, 4450, 15070, 38070, 62070, 87070, 112070, 147070, 182070, 217070, 252070, 287070, 322070, 362070, 402070, 442070, 482070, 522070, 562070, 602070, 642070, 682070, 722070]
+        };
+        const salaryIndex = Math.floor(monthlySalary / 200000) - 5;
+        const d = Math.max(1, Math.min(dependents, 3));
+        if (salaryIndex < 0 || salaryIndex >= taxTable[d].length) {
+            // 표 범위를 벗어나는 고액 연봉자에 대한 근사치 계산
+            if (monthlySalary > 8000000) return Math.floor(monthlySalary * 0.15 - 500000);
+            return 0;
+        }
+        return taxTable[d][salaryIndex] || 0;
+    }
 
     // --- Real Estate Commission Calculator Logic ---
     const tradeTypeContainer = document.getElementById('tradeTypeContainer');
@@ -463,10 +652,10 @@ document.addEventListener('DOMContentLoaded', function() {
     krwInput.addEventListener('input', () => updateCalculations('krw'));
     usdInput.addEventListener('input', () => updateCalculations('usd'));
 
-    showTab('commission');
+    // 초기 화면을 만 나이 계산기로 설정
+    showTab('age');
 });
 </script>
 
 </body>
 </html>
-
