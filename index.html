@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- START: SEO 최적화 태그 -->
-    <title>온라인 간편 계산기 | 코인 환율, 세계 환율, 만나이, 연봉, 부동산, 예적금, 로벅스, BMI, D-Day, 대출, 학점</title>
-    <meta name="description" content="코인/국가 환율, 만 나이, 연봉 실수령액, 부동산 중개보수, 예적금 이자, BMI, D-Day, 대출 이자, 학점까지 모든 것을 간편하게 계산하세요.">
-    <meta name="keywords" content="온라인 계산기, 만능 계산기, 코인 계산기, 환율 계산기, 만나이 계산기, 연봉 계산기, 부동산 계산기, 이자 계산기, BMI 계산기, D-Day 계산기, 대출 이자 계산기, 학점 계산기">
+    <title>온라인 간편 계산기 | 데이터 단위, 코인 환율, 세계 환율, 만나이, 연봉, 부동산, 예적금, BMI, D-Day, 대출, 학점</title>
+    <meta name="description" content="데이터 단위(TB, GB, MB), 코인/국가 환율, 만 나이, 연봉 실수령액, 부동산 중개보수, 예적금 이자, BMI, D-Day, 대출 이자, 학점까지 모든 것을 간편하게 계산하세요.">
+    <meta name="keywords" content="데이터 단위 계산기, 온라인 계산기, 만능 계산기, 코인 계산기, 환율 계산기, 만나이 계산기, 연봉 계산기, 부동산 계산기, 이자 계산기, BMI 계산기, D-Day 계산기, 대출 이자 계산기, 학점 계산기">
     <!-- END: SEO 최적화 태그 -->
 
     <!-- 1. 구글 애드센스 심사 코드는 여기에 성공적으로 삽입되었습니다. -->
@@ -88,6 +88,10 @@
             </div>
             
             <nav class="space-y-1 flex-grow overflow-y-auto">
+                 <a href="#" data-tab-link="unitConverter" class="flex items-center p-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 tab-link-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-slate-500"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                    데이터 단위
+                </a>
                  <a href="#" data-tab-link="crypto" class="flex items-center p-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 tab-link-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-slate-500"><circle cx="8" cy="18" r="4"/><path d="M12 18V2l7 4-7 4"/><path d="m6 12 6-4 6 4"/><path d="M6 6 12 2l6 4"/></svg>
                     주요 코인 환율
@@ -167,7 +171,7 @@
                      <h3 class="font-bold text-lg mb-4 text-gray-800">오늘의 핫딜!</h3>
                      <script src="https://ads-partners.coupang.com/g.js"></script>
                      <script>
-                          new PartnersCoupang.G({"id":914985,"template":"carousel","trackingCode":"AF3175091","width":"320","height":"300","tsource":""});
+                           new PartnersCoupang.G({"id":914985,"template":"carousel","trackingCode":"AF3175091","width":"320","height":"300","tsource":""});
                      </script>
                 </div>
 
@@ -181,6 +185,39 @@
 
                     <!-- Calculator Container -->
                     <div id="calculatorContainer">
+                        <!-- 데이터 단위 계산기 -->
+                        <div id="unitConverterCalculator" class="hidden">
+                            <div class="space-y-6 max-w-md mx-auto">
+                                <div>
+                                    <label for="unitTb" class="font-semibold text-gray-700 flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-2 text-sky-500"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                        테라바이트 (TB)
+                                    </label>
+                                    <input type="number" id="unitTb" data-unit="TB" class="unit-input w-full p-3 border rounded-lg mt-1 text-xl" placeholder="1">
+                                </div>
+                                <div>
+                                    <label for="unitGb" class="font-semibold text-gray-700 flex items-center">
+                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-2 text-indigo-500"><path d="M20 12v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4"/><path d="M12 2v10"/><path d="M15 9l-3-3-3 3"/></svg>
+                                        기가바이트 (GB)
+                                    </label>
+                                    <input type="number" id="unitGb" data-unit="GB" class="unit-input w-full p-3 border rounded-lg mt-1 text-xl" placeholder="1024">
+                                </div>
+                                <div>
+                                    <label for="unitMb" class="font-semibold text-gray-700 flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-2 text-violet-500"><path d="M12 2v10"/><path d="M15 9l-3 3-3-3"/></svg>
+                                        메가바이트 (MB)
+                                    </label>
+                                    <input type="number" id="unitMb" data-unit="MB" class="unit-input w-full p-3 border rounded-lg mt-1 text-xl" placeholder="1048576">
+                                </div>
+                                <div class="mt-6 flex justify-end">
+                                    <button data-calculator="unitConverter" class="reset-btn bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">초기화</button>
+                                </div>
+                                <div class="coupang-banner">
+                                    <a href="https://link.coupang.com/a/cNQaby" target="_blank" referrerpolicy="unsafe-url"><img src="https://ads-partners.coupang.com/banners/321206?subId=&traceId=V0-301-bae0f72e5e59e45f-I321206&w=728&h=90" alt=""></a>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- 주요 코인 환율 계산기 -->
                         <div id="cryptoCalculator" class="hidden">
                             <div class="bg-amber-50 border-l-4 border-amber-500 text-amber-700 p-4 rounded-lg mb-6" role="alert">
@@ -544,7 +581,7 @@
                                 <div class="result-container">
                                     <div id="gpaResultText" class="text-4xl sm:text-5xl font-bold my-4 text-gray-800">0.00 / 4.5</div>
                                      <button id="copyGpaBtn" class="copy-btn" title="결과 복사">
-                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
                                     </button>
                                     <span id="copyGpaMsg" class="copy-message hidden">복사 완료!</span>
                                 </div>
@@ -559,6 +596,19 @@
 
                 <!-- SEO Content Section -->
                 <div class="mt-8 bg-white rounded-2xl shadow-lg p-6 sm:p-8 info-section">
+                    <div id="unitConverterInfo" class="info-content hidden">
+                        <h3>데이터 단위 알아보기</h3>
+                        <ul class="space-y-5 text-sm">
+                            <li><strong class="block font-semibold text-gray-800">데이터 단위의 기준</strong><p class="mt-1 text-gray-600">컴퓨터 데이터의 기본 단위는 바이트(Byte)입니다. 이 계산기는 일반적으로 사용되는 1024 단위를 기준으로 변환합니다.</p></li>
+                            <li><strong class="block font-semibold text-gray-800">단위 간 관계</strong>
+                                <ul class="list-disc list-inside mt-1 text-gray-600">
+                                    <li><span class="font-bold text-sky-600">1 테라바이트 (TB)</span> = 1,024 기가바이트 (GB)</li>
+                                    <li><span class="font-bold text-indigo-600">1 기가바이트 (GB)</span> = 1,024 메가바이트 (MB)</li>
+                                </ul>
+                            </li>
+                            <li><strong class="block font-semibold text-gray-800">참고: 1000 단위 기준</strong><p class="mt-1 text-gray-600">하드 디스크 드라이브(HDD)나 SSD 같은 저장 장치 제조업체에서는 종종 1GB를 1,000MB로 계산하여 용량을 표기합니다. 이로 인해 운영체제에서 표시되는 실제 사용 가능 용량과 차이가 발생할 수 있습니다.</p></li>
+                        </ul>
+                    </div>
                     <div id="cryptoInfo" class="info-content hidden">
                         <h3>암호화폐 투자 전 알아둘 점</h3>
                         <ul class="space-y-5 text-sm">
@@ -588,10 +638,10 @@
                         <ul class="space-y-5 text-sm">
                              <li><strong class="block font-semibold text-gray-800">4대 보험 요율 (근로자 부담분 기준)</strong>
                                  <p class="mt-1 text-gray-600">
-                                     - 국민연금: 과세소득의 <span class="font-bold text-indigo-600">4.5%</span> (월 상한액 265,500원)<br>
-                                     - 건강보험: 보수월액의 <span class="font-bold text-indigo-600">3.545%</span><br>
-                                     - 장기요양보험: 건강보험료의 <span class="font-bold text-indigo-600">12.95%</span><br>
-                                     - 고용보험: 과세소득의 <span class="font-bold text-indigo-600">0.9%</span>
+                                      - 국민연금: 과세소득의 <span class="font-bold text-indigo-600">4.5%</span> (월 상한액 265,500원)<br>
+                                      - 건강보험: 보수월액의 <span class="font-bold text-indigo-600">3.545%</span><br>
+                                      - 장기요양보험: 건강보험료의 <span class="font-bold text-indigo-600">12.95%</span><br>
+                                      - 고용보험: 과세소득의 <span class="font-bold text-indigo-600">0.9%</span>
                                  </p>
                             </li>
                              <li><strong class="block font-semibold text-gray-800">근로소득세 (소득세)</strong><p class="mt-1 text-gray-600">국세청의 '근로소득 간이세액표'에 따라 월 급여와 공제대상 가족 수(부양가족, 20세 이하 자녀)를 기준으로 정해진 세금을 원천징수합니다.</p></li>
@@ -741,13 +791,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const desktopTitle = document.getElementById('currentCalculatorTitle');
     const mobileTitle = document.getElementById('currentCalculatorTitleMobile');
     const calculatorTitles = {
-        crypto: '주요 코인 환율', exchangeRate: '세계 환율', age: '만 나이', salary: '연봉 실수령액', commission: '부동산 중개보수', interest: '예/적금 이자', robux: '로벅스 환율', bmi: 'BMI (비만도)', dday: 'D-Day', loan: '대출 이자', gpa: '학점'
+        unitConverter: '데이터 단위', crypto: '주요 코인 환율', exchangeRate: '세계 환율', age: '만 나이', salary: '연봉 실수령액', commission: '부동산 중개보수', interest: '예/적금 이자', robux: '로벅스 환율', bmi: 'BMI (비만도)', dday: 'D-Day', loan: '대출 이자', gpa: '학점'
     };
     const calculators = {
-        crypto: document.getElementById('cryptoCalculator'), exchangeRate: document.getElementById('exchangeRateCalculator'), age: document.getElementById('ageCalculator'), salary: document.getElementById('salaryCalculator'), commission: document.getElementById('commissionCalculator'), interest: document.getElementById('interestCalculator'), robux: document.getElementById('robuxCalculator'), bmi: document.getElementById('bmiCalculator'), dday: document.getElementById('ddayCalculator'), loan: document.getElementById('loanCalculator'), gpa: document.getElementById('gpaCalculator')
+        unitConverter: document.getElementById('unitConverterCalculator'), crypto: document.getElementById('cryptoCalculator'), exchangeRate: document.getElementById('exchangeRateCalculator'), age: document.getElementById('ageCalculator'), salary: document.getElementById('salaryCalculator'), commission: document.getElementById('commissionCalculator'), interest: document.getElementById('interestCalculator'), robux: document.getElementById('robuxCalculator'), bmi: document.getElementById('bmiCalculator'), dday: document.getElementById('ddayCalculator'), loan: document.getElementById('loanCalculator'), gpa: document.getElementById('gpaCalculator')
     };
     const infoSections = {
-        crypto: document.getElementById('cryptoInfo'), exchangeRate: document.getElementById('exchangeRateInfo'), age: document.getElementById('ageInfo'), salary: document.getElementById('salaryInfo'), commission: document.getElementById('commissionInfo'), interest: document.getElementById('interestInfo'), robux: document.getElementById('robuxInfo'), bmi: document.getElementById('bmiInfo'), dday: document.getElementById('ddayInfo'), loan: document.getElementById('loanInfo'), gpa: document.getElementById('gpaInfo')
+        unitConverter: document.getElementById('unitConverterInfo'), crypto: document.getElementById('cryptoInfo'), exchangeRate: document.getElementById('exchangeRateInfo'), age: document.getElementById('ageInfo'), salary: document.getElementById('salaryInfo'), commission: document.getElementById('commissionInfo'), interest: document.getElementById('interestInfo'), robux: document.getElementById('robuxInfo'), bmi: document.getElementById('bmiInfo'), dday: document.getElementById('ddayInfo'), loan: document.getElementById('loanInfo'), gpa: document.getElementById('gpaInfo')
     };
 
     function showTab(tabName) {
@@ -783,7 +833,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (unformatted === '' || (!isNaN(parseFloat(unformatted)) && isFinite(unformatted))) {
                      e.target.value = formatNumber(unformatted);
                 } else {
-                    e.target.value = e.target.value.slice(0, -1);
+                     e.target.value = e.target.value.slice(0, -1);
                 }
             });
         }
@@ -1304,11 +1354,75 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add initial rows
         addGpaRow(); addGpaRow(); addGpaRow();
     }
+    
+    // 12. Unit Converter
+    function setupUnitConverter() {
+        const unitInputs = document.querySelectorAll('.unit-input');
+        let isUnitCalculating = false;
+
+        const TB_TO_MB = 1024 * 1024;
+        const GB_TO_MB = 1024;
+
+        function updateUnitCalculations(sourceUnit) {
+            if (isUnitCalculating) return;
+            isUnitCalculating = true;
+
+            const sourceInput = document.querySelector(`.unit-input[data-unit="${sourceUnit}"]`);
+            const sourceValue = parseFloat(sourceInput.value);
+
+            if (!isNaN(sourceValue) && sourceInput.value !== '') {
+                let valueInMb = 0;
+                if (sourceUnit === 'TB') {
+                    valueInMb = sourceValue * TB_TO_MB;
+                } else if (sourceUnit === 'GB') {
+                    valueInMb = sourceValue * GB_TO_MB;
+                } else { // MB
+                    valueInMb = sourceValue;
+                }
+
+                unitInputs.forEach(input => {
+                    const targetUnit = input.dataset.unit;
+                    if (targetUnit !== sourceUnit) {
+                        let targetValue;
+                        if (targetUnit === 'TB') {
+                            targetValue = valueInMb / TB_TO_MB;
+                        } else if (targetUnit === 'GB') {
+                            targetValue = valueInMb / GB_TO_MB;
+                        } else { // MB
+                            targetValue = valueInMb;
+                        }
+                        
+                        // Handle precision for better display
+                         if (targetValue === 0) {
+                            input.value = 0;
+                        } else if (targetValue < 1) {
+                             input.value = parseFloat(targetValue.toPrecision(6));
+                        } else {
+                             input.value = parseFloat(targetValue.toPrecision(9));
+                        }
+                    }
+                });
+            } else {
+                // Clear all other inputs if the source is empty
+                unitInputs.forEach(input => {
+                    if (input !== sourceInput) {
+                        input.value = '';
+                    }
+                });
+            }
+            isUnitCalculating = false;
+        }
+
+        unitInputs.forEach(input => {
+            input.addEventListener('input', () => updateUnitCalculations(input.dataset.unit));
+        });
+    }
 
     // --- INITIALIZE ---
     function initialize() {
-        const initialTab = window.location.hash.substring(1) || 'crypto';
+        const initialTab = window.location.hash.substring(1) || 'unitConverter';
         
+        setupUnitConverter();
         setupCryptoCalculator();
         setupExchangeRateCalculator();
         setupAgeCalculator();
@@ -1330,5 +1444,3 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </body>
 </html>
-
-
