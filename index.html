@@ -193,21 +193,21 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-2 text-sky-500"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                                         테라바이트 (TB)
                                     </label>
-                                    <input type="number" id="unitTb" data-unit="TB" class="unit-input w-full p-3 border rounded-lg mt-1 text-xl" placeholder="1">
+                                    <input type="text" id="unitTb" data-unit="TB" class="unit-input w-full p-3 border rounded-lg mt-1 text-xl" placeholder="1">
                                 </div>
                                 <div>
                                     <label for="unitGb" class="font-semibold text-gray-700 flex items-center">
                                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-2 text-indigo-500"><path d="M20 12v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4"/><path d="M12 2v10"/><path d="M15 9l-3-3-3 3"/></svg>
                                         기가바이트 (GB)
                                     </label>
-                                    <input type="number" id="unitGb" data-unit="GB" class="unit-input w-full p-3 border rounded-lg mt-1 text-xl" placeholder="1024">
+                                    <input type="text" id="unitGb" data-unit="GB" class="unit-input w-full p-3 border rounded-lg mt-1 text-xl" placeholder="1,024">
                                 </div>
                                 <div>
                                     <label for="unitMb" class="font-semibold text-gray-700 flex items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-2 text-violet-500"><path d="M12 2v10"/><path d="M15 9l-3 3-3-3"/></svg>
                                         메가바이트 (MB)
                                     </label>
-                                    <input type="number" id="unitMb" data-unit="MB" class="unit-input w-full p-3 border rounded-lg mt-1 text-xl" placeholder="1048576">
+                                    <input type="text" id="unitMb" data-unit="MB" class="unit-input w-full p-3 border rounded-lg mt-1 text-xl" placeholder="1,048,576">
                                 </div>
                                 <div class="mt-6 flex justify-end">
                                     <button data-calculator="unitConverter" class="reset-btn bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">초기화</button>
@@ -826,12 +826,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- Auto-formatting number inputs ---
     document.querySelectorAll('input[type="text"]').forEach(input => {
-        const idsToFormat = ['cryptoKrw', 'krw', 'annualSalary', 'price', 'deposit', 'monthlyRent', 'principal', 'loanPrincipal', 'krwInputRobux'];
+        const idsToFormat = ['cryptoKrw', 'krw', 'annualSalary', 'price', 'deposit', 'monthlyRent', 'principal', 'loanPrincipal', 'krwInputRobux', 'unitTb', 'unitGb', 'unitMb'];
         if(idsToFormat.includes(input.id)) {
             input.addEventListener('input', (e) => {
                 const unformatted = unformatNumber(e.target.value);
-                if (unformatted === '' || (!isNaN(parseFloat(unformatted)) && isFinite(unformatted))) {
-                     e.target.value = formatNumber(unformatted);
+                // Allow decimal points
+                if (/^-?\d*\.?\d*$/.test(unformatted) || unformatted === '') {
+                    const parts = unformatted.split('.');
+                    parts[0] = formatNumber(parts[0]);
+                    e.target.value = parts.join('.');
                 } else {
                      e.target.value = e.target.value.slice(0, -1);
                 }
@@ -1368,7 +1371,7 @@ document.addEventListener('DOMContentLoaded', function() {
             isUnitCalculating = true;
 
             const sourceInput = document.querySelector(`.unit-input[data-unit="${sourceUnit}"]`);
-            const sourceValue = parseFloat(sourceInput.value);
+            const sourceValue = parseFloat(unformatNumber(sourceInput.value));
 
             if (!isNaN(sourceValue) && sourceInput.value !== '') {
                 let valueInMb = 0;
@@ -1392,14 +1395,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             targetValue = valueInMb;
                         }
                         
-                        // Handle precision for better display
-                         if (targetValue === 0) {
-                            input.value = 0;
-                        } else if (targetValue < 1) {
-                             input.value = parseFloat(targetValue.toPrecision(6));
-                        } else {
-                             input.value = parseFloat(targetValue.toPrecision(9));
-                        }
+                        const parts = targetValue.toString().split('.');
+                        parts[0] = formatNumber(parts[0]);
+                        input.value = parts.join('.');
                     }
                 });
             } else {
@@ -1444,3 +1442,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </body>
 </html>
+
