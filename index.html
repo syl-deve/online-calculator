@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>온라인 간편 계산기</title>
     <!-- 1. 구글 애드센스 심사 코드는 여기에 성공적으로 삽입되었습니다. -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1665611122111123"
@@ -23,25 +23,7 @@
             -moz-appearance: textfield;
         }
         .info-section h3 {
-            @apply text-xl font-bold text-gray-800 mb-3;
-        }
-        .info-section p, .info-section li {
-            @apply text-gray-600 leading-relaxed;
-        }
-        .info-section ul {
-            @apply list-disc list-inside space-y-2 mb-6;
-        }
-        .info-section table {
-            @apply w-full text-left border-collapse mb-6;
-        }
-        .info-section th, .info-section td {
-            @apply border border-gray-200 px-4 py-2;
-        }
-        .info-section th {
-            @apply bg-gray-50 font-semibold;
-        }
-        .coupang-link {
-            @apply inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors no-underline;
+            @apply text-xl font-bold text-gray-800 mb-4;
         }
         /* 활성화된 네비게이션 링크 스타일 */
         .active-nav-link {
@@ -87,14 +69,12 @@
             <!-- Coupang Partners Banner for Desktop -->
             <div class="mt-10 pt-6 border-t">
                 <h3 class="font-bold text-lg mb-4 text-gray-800">오늘의 핫딜!</h3>
-                <!-- START: 배너 깨짐 방지용 래퍼 추가 -->
                 <div class="w-full overflow-hidden">
                     <script src="https://ads-partners.coupang.com/g.js"></script>
                     <script>
                         new PartnersCoupang.G({"id":914985,"template":"carousel","trackingCode":"AF3175091","width":"320","height":"300","tsource":""});
                     </script>
                 </div>
-                <!-- END: 배너 깨짐 방지용 래퍼 추가 -->
             </div>
         </aside>
 
@@ -128,9 +108,7 @@
                     <div class="text-center mb-6 hidden lg:block">
                         <h1 class="text-3xl sm:text-4xl font-bold text-gray-800">온라인 간편 계산기</h1>
                         <p class="text-gray-500 mt-2">생활에 필요한 모든 계산을 한 곳에서</p>
-                        <!-- START: 현재 계산기 표시 타이틀 추가 -->
                         <h2 id="currentCalculatorTitle" class="text-2xl font-bold text-blue-600 mt-4"></h2>
-                        <!-- END: 현재 계산기 표시 타이틀 추가 -->
                     </div>
 
                     <!-- Calculator Container -->
@@ -138,131 +116,69 @@
                         <!-- 부동산 중개보수 계산기 -->
                         <div id="commissionCalculator">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <!-- Input Section -->
                                 <div class="space-y-6">
                                     <div>
                                         <label class="font-semibold text-gray-700">거래 종류</label>
                                         <div class="flex gap-4 mt-2" id="tradeTypeContainer">
-                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center">
-                                                <input type="radio" name="tradeType" value="매매" class="mr-2" checked> 매매/교환
-                                            </label>
-                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center">
-                                                <input type="radio" name="tradeType" value="임대차" class="mr-2"> 임대차
-                                            </label>
+                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center"><input type="radio" name="tradeType" value="매매" class="mr-2" checked> 매매/교환</label>
+                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center"><input type="radio" name="tradeType" value="임대차" class="mr-2"> 임대차</label>
                                         </div>
                                     </div>
                                     <div>
                                         <label class="font-semibold text-gray-700">부동산 종류</label>
                                         <div class="flex gap-4 mt-2">
-                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center">
-                                                <input type="radio" name="propertyType" value="주택" class="mr-2" checked> 주택
-                                            </label>
-                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center">
-                                                <input type="radio" name="propertyType" value="오피스텔" class="mr-2"> 오피스텔
-                                            </label>
-                                             <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center">
-                                                <input type="radio" name="propertyType" value="기타" class="mr-2"> 그 외
-                                            </label>
+                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center"><input type="radio" name="propertyType" value="주택" class="mr-2" checked> 주택</label>
+                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center"><input type="radio" name="propertyType" value="오피스텔" class="mr-2"> 오피스텔</label>
+                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center"><input type="radio" name="propertyType" value="기타" class="mr-2"> 그 외</label>
                                         </div>
                                     </div>
                                     <div id="priceContainer">
                                         <label for="price" class="font-semibold text-gray-700">매매가</label>
-                                        <div class="relative mt-2">
-                                            <input type="number" id="price" class="w-full p-3 border rounded-lg" placeholder="예: 500000000">
-                                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">원</span>
-                                        </div>
+                                        <div class="relative mt-2"><input type="number" id="price" class="w-full p-3 border rounded-lg" placeholder="예: 500000000"><span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">원</span></div>
                                     </div>
                                     <div id="rentContainer" class="hidden space-y-4">
-                                         <div>
-                                            <label for="deposit" class="font-semibold text-gray-700">보증금</label>
-                                            <div class="relative mt-2">
-                                                <input type="number" id="deposit" class="w-full p-3 border rounded-lg" placeholder="예: 50000000">
-                                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">원</span>
-                                            </div>
-                                        </div>
-                                         <div>
-                                            <label for="monthlyRent" class="font-semibold text-gray-700">월세</label>
-                                            <div class="relative mt-2">
-                                                <input type="number" id="monthlyRent" class="w-full p-3 border rounded-lg" placeholder="예: 700000">
-                                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">원</span>
-                                            </div>
-                                        </div>
+                                         <div><label for="deposit" class="font-semibold text-gray-700">보증금</label><div class="relative mt-2"><input type="number" id="deposit" class="w-full p-3 border rounded-lg" placeholder="예: 50000000"><span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">원</span></div></div>
+                                         <div><label for="monthlyRent" class="font-semibold text-gray-700">월세</label><div class="relative mt-2"><input type="number" id="monthlyRent" class="w-full p-3 border rounded-lg" placeholder="예: 700000"><span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">원</span></div></div>
                                     </div>
-                                    <button id="commissionCalculateBtn" class="w-full bg-blue-500 text-white font-bold py-4 rounded-lg hover:bg-blue-600 transition-colors text-lg">
-                                        계산하기
-                                    </button>
+                                    <button id="commissionCalculateBtn" class="w-full bg-blue-500 text-white font-bold py-4 rounded-lg hover:bg-blue-600 transition-colors text-lg">계산하기</button>
                                 </div>
-                                <!-- Result Section -->
                                 <div class="bg-gray-50 rounded-lg p-6 flex flex-col justify-center items-center text-center">
                                     <p class="text-gray-600">최대 중개보수는</p>
                                     <div id="commissionResultText" class="text-4xl sm:text-5xl font-bold my-4 text-gray-800">0 원</div>
                                     <div id="commissionResultDetails" class="text-gray-500">계산 버튼을 눌러주세요.</div>
-                                     <div id="commissionErrorText" class="text-red-500 font-semibold mt-4"></div>
+                                    <div id="commissionErrorText" class="text-red-500 font-semibold mt-4"></div>
                                 </div>
                             </div>
                         </div>
                         <!-- 예/적금 이자 계산기 (Initially hidden) -->
                         <div id="interestCalculator" class="hidden">
                              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <!-- Input Section -->
                                 <div class="space-y-6">
                                    <div>
                                         <label class="font-semibold text-gray-700">예금 종류</label>
                                         <div class="flex gap-4 mt-2">
-                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center">
-                                                <input type="radio" name="depositType" value="단리" class="mr-2" checked> 예금(단리)
-                                            </label>
-                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center">
-                                                <input type="radio" name="depositType" value="복리" class="mr-2"> 예금(복리)
-                                            </label>
+                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center"><input type="radio" name="depositType" value="단리" class="mr-2" checked> 예금(단리)</label>
+                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center"><input type="radio" name="depositType" value="복리" class="mr-2"> 예금(복리)</label>
                                         </div>
                                     </div>
-                                    <div>
-                                        <label for="principal" class="font-semibold text-gray-700">예치금액(원)</label>
-                                        <input type="number" id="principal" class="w-full p-3 border rounded-lg mt-2" placeholder="예: 10000000">
-                                    </div>
-                                    <div>
-                                        <label for="period" class="font-semibold text-gray-700">예치기간(개월)</label>
-                                        <input type="number" id="period" class="w-full p-3 border rounded-lg mt-2" placeholder="예: 12">
-                                    </div>
-                                    <div>
-                                        <label for="rate" class="font-semibold text-gray-700">연 이자율(%)</label>
-                                        <input type="number" id="rate" class="w-full p-3 border rounded-lg mt-2" placeholder="예: 3.5">
-                                    </div>
+                                    <div><label for="principal" class="font-semibold text-gray-700">예치금액(원)</label><input type="number" id="principal" class="w-full p-3 border rounded-lg mt-2" placeholder="예: 10000000"></div>
+                                    <div><label for="period" class="font-semibold text-gray-700">예치기간(개월)</label><input type="number" id="period" class="w-full p-3 border rounded-lg mt-2" placeholder="예: 12"></div>
+                                    <div><label for="rate" class="font-semibold text-gray-700">연 이자율(%)</label><input type="number" id="rate" class="w-full p-3 border rounded-lg mt-2" placeholder="예: 3.5"></div>
                                     <div>
                                         <label class="font-semibold text-gray-700">과세 구분</label>
                                         <div class="flex gap-4 mt-2">
-                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center">
-                                                <input type="radio" name="taxType" value="일반" class="mr-2" checked> 일반(15.4%)
-                                            </label>
-                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center">
-                                                <input type="radio" name="taxType" value="비과세" class="mr-2"> 비과세
-                                            </label>
+                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center"><input type="radio" name="taxType" value="일반" class="mr-2" checked> 일반(15.4%)</label>
+                                            <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center"><input type="radio" name="taxType" value="비과세" class="mr-2"> 비과세</label>
                                         </div>
                                     </div>
-                                    <button id="interestCalculateBtn" class="w-full bg-green-500 text-white font-bold py-4 rounded-lg hover:bg-green-600 transition-colors text-lg">
-                                        이자 계산하기
-                                    </button>
+                                    <button id="interestCalculateBtn" class="w-full bg-green-500 text-white font-bold py-4 rounded-lg hover:bg-green-600 transition-colors text-lg">이자 계산하기</button>
                                 </div>
-                                <!-- Result Section -->
                                 <div class="bg-gray-50 rounded-lg p-6 flex flex-col justify-center text-center space-y-4">
-                                     <div>
-                                        <p class="text-gray-600 text-lg">세후 수령액</p>
-                                        <div id="interestResultTotal" class="text-4xl font-bold text-gray-800">0 원</div>
-                                    </div>
+                                     <div><p class="text-gray-600 text-lg">세후 수령액</p><div id="interestResultTotal" class="text-4xl font-bold text-gray-800">0 원</div></div>
                                     <div class="w-full pt-4 border-t">
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-500">원금 합계</span>
-                                            <span id="interestResultPrincipal" class="font-semibold text-gray-700">0 원</span>
-                                        </div>
-                                        <div class="flex justify-between mt-2">
-                                            <span class="text-gray-500">세전 이자</span>
-                                            <span id="interestResultBeforeTax" class="font-semibold text-gray-700">0 원</span>
-                                        </div>
-                                         <div class="flex justify-between mt-2">
-                                            <span class="text-gray-500">이자 과세(15.4%)</span>
-                                            <span id="interestResultTax" class="font-semibold text-red-500">0 원</span>
-                                        </div>
+                                        <div class="flex justify-between"><span class="text-gray-500">원금 합계</span><span id="interestResultPrincipal" class="font-semibold text-gray-700">0 원</span></div>
+                                        <div class="flex justify-between mt-2"><span class="text-gray-500">세전 이자</span><span id="interestResultBeforeTax" class="font-semibold text-gray-700">0 원</span></div>
+                                        <div class="flex justify-between mt-2"><span class="text-gray-500">이자 과세(15.4%)</span><span id="interestResultTax" class="font-semibold text-red-500">0 원</span></div>
                                     </div>
                                     <div id="interestErrorText" class="text-red-500 font-semibold pt-2"></div>
                                 </div>
@@ -278,27 +194,14 @@
                             <div class="mb-6">
                                 <label class="font-semibold text-gray-700">구매 플랫폼</label>
                                 <div class="flex gap-4 mt-2" id="platformSelector">
-                                    <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center bg-blue-50 border-blue-200">
-                                        <input type="radio" name="platform" value="pc" class="mr-2" checked> PC/웹/기프트
-                                    </label>
-                                    <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center">
-                                        <input type="radio" name="platform" value="mobile" class="mr-2"> 모바일/콘솔
-                                    </label>
+                                    <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center bg-blue-50 border-blue-200"><input type="radio" name="platform" value="pc" class="mr-2" checked> PC/웹/기프트</label>
+                                    <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center"><input type="radio" name="platform" value="mobile" class="mr-2"> 모바일/콘솔</label>
                                 </div>
                             </div>
                             <div class="space-y-6">
-                                <div>
-                                    <label for="robuxInput" class="font-semibold text-gray-700">로벅스 (R$)</label>
-                                    <input type="number" id="robuxInput" class="w-full p-4 border rounded-lg mt-2 text-2xl font-bold" placeholder="1200">
-                                </div>
-                                <div>
-                                    <label for="krwInput" class="font-semibold text-gray-700">대한민국 원 (₩)</label>
-                                    <input type="number" id="krwInput" class="w-full p-4 border rounded-lg mt-2 text-2xl font-bold" placeholder="15000">
-                                </div>
-                                <div>
-                                    <label for="usdInput" class="font-semibold text-gray-700">미국 달러 ($)</label>
-                                    <input type="number" id="usdInput" class="w-full p-4 border rounded-lg mt-2 text-2xl font-bold" placeholder="">
-                                </div>
+                                <div><label for="robuxInput" class="font-semibold text-gray-700">로벅스 (R$)</label><input type="number" id="robuxInput" class="w-full p-4 border rounded-lg mt-2 text-2xl font-bold" placeholder="1200"></div>
+                                <div><label for="krwInput" class="font-semibold text-gray-700">대한민국 원 (₩)</label><input type="number" id="krwInput" class="w-full p-4 border rounded-lg mt-2 text-2xl font-bold" placeholder="15000"></div>
+                                <div><label for="usdInput" class="font-semibold text-gray-700">미국 달러 ($)</label><input type="number" id="usdInput" class="w-full p-4 border rounded-lg mt-2 text-2xl font-bold" placeholder=""></div>
                             </div>
                         </div>
                     </div>
@@ -332,29 +235,66 @@
                                 </div>
                             </div>
                         </div>
-                        <h3 class="mt-6">부동산 중개보수 관련 Tip</h3>
-                        <ul>
-                            <li><strong>VAT(부가가치세) 10%는 별도입니다.</strong> 계산된 금액에 추가로 부과될 수 있습니다.</li>
-                            <li>위 요율표는 법정 '상한' 요율이므로, 실제 중개보수는 이 금액 내에서 공인중개사와 협의하여 결정할 수 있습니다.</li>
-                            <li>중개사가 간이과세자인지 일반과세자인지에 따라 VAT 부과 여부나 비율이 달라질 수 있으니, 계약 전 미리 확인하는 것이 좋습니다.</li>
+                        
+                        <!-- START: 가독성 개선된 팁 섹션 -->
+                        <h3 class="mt-8">부동산 중개보수 관련 Tip</h3>
+                        <ul class="space-y-5 text-sm">
+                            <li>
+                                <strong class="block font-semibold text-gray-800">VAT(부가가치세) 10%는 별도입니다.</strong>
+                                <p class="mt-1 text-gray-600">계산된 금액에 추가로 부과될 수 있습니다.</p>
+                            </li>
+                            <li>
+                                <strong class="block font-semibold text-gray-800">법정 '상한' 요율임을 기억하세요.</strong>
+                                <p class="mt-1 text-gray-600">실제 중개보수는 법에서 정한 상한선 내에서 공인중개사와 협의하여 결정할 수 있습니다.</p>
+                            </li>
+                            <li>
+                                <strong class="block font-semibold text-gray-800">과세 유형을 확인하세요.</strong>
+                                <p class="mt-1 text-gray-600">중개사가 간이과세자인지 일반과세자인지에 따라 VAT 부과 여부나 비율이 달라질 수 있으니, 계약 전 미리 확인하는 것이 좋습니다.</p>
+                            </li>
                         </ul>
+                        <!-- END: 가독성 개선된 팁 섹션 -->
                     </div>
                     <div id="interestInfo" class="info-content hidden">
                         <h3>예/적금 이자 관련 핵심 용어</h3>
-                        <ul>
-                            <li><strong>단리:</strong> 원금에 대해서만 약정된 이율과 기간을 적용하여 이자를 계산하는 가장 기본적인 방식입니다.</li>
-                            <li><strong>복리:</strong> 발생한 이자를 원금에 더한 금액(원리금)을 새로운 원금으로 보고 다시 이자를 계산하는 방식으로, 시간이 지날수록 이자가 눈덩이처럼 불어나는 효과가 있습니다. '이자의 이자'가 붙는 마법이죠.</li>
-                            <li><strong>일반과세(15.4%):</strong> 금융상품으로 발생한 이자 소득에 대해 부과되는 세금입니다. (소득세 14% + 지방소득세 1.4%)</li>
-                            <li><strong>비과세 종합저축:</strong> 만 65세 이상 등 특정 조건을 만족하면 가입할 수 있는 상품으로, 이자 소득에 세금을 부과하지 않아 절세에 매우 유리합니다.</li>
+                        <!-- START: 가독성 개선된 팁 섹션 -->
+                        <ul class="space-y-5 text-sm">
+                            <li>
+                                <strong class="block font-semibold text-gray-800">단리</strong>
+                                <p class="mt-1 text-gray-600">원금에 대해서만 약정된 이율과 기간을 적용하여 이자를 계산하는 가장 기본적인 방식입니다.</p>
+                            </li>
+                            <li>
+                                <strong class="block font-semibold text-gray-800">복리</strong>
+                                <p class="mt-1 text-gray-600">발생한 이자를 원금에 더한 금액(원리금)을 새로운 원금으로 보고 다시 이자를 계산하는 방식으로, 시간이 지날수록 이자가 눈덩이처럼 불어나는 효과가 있습니다. '이자의 이자'가 붙는 마법이죠.</p>
+                            </li>
+                            <li>
+                                <strong class="block font-semibold text-gray-800">일반과세 (15.4%)</strong>
+                                <p class="mt-1 text-gray-600">금융상품으로 발생한 이자 소득에 대해 부과되는 세금입니다. (소득세 14% + 지방소득세 1.4%)</p>
+                            </li>
+                             <li>
+                                <strong class="block font-semibold text-gray-800">비과세 종합저축</strong>
+                                <p class="mt-1 text-gray-600">만 65세 이상 등 특정 조건을 만족하면 가입할 수 있는 상품으로, 이자 소득에 세금을 부과하지 않아 절세에 매우 유리합니다.</p>
+                            </li>
                         </ul>
+                        <!-- END: 가독성 개선된 팁 섹션 -->
                     </div>
                     <div id="robuxInfo" class="info-content hidden">
                         <h3>로벅스(Robux) 저렴하게 구매하는 Tip</h3>
-                        <ul>
-                            <li><strong>플랫폼별 가격 비교는 필수:</strong> 일반적으로 모바일 앱(인앱결제)을 통해 구매하는 것보다 PC/웹사이트에서 직접 구매하는 것이 수수료가 없어 더 저렴합니다.</li>
-                            <li><strong>로블록스 프리미엄 활용:</strong> 월정액 구독 서비스인 '프리미엄'에 가입하면 매월 일정량의 로벅스를 보너스로 지급받고, 추가 구매 시 10% 더 많은 로벅스를 받을 수 있어 장기적으로 이득입니다.</li>
-                            <li><strong>기프트 카드 구매:</strong> 각종 온라인 쇼핑몰에서 '로블록스 기프트 카드'를 검색해 보세요. 카드사 할인이나 쇼핑몰 쿠폰을 적용하면 공식 가격보다 저렴하게 구매할 수 있는 경우가 많습니다.</li>
+                        <!-- START: 가독성 개선된 팁 섹션 -->
+                        <ul class="space-y-5 text-sm">
+                            <li>
+                                <strong class="block font-semibold text-gray-800">플랫폼별 가격 비교는 필수</strong>
+                                <p class="mt-1 text-gray-600">일반적으로 모바일 앱(인앱결제)을 통해 구매하는 것보다 PC/웹사이트에서 직접 구매하는 것이 수수료가 없어 더 저렴합니다.</p>
+                            </li>
+                            <li>
+                                <strong class="block font-semibold text-gray-800">로블록스 프리미엄 활용</strong>
+                                <p class="mt-1 text-gray-600">월정액 구독 서비스인 '프리미엄'에 가입하면 매월 일정량의 로벅스를 보너스로 지급받고, 추가 구매 시 10% 더 많은 로벅스를 받을 수 있어 장기적으로 이득입니다.</p>
+                            </li>
+                            <li>
+                                <strong class="block font-semibold text-gray-800">기프트 카드 구매</strong>
+                                <p class="mt-1 text-gray-600">각종 온라인 쇼핑몰에서 '로블록스 기프트 카드'를 검색해 보세요. 카드사 할인이나 쇼핑몰 쿠폰을 적용하면 공식 가격보다 저렴하게 구매할 수 있는 경우가 많습니다.</p>
+                            </li>
                         </ul>
+                        <!-- END: 가독성 개선된 팁 섹션 -->
                     </div>
                 </div>
             </div>
