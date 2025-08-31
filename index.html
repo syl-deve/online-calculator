@@ -121,7 +121,7 @@
                      <h3 class="font-bold text-lg mb-4 text-gray-800">오늘의 핫딜!</h3>
                      <script src="https://ads-partners.coupang.com/g.js"></script>
                      <script>
-                         new PartnersCoupang.G({"id":914985,"template":"carousel","trackingCode":"AF3175091","width":"320","height":"300","tsource":""});
+                          new PartnersCoupang.G({"id":914985,"template":"carousel","trackingCode":"AF3175091","width":"320","height":"300","tsource":""});
                      </script>
                 </div>
 
@@ -151,8 +151,8 @@
                                 <div><label for="xrp" class="font-semibold text-gray-700 flex items-center">✕ 리플 (XRP)</label><input type="number" id="xrp" data-asset="ripple" class="crypto-input w-full p-3 border rounded-lg mt-1"></div>
                                 <div><label for="doge" class="font-semibold text-gray-700 flex items-center">Ɖ 도지코인 (DOGE)</label><input type="number" id="doge" data-asset="dogecoin" class="crypto-input w-full p-3 border rounded-lg mt-1"></div>
                                 <div><label for="ada" class="font-semibold text-gray-700 flex items-center">🔷 카르다노 (ADA)</label><input type="number" id="ada" data-asset="cardano" class="crypto-input w-full p-3 border rounded-lg mt-1"></div>
-                                <div><label for="ton" class="font-semibold text-gray-700 flex items-center">💎 톤코인 (TON)</label><input type="number" id="ton" data-asset="toncoin" class="crypto-input w-full p-3 border rounded-lg mt-1"></div>
-                                <div><label for="avax" class="font-semibold text-gray-700 flex items-center">🔺 아발란체 (AVAX)</label><input type="number" id="avax" data-asset="avalanche" class="crypto-input w-full p-3 border rounded-lg mt-1"></div>
+                                <div><label for="ton" class="font-semibold text-gray-700 flex items-center">💎 톤코인 (TON)</label><input type="number" id="ton" data-asset="the-open-network" class="crypto-input w-full p-3 border rounded-lg mt-1"></div>
+                                <div><label for="avax" class="font-semibold text-gray-700 flex items-center">🔺 아발란체 (AVAX)</label><input type="number" id="avax" data-asset="avalanche-2" class="crypto-input w-full p-3 border rounded-lg mt-1"></div>
                                 <div><label for="dot" class="font-semibold text-gray-700 flex items-center">⚫️ 폴카닷 (DOT)</label><input type="number" id="dot" data-asset="polkadot" class="crypto-input w-full p-3 border rounded-lg mt-1"></div>
                             </div>
                         </div>
@@ -268,8 +268,8 @@
                         <!-- 예/적금 이자 계산기 (Initially hidden) -->
                         <div id="interestCalculator" class="hidden">
                              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div class="space-y-6">
-                                   <div>
+                                 <div class="space-y-6">
+                                    <div>
                                         <label class="font-semibold text-gray-700">예금 종류</label>
                                         <div class="flex gap-4 mt-2">
                                             <label class="flex items-center p-3 border rounded-lg cursor-pointer flex-1 justify-center"><input type="radio" name="depositType" value="단리" class="mr-2" checked> 예금(단리)</label>
@@ -287,17 +287,17 @@
                                         </div>
                                     </div>
                                     <button id="interestCalculateBtn" class="w-full bg-green-500 text-white font-bold py-4 rounded-lg hover:bg-green-600 transition-colors text-lg">이자 계산하기</button>
-                                </div>
-                                <div class="bg-gray-50 rounded-lg p-6 flex flex-col justify-center text-center space-y-4">
+                                 </div>
+                                 <div class="bg-gray-50 rounded-lg p-6 flex flex-col justify-center text-center space-y-4">
                                       <div><p class="text-gray-600 text-lg">세후 수령액</p><div id="interestResultTotal" class="text-4xl font-bold text-gray-800">0 원</div></div>
-                                    <div class="w-full pt-4 border-t">
-                                        <div class="flex justify-between"><span class="text-gray-500">원금 합계</span><span id="interestResultPrincipal" class="font-semibold text-gray-700">0 원</span></div>
-                                        <div class="flex justify-between mt-2"><span class="text-gray-500">세전 이자</span><span id="interestResultBeforeTax" class="font-semibold text-gray-700">0 원</span></div>
-                                        <div class="flex justify-between mt-2"><span class="text-gray-500">이자 과세(15.4%)</span><span id="interestResultTax" class="font-semibold text-red-500">0 원</span></div>
-                                    </div>
-                                    <div id="interestErrorText" class="text-red-500 font-semibold pt-2"></div>
-                                </div>
-                            </div>
+                                     <div class="w-full pt-4 border-t">
+                                         <div class="flex justify-between"><span class="text-gray-500">원금 합계</span><span id="interestResultPrincipal" class="font-semibold text-gray-700">0 원</span></div>
+                                         <div class="flex justify-between mt-2"><span class="text-gray-500">세전 이자</span><span id="interestResultBeforeTax" class="font-semibold text-gray-700">0 원</span></div>
+                                         <div class="flex justify-between mt-2"><span class="text-gray-500">이자 과세(15.4%)</span><span id="interestResultTax" class="font-semibold text-red-500">0 원</span></div>
+                                     </div>
+                                     <div id="interestErrorText" class="text-red-500 font-semibold pt-2"></div>
+                                 </div>
+                             </div>
                         </div>
                         <!-- 로벅스 환율 계산기 (Initially hidden) -->
                         <div id="robuxCalculator" class="hidden">
@@ -352,12 +352,12 @@
                         <h3>2025년 연봉 실수령액 계산 기준</h3>
                         <ul class="space-y-5 text-sm">
                              <li><strong class="block font-semibold text-gray-800">4대 보험 요율 (근로자 부담분 기준)</strong>
-                                <p class="mt-1 text-gray-600">
-                                    - 국민연금: 과세소득의 <span class="font-bold text-indigo-600">4.5%</span> (월 상한액 265,500원)<br>
-                                    - 건강보험: 보수월액의 <span class="font-bold text-indigo-600">3.545%</span><br>
-                                    - 장기요양보험: 건강보험료의 <span class="font-bold text-indigo-600">12.95%</span><br>
-                                    - 고용보험: 과세소득의 <span class="font-bold text-indigo-600">0.9%</span>
-                                </p>
+                                 <p class="mt-1 text-gray-600">
+                                     - 국민연금: 과세소득의 <span class="font-bold text-indigo-600">4.5%</span> (월 상한액 265,500원)<br>
+                                     - 건강보험: 보수월액의 <span class="font-bold text-indigo-600">3.545%</span><br>
+                                     - 장기요양보험: 건강보험료의 <span class="font-bold text-indigo-600">12.95%</span><br>
+                                     - 고용보험: 과세소득의 <span class="font-bold text-indigo-600">0.9%</span>
+                                 </p>
                             </li>
                              <li><strong class="block font-semibold text-gray-800">근로소득세 (소득세)</strong><p class="mt-1 text-gray-600">국세청의 '근로소득 간이세액표'에 따라 월 급여와 공제대상 가족 수(부양가족, 20세 이하 자녀)를 기준으로 정해진 세금을 원천징수합니다.</p></li>
                              <li><strong class="block font-semibold text-gray-800">지방소득세</strong><p class="mt-1 text-gray-600">위에서 계산된 근로소득세의 <span class="font-bold text-indigo-600">10%</span>가 지방소득세로 추가 공제됩니다.</p></li>
@@ -482,7 +482,7 @@ document.addEventListener('DOMContentLoaded', function() {
         sidebarLinks.forEach(link => {
             link.classList.remove('active-nav-link');
              if (link.dataset.tabLink === tabName) {
-                link.classList.add('active-nav-link');
+                 link.classList.add('active-nav-link');
             }
         });
         
@@ -506,7 +506,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function fetchCryptoRates() {
         try {
-            const coin_ids = 'bitcoin,ethereum,solana,binancecoin,ripple,dogecoin,cardano,toncoin,avalanche,polkadot';
+            const coin_ids = 'bitcoin,ethereum,solana,binancecoin,ripple,dogecoin,cardano,the-open-network,avalanche-2,polkadot';
             const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coin_ids}&vs_currencies=usd,krw`);
             if (!response.ok) throw new Error('Network response was not ok');
             cryptoRates = await response.json();
@@ -536,8 +536,8 @@ document.addEventListener('DOMContentLoaded', function() {
             ripple: 4,
             dogecoin: 4,
             cardano: 4,
-            toncoin: 4,
-            avalanche: 4,
+            'the-open-network': 4,
+            'avalanche-2': 4,
             polkadot: 4
         };
 
@@ -547,7 +547,13 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (sourceAsset === 'USD') {
                 valueInUsd = sourceValue;
             } else { 
-                valueInUsd = sourceValue * cryptoRates[sourceAsset].usd;
+                if (cryptoRates[sourceAsset]) {
+                    valueInUsd = sourceValue * cryptoRates[sourceAsset].usd;
+                } else {
+                    console.error(`Rate for ${sourceAsset} not found.`);
+                    isCryptoCalculating = false;
+                    return;
+                }
             }
 
             cryptoInputs.forEach(input => {
@@ -559,7 +565,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else if (targetAsset === 'USD') {
                         targetValue = valueInUsd;
                     } else {
-                        targetValue = valueInUsd / cryptoRates[targetAsset].usd;
+                         if (cryptoRates[targetAsset]) {
+                            targetValue = valueInUsd / cryptoRates[targetAsset].usd;
+                         } else {
+                            console.error(`Rate for ${targetAsset} not found.`);
+                            return;
+                         }
                     }
 
                     const precision = precisionMap[targetAsset] ?? 2;
@@ -717,18 +728,24 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     function calculateIncomeTax(monthlySalary, dependents) {
+        // Based on 2024 simplified tax table
         const taxTable = {
-            1: [0, 0, 0, 0, 0, 1630, 6210, 14360, 24360, 36240, 50240, 77240, 105240, 134240, 163240, 203240, 243240, 283240, 323240, 363240, 403240, 448240, 493240, 538240, 583240, 628240, 673240, 718240, 763240, 808240, 853240],
-            2: [0, 0, 0, 0, 0, 0, 0, 2980, 10690, 20690, 32810, 57810, 83810, 110810, 137810, 175310, 212810, 250310, 287810, 325310, 362810, 405310, 447810, 490310, 532810, 575310, 617810, 660310, 702810, 745310, 787810],
-            3: [0, 0, 0, 0, 0, 0, 0, 0, 0, 4450, 15070, 38070, 62070, 87070, 112070, 147070, 182070, 217070, 252070, 287070, 322070, 362070, 402070, 442070, 482070, 522070, 562070, 602070, 642070, 682070, 722070]
+            1: [0,0,0,0,0,0,0,1630,6210,14360,24360,36240,50240,77240,105240,134240,163240,203240,243240,283240,323240,363240,403240,448240,493240,538240,583240,628240,673240,718240,763240,808240,853240,898240,943240,988240,1033240,1078240,1123240,1168240,1213240,1258240,1303240,1348240,1393240,1438240,1483240,1528240,1573240,1618240,1663240,1708240,1753240,1798240,1843240,1888240],
+            2: [0,0,0,0,0,0,0,0,0,2980,10690,20690,32810,57810,83810,110810,137810,175310,212810,250310,287810,325310,362810,405310,447810,490310,532810,575310,617810,660310,702810,745310,787810,830310,872810,915310,957810,1000310,1042810,1085310,1127810,1170310,1212810,1255310,1297810,1340310,1382810,1425310,1467810,1510310,1552810,1595310,1637810,1680310,1722810,1765310],
+            3: [0,0,0,0,0,0,0,0,0,0,4450,15070,38070,62070,87070,112070,147070,182070,217070,252070,287070,322070,362070,402070,442070,482070,522070,562070,602070,642070,682070,722070,762070,802070,842070,882070,922070,962070,1002070,1042070,1082070,1122070,1162070,1202070,1242070,1282070,1322070,1362070,1402070,1442070,1482070,1522070,1562070,1602070,1642070,1682070]
         };
-        const salaryIndex = Math.floor(monthlySalary / 200000) - 5;
-        const d = Math.max(1, Math.min(dependents, 3));
-        if (salaryIndex < 0 || salaryIndex >= taxTable[d].length) {
-            if (monthlySalary > 8000000) return Math.floor(monthlySalary * 0.15 - 500000);
+        const salaryIndex = Math.floor(monthlySalary / 200000) - 7;
+        const d = Math.max(1, Math.min(dependents, 11)); // Simplified for dependents up to 11
+        const selectedTaxTable = taxTable[Math.min(d, 3)]; // Use table for 3 if more dependents
+        if (monthlySalary < 1400000 || salaryIndex < 0 || salaryIndex >= selectedTaxTable.length) {
+            // Simplified logic for salaries outside the common table range
+            if (monthlySalary > 8000000) { // Approximation for higher salaries
+                 let tax = (monthlySalary * 0.24) - (d * 50000) - 520000;
+                 return Math.max(0, Math.floor(tax / 10) * 10);
+            }
             return 0;
         }
-        return taxTable[d][salaryIndex] || 0;
+        return selectedTaxTable[salaryIndex] || 0;
     }
 
     // --- Real Estate Commission Calculator Logic ---
@@ -869,3 +886,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </body>
 </html>
+
