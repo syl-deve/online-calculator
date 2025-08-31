@@ -31,15 +31,6 @@
         .info-section ul {
             @apply list-disc list-inside space-y-2 mb-6;
         }
-        .info-section table {
-            @apply w-full text-left border-collapse mb-6;
-        }
-        .info-section th, .info-section td {
-            @apply border border-gray-200 px-4 py-2;
-        }
-        .info-section th {
-            @apply bg-gray-50 font-semibold;
-        }
         .coupang-link {
             @apply inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors no-underline;
         }
@@ -301,26 +292,72 @@
                 <div class="mt-8 bg-white rounded-2xl shadow-lg p-6 sm:p-8 info-section">
                     <div id="commissionInfo" class="info-content">
                         <h3>2025년 부동산 중개보수 요율표 (주택 기준)</h3>
-                        <table>
-                            <thead>
-                                <tr><th>구분</th><th>거래금액</th><th>상한요율</th><th>한도액</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td rowspan="6">매매/교환</td><td>5천만원 미만</td><td>0.6%</td><td>25만원</td></tr>
-                                <tr><td>5천만원 이상 ~ 2억원 미만</td><td>0.5%</td><td>80만원</td></tr>
-                                <tr><td>2억원 이상 ~ 9억원 미만</td><td>0.4%</td><td>-</td></tr>
-                                <tr><td>9억원 이상 ~ 12억원 미만</td><td>0.5%</td><td>-</td></tr>
-                                <tr><td>12억원 이상 ~ 15억원 미만</td><td>0.6%</td><td>-</td></tr>
-                                <tr><td>15억원 이상</td><td>0.7%</td><td>-</td></tr>
-                                <tr><td rowspan="6">임대차 등</td><td>5천만원 미만</td><td>0.5%</td><td>20만원</td></tr>
-                                <tr><td>5천만원 이상 ~ 1억원 미만</td><td>0.4%</td><td>30만원</td></tr>
-                                <tr><td>1억원 이상 ~ 6억원 미만</td><td>0.3%</td><td>-</td></tr>
-                                <tr><td>6억원 이상 ~ 12억원 미만</td><td>0.4%</td><td>-</td></tr>
-                                <tr><td>12억원 이상 ~ 15억원 미만</td><td>0.5%</td><td>-</td></tr>
-                                <tr><td>15억원 이상</td><td>0.6%</td><td>-</td></tr>
-                            </tbody>
-                        </table>
-                        <h3>부동산 중개보수 관련 Tip</h3>
+                        <!-- START: 시각화된 요율표 -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <!-- 매매/교환 카드 -->
+                            <div class="border rounded-lg p-4 bg-blue-50">
+                                <h4 class="text-lg font-bold text-blue-800 mb-4 text-center">매매 / 교환</h4>
+                                <div class="space-y-3">
+                                    <div class="p-3 bg-white rounded-md text-sm">
+                                        <p class="font-semibold text-gray-700">5천만원 미만</p>
+                                        <p class="text-right"><span class="font-bold text-blue-600">0.6%</span> (한도 25만원)</p>
+                                    </div>
+                                    <div class="p-3 bg-white rounded-md text-sm">
+                                        <p class="font-semibold text-gray-700">5천만원 ~ 2억원 미만</p>
+                                        <p class="text-right"><span class="font-bold text-blue-600">0.5%</span> (한도 80만원)</p>
+                                    </div>
+                                    <div class="p-3 bg-white rounded-md text-sm">
+                                        <p class="font-semibold text-gray-700">2억원 ~ 9억원 미만</p>
+                                        <p class="text-right font-bold text-blue-600">0.4%</p>
+                                    </div>
+                                    <div class="p-3 bg-white rounded-md text-sm">
+                                        <p class="font-semibold text-gray-700">9억원 ~ 12억원 미만</p>
+                                        <p class="text-right font-bold text-blue-600">0.5%</p>
+                                    </div>
+                                    <div class="p-3 bg-white rounded-md text-sm">
+                                        <p class="font-semibold text-gray-700">12억원 ~ 15억원 미만</p>
+                                        <p class="text-right font-bold text-blue-600">0.6%</p>
+                                    </div>
+                                    <div class="p-3 bg-white rounded-md text-sm">
+                                        <p class="font-semibold text-gray-700">15억원 이상</p>
+                                        <p class="text-right font-bold text-blue-600">0.7%</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 임대차 카드 -->
+                            <div class="border rounded-lg p-4 bg-green-50">
+                                <h4 class="text-lg font-bold text-green-800 mb-4 text-center">임대차 등 (전/월세)</h4>
+                                <div class="space-y-3">
+                                    <div class="p-3 bg-white rounded-md text-sm">
+                                        <p class="font-semibold text-gray-700">5천만원 미만</p>
+                                        <p class="text-right"><span class="font-bold text-green-600">0.5%</span> (한도 20만원)</p>
+                                    </div>
+                                    <div class="p-3 bg-white rounded-md text-sm">
+                                        <p class="font-semibold text-gray-700">5천만원 ~ 1억원 미만</p>
+                                        <p class="text-right"><span class="font-bold text-green-600">0.4%</span> (한도 30만원)</p>
+                                    </div>
+                                    <div class="p-3 bg-white rounded-md text-sm">
+                                        <p class="font-semibold text-gray-700">1억원 ~ 6억원 미만</p>
+                                        <p class="text-right font-bold text-green-600">0.3%</p>
+                                    </div>
+                                    <div class="p-3 bg-white rounded-md text-sm">
+                                        <p class="font-semibold text-gray-700">6억원 ~ 12억원 미만</p>
+                                        <p class="text-right font-bold text-green-600">0.4%</p>
+                                    </div>
+                                    <div class="p-3 bg-white rounded-md text-sm">
+                                        <p class="font-semibold text-gray-700">12억원 ~ 15억원 미만</p>
+                                        <p class="text-right font-bold text-green-600">0.5%</p>
+                                    </div>
+                                     <div class="p-3 bg-white rounded-md text-sm">
+                                        <p class="font-semibold text-gray-700">15억원 이상</p>
+                                        <p class="text-right font-bold text-green-600">0.6%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END: 시각화된 요율표 -->
+                        
+                        <h3 class="mt-8">부동산 중개보수 관련 Tip</h3>
                         <ul>
                             <li><strong>VAT(부가가치세) 10%는 별도입니다.</strong> 계산된 금액에 추가로 부과될 수 있습니다.</li>
                             <li>위 요율표는 법정 '상한' 요율이므로, 실제 중개보수는 이 금액 내에서 공인중개사와 협의하여 결정할 수 있습니다.</li>
