@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>온라인 간편 계산기</title>
+    <!-- 1. 구글 애드센스 심사 코드는 여기에 성공적으로 삽입되었습니다. -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1665611122111123"
+     crossorigin="anonymous"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', 'Inter', sans-serif;
+            background-color: #f8fafc; /* Light gray background */
+        }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        .info-section h3 {
+            @apply text-xl font-bold text-gray-800 mb-4;
+        }
+        .info-section p, .info-section li {
+            @apply text-gray-700 leading-relaxed;
+        }
+        .info-section ul {
+            @apply list-disc list-inside space-y-2 mb-6;
+        }
+        /* Shadcn/ui inspired styles */
+        .card {
+            @apply bg-white rounded-xl border border-gray-200 shadow-sm;
+        }
+        .btn {
+            @apply w-full font-semibold py-3 px-4 rounded-lg transition-colors duration-200;
+        }
+        .btn-primary {
+            @apply bg-blue-600 text-white hover:bg-blue-700;
+        }
+        .input-field {
+            @apply w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow;
+        }
+        .radio-label {
+             @apply flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer flex-1 justify-center transition-colors duration-200 hover:bg-gray-50;
+        }
+        .radio-label-active {
+            @apply bg-blue-50 border-blue-500 text-blue-800 font-semibold;
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+
+    <!-- Overlay for Mobile Sidebar -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-60 z-30 hidden lg:hidden"></div>
+
+    <div class="relative min-h-screen lg:flex">
+        <!-- Left Sidebar -->
+        <aside id="sidebar" class="fixed top-0 left-0 w-3/4 max-w-xs h-full bg-white border-r border-gray-200 p-6 z-40 transform -translate-x-full transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:w-1/4 lg:h-screen lg:max-w-none lg:sticky">
+            <div class="flex justify-between items-center border-b border-gray-200 pb-4 mb-6">
+                 <h2 class="text-xl font-bold text-gray-800">계산기 목록</h2>
+                 <button id="closeButton" class="lg:hidden text-gray-500 hover:text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                 </button>
+            </div>
+            
+            <nav class="space-y-2">
+                <a href="#" data-tab-link="commission" class="block font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-100 p-2 rounded-md tab-link-item">부동산 중개보수</a>
+                <a href="#" data-tab-link="interest" class="block font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-100 p-2 rounded-md tab-link-item">예/적금 이자</a>
+                <a href="#" data-tab-link="robux" class="block font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-100 p-2 rounded-md tab-link-item">로벅스 환율</a>
+            </nav>
+
+            <!-- Coupang Partners Banner for Desktop -->
+            <div class="mt-8 pt-6 border-t border-gray-200">
+                <h3 class="font-semibold text-base mb-4 text-gray-800">오늘의 핫딜!</h3>
+                <div class="rounded-lg overflow-hidden">
+                    <script src="https://ads-partners.coupang.com/g.js"></script>
+                    <script>
+                        new PartnersCoupang.G({"id":914985,"template":"carousel","trackingCode":"AF3175091","width":"320","height":"300","tsource":""});
+                    </script>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="w-full p-4 sm:p-6 md:p-8">
+             <!-- Mobile Header -->
+            <header class="lg:hidden flex justify-between items-center mb-6 pb-4 border-b border-gray-200">
+                <h1 class="text-xl font-bold text-gray-800">온라인 간편 계산기</h1>
+                <button id="menuButton" class="p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </header>
+
+            <div class="w-full max-w-4xl mx-auto">
+                <!-- Coupang Partners Banner for Mobile -->
+                <div class="lg:hidden mb-6 card p-4">
+                     <h3 class="font-semibold text-base mb-4 text-gray-800">오늘의 핫딜!</h3>
+                     <div class="flex justify-center">
+                         <script src="https://ads-partners.coupang.com/g.js"></script>
+                         <script>
+                             new PartnersCoupang.G({"id":914985,"template":"carousel","trackingCode":"AF3175091","width":"320","height":"300","tsource":""});
+                         </script>
+                     </div>
+                </div>
+
+                <div class="card p-6 sm:p-8">
+                    <!-- Header for Desktop -->
+                    <div class="text-center mb-8 hidden lg:block">
+                        <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">온라인 간편 계산기</h1>
+                        <p class="text-gray-600 mt-2">생활에 필요한 모든 계산을 한 곳에서</p>
+                    </div>
+
+                    <!-- Tab Navigation for Mobile (Now handled by sidebar) -->
+                    
+                    <!-- Calculator Container -->
+                    <div id="calculatorContainer">
+                        <!-- 부동산 중개보수 계산기 -->
+                        <div id="commissionCalculator">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <!-- Input Section -->
+                                <div class="space-y-6">
+                                    <div>
+                                        <label class="font-semibold text-gray-700 block mb-2">거래 종류</label>
+                                        <div class="flex gap-4" id="tradeTypeContainer">
+                                            <label class="radio-label radio-label-active">
+                                                <input type="radio" name="tradeType" value="매매" class="hidden" checked> 매매/교환
+                                            </label>
+                                            <label class="radio-label">
+                                                <input type="radio" name="tradeType" value="임대차" class="hidden"> 임대차
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="font-semibold text-gray-700 block mb-2">부동산 종류</label>
+                                        <div class="flex gap-4">
+                                            <label class="radio-label radio-label-active">
+                                                <input type="radio" name="propertyType" value="주택" class="hidden" checked> 주택
+                                            </label>
+                                            <label class="radio-label">
+                                                <input type="radio" name="propertyType" value="오피스텔" class="hidden"> 오피스텔
+                                            </label>
+                                             <label class="radio-label">
+                                                <input type="radio" name="propertyType" value="기타" class="hidden"> 그 외
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div id="priceContainer">
+                                        <label for="price" class="font-semibold text-gray-700">매매가</label>
+                                        <div class="relative mt-2">
+                                            <input type="number" id="price" class="input-field" placeholder="예: 500000000">
+                                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">원</span>
+                                        </div>
+                                    </div>
+                                    <div id="rentContainer" class="hidden space-y-4">
+                                         <div>
+                                            <label for="deposit" class="font-semibold text-gray-700">보증금</label>
+                                            <div class="relative mt-2">
+                                                <input type="number" id="deposit" class="input-field" placeholder="예: 50000000">
+                                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">원</span>
+                                            </div>
+                                        </div>
+                                         <div>
+                                            <label for="monthlyRent" class="font-semibold text-gray-700">월세</label>
+                                            <div class="relative mt-2">
+                                                <input type="number" id="monthlyRent" class="input-field" placeholder="예: 700000">
+                                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">원</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button id="commissionCalculateBtn" class="btn btn-primary text-lg">
+                                        계산하기
+                                    </button>
+                                </div>
+                                <!-- Result Section -->
+                                <div class="bg-slate-50 rounded-lg p-6 flex flex-col justify-center items-center text-center border">
+                                    <p class="text-gray-600">최대 중개보수는</p>
+                                    <div id="commissionResultText" class="text-4xl sm:text-5xl font-bold my-4 text-gray-800">0 원</div>
+                                    <div id="commissionResultDetails" class="text-gray-500">계산 버튼을 눌러주세요.</div>
+                                     <div id="commissionErrorText" class="text-red-500 font-semibold mt-4"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 예/적금 이자 계산기 (Initially hidden) -->
+                        <div id="interestCalculator" class="hidden">
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <!-- Input Section -->
+                                <div class="space-y-6">
+                                   <div>
+                                        <label class="font-semibold text-gray-700 block mb-2">예금 종류</label>
+                                        <div class="flex gap-4">
+                                            <label class="radio-label radio-label-active">
+                                                <input type="radio" name="depositType" value="단리" class="hidden" checked> 예금(단리)
+                                            </label>
+                                            <label class="radio-label">
+                                                <input type="radio" name="depositType" value="복리" class="hidden"> 예금(복리)
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="principal" class="font-semibold text-gray-700">예치금액(원)</label>
+                                        <input type="number" id="principal" class="input-field mt-2" placeholder="예: 10000000">
+                                    </div>
+                                    <div>
+                                        <label for="period" class="font-semibold text-gray-700">예치기간(개월)</label>
+                                        <input type="number" id="period" class="input-field mt-2" placeholder="예: 12">
+                                    </div>
+                                    <div>
+                                        <label for="rate" class="font-semibold text-gray-700">연 이자율(%)</label>
+                                        <input type="number" id="rate" class="input-field mt-2" placeholder="예: 3.5">
+                                    </div>
+                                    <div>
+                                        <label class="font-semibold text-gray-700 block mb-2">과세 구분</label>
+                                        <div class="flex gap-4">
+                                            <label class="radio-label radio-label-active">
+                                                <input type="radio" name="taxType" value="일반" class="hidden" checked> 일반(15.4%)
+                                            </label>
+                                            <label class="radio-label">
+                                                <input type="radio" name="taxType" value="비과세" class="hidden"> 비과세
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <button id="interestCalculateBtn" class="btn bg-green-600 text-white hover:bg-green-700 text-lg">
+                                        이자 계산하기
+                                    </button>
+                                </div>
+                                <!-- Result Section -->
+                                <div class="bg-slate-50 rounded-lg p-6 flex flex-col justify-center text-center space-y-4 border">
+                                     <div>
+                                        <p class="text-gray-600 text-lg">세후 수령액</p>
+                                        <div id="interestResultTotal" class="text-4xl font-bold text-gray-800">0 원</div>
+                                    </div>
+                                    <div class="w-full pt-4 border-t">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-500">원금 합계</span>
+                                            <span id="interestResultPrincipal" class="font-semibold text-gray-700">0 원</span>
+                                        </div>
+                                        <div class="flex justify-between mt-2">
+                                            <span class="text-gray-500">세전 이자</span>
+                                            <span id="interestResultBeforeTax" class="font-semibold text-gray-700">0 원</span>
+                                        </div>
+                                         <div class="flex justify-between mt-2">
+                                            <span class="text-gray-500">이자 과세(15.4%)</span>
+                                            <span id="interestResultTax" class="font-semibold text-red-500">0 원</span>
+                                        </div>
+                                    </div>
+                                    <div id="interestErrorText" class="text-red-500 font-semibold pt-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 로벅스 환율 계산기 (Initially hidden) -->
+                        <div id="robuxCalculator" class="hidden">
+                            <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-lg mb-6" role="alert">
+                              <p class="font-bold">참고</p>
+                              <p id="robuxRateInfo">현재 환율 정보를 불러오는 중입니다...</p>
+                              <p id="robuxStandardInfo"></p>
+                            </div>
+                            <div class="mb-6">
+                                <label class="font-semibold text-gray-700 block mb-2">구매 플랫폼</label>
+                                <div class="flex gap-4" id="platformSelector">
+                                    <label class="radio-label radio-label-active">
+                                        <input type="radio" name="platform" value="pc" class="hidden" checked> PC/웹/기프트
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="platform" value="mobile" class="hidden"> 모바일/콘솔
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="space-y-6">
+                                <div>
+                                    <label for="robuxInput" class="font-semibold text-gray-700">로벅스 (R$)</label>
+                                    <input type="number" id="robuxInput" class="input-field mt-2 text-2xl font-bold" placeholder="1200">
+                                </div>
+                                <div>
+                                    <label for="krwInput" class="font-semibold text-gray-700">대한민국 원 (₩)</label>
+                                    <input type="number" id="krwInput" class="input-field mt-2 text-2xl font-bold" placeholder="15000">
+                                </div>
+                                <div>
+                                    <label for="usdInput" class="font-semibold text-gray-700">미국 달러 ($)</label>
+                                    <input type="number" id="usdInput" class="input-field mt-2 text-2xl font-bold" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEO Content Section -->
+                <div class="mt-8 card p-6 sm:p-8 info-section">
+                    <div id="commissionInfo" class="info-content">
+                        <h3>2025년 부동산 중개보수 요율표 (주택 기준)</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="border rounded-lg p-4 bg-blue-50">
+                                <h4 class="text-lg font-bold text-blue-800 mb-4 text-center">매매 / 교환</h4>
+                                <div class="space-y-3">
+                                    <div class="p-3 bg-white rounded-md text-sm shadow-sm"><p class="font-semibold text-gray-700">5천만원 미만</p><p class="text-right"><span class="font-bold text-blue-600">0.6%</span> (한도 25만원)</p></div>
+                                    <div class="p-3 bg-white rounded-md text-sm shadow-sm"><p class="font-semibold text-gray-700">5천만원 ~ 2억원 미만</p><p class="text-right"><span class="font-bold text-blue-600">0.5%</span> (한도 80만원)</p></div>
+                                    <div class="p-3 bg-white rounded-md text-sm shadow-sm"><p class="font-semibold text-gray-700">2억원 ~ 9억원 미만</p><p class="text-right font-bold text-blue-600">0.4%</p></div>
+                                    <div class="p-3 bg-white rounded-md text-sm shadow-sm"><p class="font-semibold text-gray-700">9억원 ~ 12억원 미만</p><p class="text-right font-bold text-blue-600">0.5%</p></div>
+                                    <div class="p-3 bg-white rounded-md text-sm shadow-sm"><p class="font-semibold text-gray-700">12억원 ~ 15억원 미만</p><p class="text-right font-bold text-blue-600">0.6%</p></div>
+                                    <div class="p-3 bg-white rounded-md text-sm shadow-sm"><p class="font-semibold text-gray-700">15억원 이상</p><p class="text-right font-bold text-blue-600">0.7%</p></div>
+                                </div>
+                            </div>
+                            <div class="border rounded-lg p-4 bg-green-50">
+                                <h4 class="text-lg font-bold text-green-800 mb-4 text-center">임대차 등 (전/월세)</h4>
+                                <div class="space-y-3">
+                                    <div class="p-3 bg-white rounded-md text-sm shadow-sm"><p class="font-semibold text-gray-700">5천만원 미만</p><p class="text-right"><span class="font-bold text-green-600">0.5%</span> (한도 20만원)</p></div>
+                                    <div class="p-3 bg-white rounded-md text-sm shadow-sm"><p class="font-semibold text-gray-700">5천만원 ~ 1억원 미만</p><p class="text-right"><span class="font-bold text-green-600">0.4%</span> (한도 30만원)</p></div>
+                                    <div class="p-3 bg-white rounded-md text-sm shadow-sm"><p class="font-semibold text-gray-700">1억원 ~ 6억원 미만</p><p class="text-right font-bold text-green-600">0.3%</p></div>
+                                    <div class="p-3 bg-white rounded-md text-sm shadow-sm"><p class="font-semibold text-gray-700">6억원 ~ 12억원 미만</p><p class="text-right font-bold text-green-600">0.4%</p></div>
+                                    <div class="p-3 bg-white rounded-md text-sm shadow-sm"><p class="font-semibold text-gray-700">12억원 ~ 15억원 미만</p><p class="text-right font-bold text-green-600">0.5%</p></div>
+                                     <div class="p-3 bg-white rounded-md text-sm shadow-sm"><p class="font-semibold text-gray-700">15억원 이상</p><p class="text-right font-bold text-green-600">0.6%</p></div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="mt-8">부동산 중개보수 관련 Tip</h3>
+                        <ul>
+                            <li><strong>VAT(부가가치세) 10%는 별도입니다.</strong> 계산된 금액에 추가로 부과될 수 있습니다.</li>
+                            <li>위 요율표는 법정 '상한' 요율이므로, 실제 중개보수는 이 금액 내에서 공인중개사와 협의하여 결정할 수 있습니다.</li>
+                            <li>중개사가 간이과세자인지 일반과세자인지에 따라 VAT 부과 여부나 비율이 달라질 수 있으니, 계약 전 미리 확인하는 것이 좋습니다.</li>
+                        </ul>
+                    </div>
+                    <div id="interestInfo" class="info-content hidden">
+                        <h3>예/적금 이자 관련 핵심 용어</h3>
+                        <ul>
+                            <li><strong>단리:</strong> 원금에 대해서만 약정된 이율과 기간을 적용하여 이자를 계산하는 가장 기본적인 방식입니다.</li>
+                            <li><strong>복리:</strong> 발생한 이자를 원금에 더한 금액(원리금)을 새로운 원금으로 보고 다시 이자를 계산하는 방식으로, 시간이 지날수록 이자가 눈덩이처럼 불어나는 효과가 있습니다. '이자의 이자'가 붙는 마법이죠.</li>
+                            <li><strong>일반과세(15.4%):</strong> 금융상품으로 발생한 이자 소득에 대해 부과되는 세금입니다. (소득세 14% + 지방소득세 1.4%)</li>
+                            <li><strong>비과세 종합저축:</strong> 만 65세 이상 등 특정 조건을 만족하면 가입할 수 있는 상품으로, 이자 소득에 세금을 부과하지 않아 절세에 매우 유리합니다.</li>
+                        </ul>
+                    </div>
+                    <div id="robuxInfo" class="info-content hidden">
+                        <h3>로벅스(Robux) 저렴하게 구매하는 Tip</h3>
+                        <ul>
+                            <li><strong>플랫폼별 가격 비교는 필수:</strong> 일반적으로 모바일 앱(인앱결제)을 통해 구매하는 것보다 PC/웹사이트에서 직접 구매하는 것이 수수료가 없어 더 저렴합니다.</li>
+                            <li><strong>로블록스 프리미엄 활용:</strong> 월정액 구독 서비스인 '프리미엄'에 가입하면 매월 일정량의 로벅스를 보너스로 지급받고, 추가 구매 시 10% 더 많은 로벅스를 받을 수 있어 장기적으로 이득입니다.</li>
+                            <li><strong>기프트 카드 구매:</strong> 각종 온라인 쇼핑몰에서 '로블록스 기프트 카드'를 검색해 보세요. 카드사 할인이나 쇼핑몰 쿠폰을 적용하면 공식 가격보다 저렴하게 구매할 수 있는 경우가 많습니다.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // --- Mobile Sidebar Logic ---
+    const menuButton = document.getElementById('menuButton');
+    const closeButton = document.getElementById('closeButton');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    function openSidebar() {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+    }
+
+    function closeSidebar() {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+    }
+
+    menuButton.addEventListener('click', openSidebar);
+    closeButton.addEventListener('click', closeSidebar);
+    overlay.addEventListener('click', closeSidebar);
+
+    // --- Tab and Calculator Display Logic ---
+    const sidebarLinks = document.querySelectorAll('.tab-link-item');
+    
+    const calculators = {
+        commission: document.getElementById('commissionCalculator'),
+        interest: document.getElementById('interestCalculator'),
+        robux: document.getElementById('robuxCalculator')
+    };
+    const infoSections = {
+        commission: document.getElementById('commissionInfo'),
+        interest: document.getElementById('interestInfo'),
+        robux: document.getElementById('robuxInfo')
+    };
+
+    function showTab(tabName) {
+        Object.values(calculators).forEach(calc => calc.classList.add('hidden'));
+        Object.values(infoSections).forEach(info => info.classList.add('hidden'));
+
+        if (calculators[tabName]) calculators[tabName].classList.remove('hidden');
+        if (infoSections[tabName]) infoSections[tabName].classList.remove('hidden');
+
+        // Close sidebar after selection on mobile
+        if (window.innerWidth < 1024) {
+            closeSidebar();
+        }
+    }
+
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            showTab(link.dataset.tabLink);
+        });
+    });
+
+    // --- Radio Button UI Logic ---
+    function setupRadioGroups() {
+        const radioGroups = document.querySelectorAll('div[id$="Container"], div[id="platformSelector"]');
+        radioGroups.forEach(group => {
+            group.addEventListener('change', (e) => {
+                if(e.target.type === 'radio') {
+                    const groupLabels = group.querySelectorAll('.radio-label');
+                    groupLabels.forEach(label => {
+                        label.classList.remove('radio-label-active');
+                    });
+                    e.target.closest('.radio-label').classList.add('radio-label-active');
+                }
+            });
+        });
+    }
+
+    // --- Real Estate Commission Calculator Logic ---
+    const tradeTypeContainer = document.getElementById('tradeTypeContainer');
+    const priceContainer = document.getElementById('priceContainer');
+    const rentContainer = document.getElementById('rentContainer');
+    const priceLabel = priceContainer.querySelector('label');
+    const commissionCalculateBtn = document.getElementById('commissionCalculateBtn');
+    const commissionResultText = document.getElementById('commissionResultText');
+    const commissionResultDetails = document.getElementById('commissionResultDetails');
+    const commissionErrorText = document.getElementById('commissionErrorText');
+    const priceInput = document.getElementById('price');
+    const depositInput = document.getElementById('deposit');
+    const monthlyRentInput = document.getElementById('monthlyRent');
+
+    tradeTypeContainer.addEventListener('change', (e) => {
+        if (e.target.name === 'tradeType') {
+            updateUiForTradeType(e.target.value);
+        }
+    });
+    commissionCalculateBtn.addEventListener('click', () => {
+        const tradeType = document.querySelector('input[name="tradeType"]:checked').value;
+        const propertyType = document.querySelector('input[name="propertyType"]:checked').value;
+        let price = (tradeType === '매매') ? Number(priceInput.value) : Number(depositInput.value);
+        let monthlyRent = (tradeType === '매매') ? 0 : Number(monthlyRentInput.value);
+
+        if ((tradeType === '매매' && price <= 0) || (tradeType === '임대차' && (price < 0 || monthlyRent < 0 || (price === 0 && monthlyRent === 0)))) {
+            commissionErrorText.textContent = '금액을 정확히 입력해주세요.';
+            commissionResultText.textContent = '0 원';
+            commissionResultDetails.textContent = '올바른 값을 입력 후 다시 계산해주세요.';
+            return;
+        }
+        commissionErrorText.textContent = '';
+        const result = calculateCommissionFee(tradeType, propertyType, price, monthlyRent);
+        displayCommissionResult(result);
+    });
+    function updateUiForTradeType(type) {
+        if (type === '임대차') {
+            priceContainer.classList.add('hidden');
+            rentContainer.classList.remove('hidden');
+        } else {
+            priceContainer.classList.remove('hidden');
+            rentContainer.classList.add('hidden');
+            priceLabel.textContent = '매매가';
+        }
+    }
+    function calculateCommissionFee(tradeType, propertyType, price, monthlyRent) {
+        let dealAmount = price;
+        if (tradeType === '임대차') {
+            const convertedPrice = price + (monthlyRent * 100);
+            dealAmount = (convertedPrice < 50000000) ? price + (monthlyRent * 70) : convertedPrice;
+        }
+        let rate = 0; let limit = Infinity;
+        if (propertyType === '주택') {
+            if (tradeType === '매매') {
+                if (dealAmount < 50000000) { rate = 0.006; limit = 250000; }
+                else if (dealAmount < 200000000) { rate = 0.005; limit = 800000; }
+                else if (dealAmount < 900000000) { rate = 0.004; }
+                else if (dealAmount < 1200000000) { rate = 0.005; }
+                else if (dealAmount < 1500000000) { rate = 0.006; }
+                else { rate = 0.007; }
+            } else {
+                if (dealAmount < 50000000) { rate = 0.005; limit = 200000; }
+                else if (dealAmount < 100000000) { rate = 0.004; limit = 300000; }
+                else if (dealAmount < 600000000) { rate = 0.003; }
+                else if (dealAmount < 1200000000) { rate = 0.004; }
+                else if (dealAmount < 1500000000) { rate = 0.005; }
+                else { rate = 0.006; }
+            }
+        } else if (propertyType === '오피스텔') { rate = (tradeType === '매매') ? 0.005 : 0.004; }
+        else { rate = 0.009; }
+        const finalFee = Math.min(dealAmount * rate, limit);
+        return { fee: Math.floor(finalFee), rate: rate * 100, limit: limit === Infinity ? null : limit };
+    }
+    function displayCommissionResult(result) {
+        commissionResultText.textContent = `${result.fee.toLocaleString('ko-KR')} 원`;
+        let details = `적용 요율: ${result.rate.toFixed(2)}%`;
+        if (result.limit) { details += ` (한도액: ${result.limit.toLocaleString('ko-KR')}원)`; }
+        commissionResultDetails.innerHTML = details + '<br>VAT 10%는 별도이며, 실제 보수는 협의를 통해 결정됩니다.';
+    }
+
+    // --- Savings Interest Calculator Logic ---
+    const interestCalculateBtn = document.getElementById('interestCalculateBtn');
+    interestCalculateBtn.addEventListener('click', () => {
+        const principal = Number(document.getElementById('principal').value);
+        const period = Number(document.getElementById('period').value);
+        const annualRate = Number(document.getElementById('rate').value) / 100;
+        const depositType = document.querySelector('input[name="depositType"]:checked').value;
+        const taxType = document.querySelector('input[name="taxType"]:checked').value;
+        const interestErrorText = document.getElementById('interestErrorText');
+        if (principal <= 0 || period <= 0 || annualRate <= 0) {
+            interestErrorText.textContent = "모든 값을 정확히 입력해주세요."; return;
+        }
+        interestErrorText.textContent = "";
+        let interestBeforeTax = (depositType === '단리')
+            ? principal * annualRate * (period / 12)
+            : principal * (Math.pow(1 + (annualRate / 12), period)) - principal;
+        const tax = Math.floor(interestBeforeTax * (taxType === '일반' ? 0.154 : 0));
+        const total = principal + interestBeforeTax - tax;
+        document.getElementById('interestResultTotal').textContent = `${Math.floor(total).toLocaleString('ko-KR')} 원`;
+        document.getElementById('interestResultPrincipal').textContent = `${principal.toLocaleString('ko-KR')} 원`;
+        document.getElementById('interestResultBeforeTax').textContent = `${Math.floor(interestBeforeTax).toLocaleString('ko-KR')} 원`;
+        document.getElementById('interestResultTax').textContent = `- ${tax.toLocaleString('ko-KR')} 원`;
+    });
+
+    // --- Robux Currency Calculator Logic ---
+    const robuxInput = document.getElementById('robuxInput');
+    const krwInput = document.getElementById('krwInput');
+    const usdInput = document.getElementById('usdInput');
+    const robuxRateInfo = document.getElementById('robuxRateInfo');
+    const robuxStandardInfo = document.getElementById('robuxStandardInfo');
+    const platformSelector = document.getElementById('platformSelector');
+    const PC_KRW_PER_ROBUX = 15000 / 1200;
+    const MOBILE_KRW_PER_ROBUX = 7500 / 400;
+    let currentKrwPerRobux = PC_KRW_PER_ROBUX;
+    let USD_TO_KRW = 1350;
+    let isCalculating = false;
+
+    async function fetchAndUpdateRate() {
+        try {
+            const response = await fetch('https://open.er-api.com/v6/latest/USD');
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+            USD_TO_KRW = data.rates.KRW;
+            robuxRateInfo.textContent = `현재 환율 적용 중: 1달러 = ${USD_TO_KRW.toFixed(2)}원`;
+        } catch (error) {
+            console.error("환율 정보 가져오기 실패:", error);
+            robuxRateInfo.textContent = `실시간 환율 로딩 실패. 예상 환율(1달러 = ${USD_TO_KRW}원)을 적용합니다.`;
+        }
+    }
+    
+    function updateInfoText() {
+        const selectedPlatform = platformSelector.querySelector('input[name="platform"]:checked').value;
+        robuxStandardInfo.textContent = selectedPlatform === 'pc' 
+            ? '이 계산은 공식 PC/웹 구매가(1,200 R$ = 15,000원)를 기준으로 합니다.'
+            : '이 계산은 공식 모바일 구매가(400 R$ = 7,500원)를 기준으로 합니다.';
+    }
+    
+    platformSelector.addEventListener('change', (e) => {
+        if (e.target.name === 'platform') {
+            currentKrwPerRobux = e.target.value === 'pc' ? PC_KRW_PER_ROBUX : MOBILE_KRW_PER_ROBUX;
+            updateInfoText();
+            if (robuxInput.value) updateCalculations('robux');
+            else if (krwInput.value) updateCalculations('krw');
+            else if (usdInput.value) updateCalculations('usd');
+        }
+    });
+
+    function updateCalculations(source) {
+        if (isCalculating) return;
+        isCalculating = true;
+        const robux = parseFloat(robuxInput.value);
+        const krw = parseFloat(krwInput.value);
+        const usd = parseFloat(usdInput.value);
+        if (source === 'robux') {
+            if (!isNaN(robux) && robuxInput.value !== '') {
+                const calculatedKrw = robux * currentKrwPerRobux;
+                krwInput.value = Math.round(calculatedKrw);
+                usdInput.value = (calculatedKrw / USD_TO_KRW).toFixed(2);
+            } else { krwInput.value = ''; usdInput.value = ''; }
+        } else if (source === 'krw') {
+            if (!isNaN(krw) && krwInput.value !== '') {
+                robuxInput.value = Math.round(krw / currentKrwPerRobux);
+                usdInput.value = (krw / USD_TO_KRW).toFixed(2);
+            } else { robuxInput.value = ''; usdInput.value = ''; }
+        } else if (source === 'usd') {
+            if (!isNaN(usd) && usdInput.value !== '') {
+                const calculatedKrw = usd * USD_TO_KRW;
+                krwInput.value = Math.round(calculatedKrw);
+                robuxInput.value = Math.round(calculatedKrw / currentKrwPerRobux);
+            } else { robuxInput.value = ''; krwInput.value = ''; }
+        }
+        isCalculating = false;
+    }
+    
+    // --- Initialize ---
+    fetchAndUpdateRate();
+    updateInfoText();
+    setupRadioGroups();
+    robuxInput.addEventListener('input', () => updateCalculations('robux'));
+    krwInput.addEventListener('input', () => updateCalculations('krw'));
+    usdInput.addEventListener('input', () => updateCalculations('usd'));
+
+    // Initialize with the first tab shown
+    showTab('commission');
+});
+</script>
+
+</body>
+</html>
+
