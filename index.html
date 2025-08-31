@@ -74,7 +74,7 @@
 
     <div class="relative min-h-screen lg:flex">
         <!-- Left Sidebar -->
-        <aside id="sidebar" class="fixed top-0 left-0 w-3/4 max-w-xs h-full bg-white shadow-xl p-6 z-20 transform -translate-x-full transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:w-1/4 lg:h-screen lg:shadow-md lg:max-w-none lg:sticky">
+        <aside id="sidebar" class="fixed top-0 left-0 w-3/4 max-w-xs h-full bg-white shadow-xl p-6 z-20 transform -translate-x-full transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:w-1/4 lg:h-screen lg:shadow-md lg:max-w-none lg:sticky flex flex-col">
             <div class="flex justify-between items-center border-b pb-4 mb-6">
                 <h2 class="text-xl font-bold text-slate-800 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-slate-600"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
@@ -87,7 +87,7 @@
                 </button>
             </div>
             
-            <nav class="space-y-1">
+            <nav class="space-y-1 flex-grow overflow-y-auto">
                  <a href="#" data-tab-link="crypto" class="flex items-center p-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 tab-link-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-slate-500"><circle cx="8" cy="18" r="4"/><path d="M12 18V2l7 4-7 4"/><path d="m6 12 6-4 6 4"/><path d="M6 6 12 2l6 4"/></svg>
                     주요 코인 환율
@@ -135,7 +135,7 @@
             </nav>
 
             <!-- Coupang Partners Banner for Desktop -->
-            <div class="mt-10 pt-6 border-t">
+            <div class="mt-6 pt-6 border-t flex-shrink-0">
                 <h3 class="font-bold text-lg mb-4 text-gray-800">오늘의 핫딜!</h3>
                 <div class="w-full overflow-hidden">
                     <script src="https://ads-partners.coupang.com/g.js"></script>
@@ -1330,4 +1330,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </body>
 </html>
+
 
