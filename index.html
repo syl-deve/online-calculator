@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
     <title>온라인 간편 계산기</title>
     <!-- 1. 구글 애드센스 심사 코드는 여기에 성공적으로 삽입되었습니다. -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1665611122111123"
@@ -87,10 +87,14 @@
             <!-- Coupang Partners Banner for Desktop -->
             <div class="mt-10 pt-6 border-t">
                 <h3 class="font-bold text-lg mb-4 text-gray-800">오늘의 핫딜!</h3>
-                <script src="https://ads-partners.coupang.com/g.js"></script>
-                <script>
-                    new PartnersCoupang.G({"id":914985,"template":"carousel","trackingCode":"AF3175091","width":"320","height":"300","tsource":""});
-                </script>
+                <!-- START: 배너 깨짐 방지용 래퍼 추가 -->
+                <div class="w-full overflow-hidden">
+                    <script src="https://ads-partners.coupang.com/g.js"></script>
+                    <script>
+                        new PartnersCoupang.G({"id":914985,"template":"carousel","trackingCode":"AF3175091","width":"320","height":"300","tsource":""});
+                    </script>
+                </div>
+                <!-- END: 배너 깨짐 방지용 래퍼 추가 -->
             </div>
         </aside>
 
@@ -98,7 +102,10 @@
         <main class="w-full p-4 sm:p-6 md:p-8">
              <!-- Mobile Header -->
             <header class="lg:hidden flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-bold text-gray-800">온라인 간편 계산기</h1>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">온라인 간편 계산기</h1>
+                    <h2 id="currentCalculatorTitleMobile" class="text-lg font-medium text-blue-600"></h2>
+                </div>
                 <button id="menuButton" class="p-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -121,21 +128,9 @@
                     <div class="text-center mb-6 hidden lg:block">
                         <h1 class="text-3xl sm:text-4xl font-bold text-gray-800">온라인 간편 계산기</h1>
                         <p class="text-gray-500 mt-2">생활에 필요한 모든 계산을 한 곳에서</p>
-                    </div>
-
-                    <!-- Tab Navigation for Mobile -->
-                    <div class="mb-6 border-b border-gray-200 lg:hidden">
-                        <nav class="-mb-px flex space-x-6 overflow-x-auto" id="calculatorTabs">
-                            <a href="#commission" data-tab="commission" class="tab-item text-blue-600 border-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                                부동산
-                            </a>
-                            <a href="#interest" data-tab="interest" class="tab-item text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                                예/적금
-                            </a>
-                            <a href="#robux" data-tab="robux" class="tab-item text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                                로벅스
-                            </a>
-                        </nav>
+                        <!-- START: 현재 계산기 표시 타이틀 추가 -->
+                        <h2 id="currentCalculatorTitle" class="text-2xl font-bold text-blue-600 mt-4"></h2>
+                        <!-- END: 현재 계산기 표시 타이틀 추가 -->
                     </div>
 
                     <!-- Calculator Container -->
@@ -313,70 +308,30 @@
                 <div class="mt-8 bg-white rounded-2xl shadow-lg p-6 sm:p-8 info-section">
                     <div id="commissionInfo" class="info-content">
                         <h3>2025년 부동산 중개보수 요율표 (주택 기준)</h3>
-                        <!-- START: 시각화된 요율표 -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <!-- 매매/교환 카드 -->
                             <div class="border rounded-lg p-4 bg-blue-50">
                                 <h4 class="text-lg font-bold text-blue-800 mb-4 text-center">매매 / 교환</h4>
                                 <div class="space-y-3">
-                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm">
-                                        <p class="font-semibold text-gray-700">5천만원 미만</p>
-                                        <p class="text-right"><span class="font-bold text-blue-600">0.6%</span> (한도 25만원)</p>
-                                    </div>
-                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm">
-                                        <p class="font-semibold text-gray-700">5천만원 ~ 2억원 미만</p>
-                                        <p class="text-right"><span class="font-bold text-blue-600">0.5%</span> (한도 80만원)</p>
-                                    </div>
-                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm">
-                                        <p class="font-semibold text-gray-700">2억원 ~ 9억원 미만</p>
-                                        <p class="text-right font-bold text-blue-600">0.4%</p>
-                                    </div>
-                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm">
-                                        <p class="font-semibold text-gray-700">9억원 ~ 12억원 미만</p>
-                                        <p class="text-right font-bold text-blue-600">0.5%</p>
-                                    </div>
-                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm">
-                                        <p class="font-semibold text-gray-700">12억원 ~ 15억원 미만</p>
-                                        <p class="text-right font-bold text-blue-600">0.6%</p>
-                                    </div>
-                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm">
-                                        <p class="font-semibold text-gray-700">15억원 이상</p>
-                                        <p class="text-right font-bold text-blue-600">0.7%</p>
-                                    </div>
+                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm"><p class="font-semibold text-gray-700">5천만원 미만</p><p class="text-right"><span class="font-bold text-blue-600">0.6%</span> (한도 25만원)</p></div>
+                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm"><p class="font-semibold text-gray-700">5천만원 ~ 2억원 미만</p><p class="text-right"><span class="font-bold text-blue-600">0.5%</span> (한도 80만원)</p></div>
+                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm"><p class="font-semibold text-gray-700">2억원 ~ 9억원 미만</p><p class="text-right font-bold text-blue-600">0.4%</p></div>
+                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm"><p class="font-semibold text-gray-700">9억원 ~ 12억원 미만</p><p class="text-right font-bold text-blue-600">0.5%</p></div>
+                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm"><p class="font-semibold text-gray-700">12억원 ~ 15억원 미만</p><p class="text-right font-bold text-blue-600">0.6%</p></div>
+                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm"><p class="font-semibold text-gray-700">15억원 이상</p><p class="text-right font-bold text-blue-600">0.7%</p></div>
                                 </div>
                             </div>
-                            <!-- 임대차 카드 -->
                             <div class="border rounded-lg p-4 bg-green-50">
                                 <h4 class="text-lg font-bold text-green-800 mb-4 text-center">임대차 등 (전/월세)</h4>
                                 <div class="space-y-3">
-                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm">
-                                        <p class="font-semibold text-gray-700">5천만원 미만</p>
-                                        <p class="text-right"><span class="font-bold text-green-600">0.5%</span> (한도 20만원)</p>
-                                    </div>
-                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm">
-                                        <p class="font-semibold text-gray-700">5천만원 ~ 1억원 미만</p>
-                                        <p class="text-right"><span class="font-bold text-green-600">0.4%</span> (한도 30만원)</p>
-                                    </div>
-                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm">
-                                        <p class="font-semibold text-gray-700">1억원 ~ 6억원 미만</p>
-                                        <p class="text-right font-bold text-green-600">0.3%</p>
-                                    </div>
-                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm">
-                                        <p class="font-semibold text-gray-700">6억원 ~ 12억원 미만</p>
-                                        <p class="text-right font-bold text-green-600">0.4%</p>
-                                    </div>
-                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm">
-                                        <p class="font-semibold text-gray-700">12억원 ~ 15억원 미만</p>
-                                        <p class="text-right font-bold text-green-600">0.5%</p>
-                                    </div>
-                                     <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm">
-                                        <p class="font-semibold text-gray-700">15억원 이상</p>
-                                        <p class="text-right font-bold text-green-600">0.6%</p>
-                                    </div>
+                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm"><p class="font-semibold text-gray-700">5천만원 미만</p><p class="text-right"><span class="font-bold text-green-600">0.5%</span> (한도 20만원)</p></div>
+                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm"><p class="font-semibold text-gray-700">5천만원 ~ 1억원 미만</p><p class="text-right"><span class="font-bold text-green-600">0.4%</span> (한도 30만원)</p></div>
+                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm"><p class="font-semibold text-gray-700">1억원 ~ 6억원 미만</p><p class="text-right font-bold text-green-600">0.3%</p></div>
+                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm"><p class="font-semibold text-gray-700">6억원 ~ 12억원 미만</p><p class="text-right font-bold text-green-600">0.4%</p></div>
+                                    <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm"><p class="font-semibold text-gray-700">12억원 ~ 15억원 미만</p><p class="text-right font-bold text-green-600">0.5%</p></div>
+                                     <div class="p-3 bg-white rounded-md text-sm flex justify-between items-center shadow-sm"><p class="font-semibold text-gray-700">15억원 이상</p><p class="text-right font-bold text-green-600">0.6%</p></div>
                                 </div>
                             </div>
                         </div>
-                        <!-- END: 시각화된 요율표 -->
                         <h3 class="mt-6">부동산 중개보수 관련 Tip</h3>
                         <ul>
                             <li><strong>VAT(부가가치세) 10%는 별도입니다.</strong> 계산된 금액에 추가로 부과될 수 있습니다.</li>
@@ -429,8 +384,14 @@ document.addEventListener('DOMContentLoaded', function() {
     overlay.addEventListener('click', closeSidebar);
 
     // --- Tab and Calculator Display Logic ---
-    const calculatorTabs = document.getElementById('calculatorTabs');
     const sidebarLinks = document.querySelectorAll('.tab-link-item');
+    const desktopTitle = document.getElementById('currentCalculatorTitle');
+    const mobileTitle = document.getElementById('currentCalculatorTitleMobile');
+    const calculatorTitles = {
+        commission: '부동산 중개보수',
+        interest: '예/적금 이자',
+        robux: '로벅스 환율'
+    };
     
     const calculators = {
         commission: document.getElementById('commissionCalculator'),
@@ -444,6 +405,11 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     function showTab(tabName) {
+        // Update Title
+        const title = calculatorTitles[tabName] || '';
+        if(desktopTitle) desktopTitle.textContent = title;
+        if(mobileTitle) mobileTitle.textContent = title;
+
         Object.values(calculators).forEach(calc => calc.classList.add('hidden'));
         Object.values(infoSections).forEach(info => info.classList.add('hidden'));
 
@@ -457,30 +423,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 link.classList.add('active-nav-link');
             }
         });
-
-        const mobileTabs = calculatorTabs.querySelectorAll('.tab-item');
-        mobileTabs.forEach(item => {
-            item.classList.remove('text-blue-600', 'border-blue-600');
-            item.classList.add('text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
-            if (item.getAttribute('data-tab') === tabName) {
-                 item.classList.add('text-blue-600', 'border-blue-600');
-                 item.classList.remove('text-gray-500');
-            }
-        });
         
         // Close sidebar after selection on mobile
         if (window.innerWidth < 1024) {
             closeSidebar();
         }
     }
-
-    calculatorTabs.addEventListener('click', e => {
-        e.preventDefault();
-        const tab = e.target.closest('.tab-item');
-        if (tab) {
-            showTab(tab.dataset.tab);
-        }
-    });
 
     sidebarLinks.forEach(link => {
         link.addEventListener('click', e => {
