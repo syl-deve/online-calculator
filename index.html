@@ -11,7 +11,7 @@
     <!-- END: SEO 최적화 태그 -->
 
     <!-- 1. 구글 애드센스 심사 코드 -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3960681231120180"
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1665611122111123"
      crossorigin="anonymous"></script>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -34,10 +34,24 @@
             color: #1f2937;
             margin-bottom: 1rem;
         }
-        /* 활성화된 네비게이션 링크 스타일 */
+        /* 활성화된 데스크톱 네비게이션 링크 스타일 */
         .active-nav-link {
             background-color: #f1f5f9;
             color: #0f172a;
+        }
+        /* 활성화된 모바일 네비게이션 링크 스타일 */
+        .active-mobile-nav-link {
+            background-color: #3b82f6 !important;
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+        /* 모바일 가로 스크롤바 숨기기 */
+        .mobile-nav-container::-webkit-scrollbar {
+            display: none;
+        }
+        .mobile-nav-container {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
         }
         .coupang-banner {
             margin-top: 2rem;
@@ -69,22 +83,14 @@
 </head>
 <body class="bg-gray-50">
 
-    <!-- Overlay for Mobile Sidebar -->
-    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-10 hidden lg:hidden"></div>
-
     <div class="relative min-h-screen lg:flex">
-        <!-- Left Sidebar -->
-        <aside id="sidebar" class="fixed top-0 left-0 w-3/4 max-w-xs h-full bg-white shadow-xl p-6 z-20 transform -translate-x-full transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:w-1/4 lg:h-screen lg:shadow-md lg:max-w-none lg:sticky flex flex-col">
+        <!-- Left Sidebar (Desktop) -->
+        <aside id="sidebar" class="hidden lg:flex lg:flex-col fixed top-0 left-0 w-3/4 max-w-xs h-full bg-white shadow-xl p-6 z-20 transform -translate-x-full transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:w-1/4 lg:h-screen lg:shadow-md lg:max-w-none lg:sticky">
             <div class="flex justify-between items-center border-b pb-4 mb-6">
                 <h2 class="text-xl font-bold text-slate-800 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-slate-600"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
                     계산기 목록
                 </h2>
-                <button id="closeButton" class="lg:hidden text-gray-500 hover:text-gray-800">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
             </div>
             
             <nav class="space-y-1 flex-grow overflow-y-auto">
@@ -152,18 +158,23 @@
 
         <!-- Main Content -->
         <main class="w-full p-4 sm:p-6 md:p-8">
-             <!-- Mobile Header -->
-            <header class="lg:hidden flex justify-between items-center mb-6">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-800">온라인 간편 계산기</h1>
-                    <h2 id="currentCalculatorTitleMobile" class="text-lg font-medium text-blue-600"></h2>
-                </div>
-                <button id="menuButton" class="p-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-            </header>
+             <!-- Mobile Horizontal Navigation -->
+            <div class="lg:hidden mb-4">
+                <nav class="mobile-nav-container flex space-x-2 overflow-x-auto pb-2">
+                    <a href="#" data-tab-link="unitConverter" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">데이터 단위</a>
+                    <a href="#" data-tab-link="crypto" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">코인 환율</a>
+                    <a href="#" data-tab-link="exchangeRate" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">세계 환율</a>
+                    <a href="#" data-tab-link="age" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">만 나이</a>
+                    <a href="#" data-tab-link="salary" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">연봉</a>
+                    <a href="#" data-tab-link="commission" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">부동산</a>
+                    <a href="#" data-tab-link="interest" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">예/적금</a>
+                    <a href="#" data-tab-link="robux" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">로벅스</a>
+                    <a href="#" data-tab-link="bmi" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">BMI</a>
+                    <a href="#" data-tab-link="dday" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">D-Day</a>
+                    <a href="#" data-tab-link="loan" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">대출 이자</a>
+                    <a href="#" data-tab-link="gpa" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">학점</a>
+                </nav>
+            </div>
 
             <div class="w-full max-w-4xl mx-auto">
                 <!-- Coupang Partners Banner for Mobile -->
@@ -176,8 +187,8 @@
                 </div>
 
                 <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
-                    <!-- Header for Desktop -->
-                    <div class="text-center mb-6 hidden lg:block">
+                    <!-- Header for All Devices -->
+                    <div class="text-center mb-6">
                         <h1 class="text-3xl sm:text-4xl font-bold text-gray-800">온라인 간편 계산기</h1>
                         <p class="text-gray-500 mt-2">생활에 필요한 모든 계산을 한 곳에서</p>
                         <h2 id="currentCalculatorTitle" class="text-2xl font-bold text-blue-600 mt-4"></h2>
@@ -775,21 +786,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // --- Mobile Sidebar Logic ---
-    const menuButton = document.getElementById('menuButton');
-    const closeButton = document.getElementById('closeButton');
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-    function openSidebar() { sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden'); }
-    function closeSidebar() { sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden'); }
-    menuButton.addEventListener('click', openSidebar);
-    closeButton.addEventListener('click', closeSidebar);
-    overlay.addEventListener('click', closeSidebar);
-
     // --- Tab and Calculator Display Logic ---
-    const sidebarLinks = document.querySelectorAll('.tab-link-item');
+    const allTabLinks = document.querySelectorAll('.tab-link-item');
     const desktopTitle = document.getElementById('currentCalculatorTitle');
-    const mobileTitle = document.getElementById('currentCalculatorTitleMobile');
     const calculatorTitles = {
         unitConverter: '데이터 단위', crypto: '주요 코인 환율', exchangeRate: '세계 환율', age: '만 나이', salary: '연봉 실수령액', commission: '부동산 중개보수', interest: '예/적금 이자', robux: '로벅스 환율', bmi: 'BMI (비만도)', dday: 'D-Day', loan: '대출 이자', gpa: '학점'
     };
@@ -803,19 +802,32 @@ document.addEventListener('DOMContentLoaded', function() {
     function showTab(tabName) {
         const title = calculatorTitles[tabName] || '';
         if(desktopTitle) desktopTitle.textContent = title;
-        if(mobileTitle) mobileTitle.textContent = title;
+        
         Object.values(calculators).forEach(calc => calc && calc.classList.add('hidden'));
         Object.values(infoSections).forEach(info => info && info.classList.add('hidden'));
+        
         if (calculators[tabName]) calculators[tabName].classList.remove('hidden');
         if (infoSections[tabName]) infoSections[tabName].classList.remove('hidden');
-        sidebarLinks.forEach(link => {
+        
+        // Handle active states for both desktop and mobile links
+        document.querySelectorAll('aside .tab-link-item').forEach(link => {
             link.classList.remove('active-nav-link');
-            if (link.dataset.tabLink === tabName) { link.classList.add('active-nav-link'); }
+            if (link.dataset.tabLink === tabName) {
+                link.classList.add('active-nav-link');
+            }
         });
-        if (window.innerWidth < 1024) { closeSidebar(); }
+
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.classList.remove('active-mobile-nav-link');
+            if (link.dataset.tabLink === tabName) {
+                link.classList.add('active-mobile-nav-link');
+                // Scroll the active link into view on mobile
+                link.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        });
     }
 
-    sidebarLinks.forEach(link => {
+    allTabLinks.forEach(link => {
         link.addEventListener('click', e => {
             e.preventDefault();
             const tabName = e.currentTarget.dataset.tabLink;
@@ -830,7 +842,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if(idsToFormat.includes(input.id)) {
             input.addEventListener('input', (e) => {
                 const unformatted = unformatNumber(e.target.value);
-                // Allow decimal points
                 if (/^-?\d*\.?\d*$/.test(unformatted) || unformatted === '') {
                     const parts = unformatted.split('.');
                     parts[0] = formatNumber(parts[0]);
@@ -1461,3 +1472,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </body>
 </html>
+
