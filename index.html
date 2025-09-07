@@ -159,7 +159,10 @@
         <!-- Main Content -->
         <main class="w-full p-4 sm:p-6 md:p-8">
              <!-- Mobile Horizontal Navigation -->
-            <div class="lg:hidden mb-4">
+            <div class="lg:hidden mb-4 relative">
+                <button id="scroll-left-btn" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur-sm rounded-full p-1 shadow-md hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-gray-600"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
                 <nav class="mobile-nav-container flex space-x-2 overflow-x-auto pb-2">
                     <a href="#" data-tab-link="unitConverter" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">데이터 단위</a>
                     <a href="#" data-tab-link="crypto" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">코인 환율</a>
@@ -174,6 +177,9 @@
                     <a href="#" data-tab-link="loan" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">대출 이자</a>
                     <a href="#" data-tab-link="gpa" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">학점</a>
                 </nav>
+                <button id="scroll-right-btn" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur-sm rounded-full p-1 shadow-md hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-gray-600"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
             </div>
 
             <div class="w-full max-w-4xl mx-auto">
@@ -1449,6 +1455,41 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // --- Mobile Nav Scroll ---
+    function setupMobileNavScroll() {
+        const navContainer = document.querySelector('.mobile-nav-container');
+        const scrollLeftBtn = document.getElementById('scroll-left-btn');
+        const scrollRightBtn = document.getElementById('scroll-right-btn');
+
+        if (!navContainer || !scrollLeftBtn || !scrollRightBtn) return;
+
+        const updateScrollButtons = () => {
+            const { scrollLeft, scrollWidth, clientWidth } = navContainer;
+            // A small buffer is added to handle sub-pixel rendering issues
+            const buffer = 1; 
+            
+            scrollLeftBtn.classList.toggle('hidden', scrollLeft <= 0);
+            scrollRightBtn.classList.toggle('hidden', scrollLeft >= scrollWidth - clientWidth - buffer);
+        };
+
+        scrollLeftBtn.addEventListener('click', () => {
+            navContainer.scrollBy({ left: -200, behavior: 'smooth' });
+        });
+
+        scrollRightBtn.addEventListener('click', () => {
+            navContainer.scrollBy({ left: 200, behavior: 'smooth' });
+        });
+
+        navContainer.addEventListener('scroll', updateScrollButtons);
+        
+        // Use ResizeObserver to detect size changes of the container
+        new ResizeObserver(updateScrollButtons).observe(navContainer);
+        
+        // Initial check
+        updateScrollButtons();
+    }
+
+
     // --- INITIALIZE ---
     function initialize() {
         const initialTab = window.location.hash.substring(1) || 'unitConverter';
@@ -1465,6 +1506,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setupDdayCalculator();
         setupLoanCalculator();
         setupGpaCalculator();
+        setupMobileNavScroll();
         
         showTab(initialTab);
     }
@@ -1475,4 +1517,3 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </body>
 </html>
-
