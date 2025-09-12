@@ -375,44 +375,53 @@ document.addEventListener('DOMContentLoaded', function() {
         const rentContainer = document.getElementById('rentContainer');
         tradeTypeContainer.addEventListener('change', (e) => {
             if (e.target.name === 'tradeType') {
-                if (e.target.value === '임대차') { priceContainer.classList.add('hidden'); rentContainer.classList.remove('hidden'); } 
-                else { priceContainer.classList.remove('hidden'); rentContainer.classList.add('hidden'); }
+                if (e.target.value === '임대차') {
+                    priceContainer.classList.add('hidden');
+                    rentContainer.classList.remove('hidden');
+                } else {
+                    priceContainer.classList.remove('hidden');
+                    rentContainer.classList.add('hidden');
+                }
             }
         });
-        document.getElementById('commissionCalculateBtn').addEventListener('click', () => {
+
+        document.getElementById('commissionCalculateBtn').addEventListener('click', async () => {
             const tradeType = document.querySelector('input[name="tradeType"]:checked').value;
             const propertyType = document.querySelector('input[name="propertyType"]:checked').value;
-            let price = (tradeType === '매매') ? Number(unformatNumber(document.getElementById('price').value)) : Number(unformatNumber(document.getElementById('deposit').value));
-            let monthlyRent = (tradeType === '매매') ? 0 : Number(unformatNumber(document.getElementById('monthlyRent').value));
+            const price = (tradeType === '매매') ? Number(unformatNumber(document.getElementById('price').value)) : Number(unformatNumber(document.getElementById('deposit').value));
+            const monthlyRent = (tradeType === '매매') ? 0 : Number(unformatNumber(document.getElementById('monthlyRent').value));
             const errorText = document.getElementById('commissionErrorText');
+
             if ((tradeType === '매매' && price <= 0) || (tradeType === '임대차' && (price < 0 || monthlyRent < 0 || (price === 0 && monthlyRent === 0)))) {
-                errorText.textContent = '금액을 정확히 입력해주세요.'; return;
+                errorText.textContent = '금액을 정확히 입력해주세요.';
+                return;
             }
             errorText.textContent = '';
-            
-            let dealAmount = price;
-            if (tradeType === '임대차') { const convertedPrice = price + (monthlyRent * 100); dealAmount = (convertedPrice < 50000000) ? price + (monthlyRent * 70) : convertedPrice; }
-            let rate = 0; let limit = Infinity;
-            if (propertyType === '주택') {
-                if (tradeType === '매매') {
-                    if (dealAmount < 50000000) { rate = 0.006; limit = 250000; }
-                    else if (dealAmount < 200000000) { rate = 0.005; limit = 800000; }
-                    else if (dealAmount < 900000000) { rate = 0.004; } else if (dealAmount < 1200000000) { rate = 0.005; }
-                    else if (dealAmount < 1500000000) { rate = 0.006; } else { rate = 0.007; }
-                } else { // 임대차
-                    if (dealAmount < 50000000) { rate = 0.005; limit = 200000; }
-                    else if (dealAmount < 100000000) { rate = 0.004; limit = 300000; }
-                    else if (dealAmount < 600000000) { rate = 0.003; } else if (dealAmount < 1200000000) { rate = 0.004; }
-                    else if (dealAmount < 1500000000) { rate = 0.005; } else { rate = 0.006; }
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-commission', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tradeType, propertyType, price, monthlyRent }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Commission calculation failed on server.');
                 }
-            } else if (propertyType === '오피스텔') { rate = (tradeType === '매매') ? 0.005 : 0.004; } 
-            else { rate = 0.009; }
-            
-            const finalFee = Math.min(dealAmount * rate, limit);
-            document.getElementById('commissionResultText').textContent = `${formatNumber(Math.floor(finalFee))} 원`;
-            let details = `적용 요율: ${(rate * 100).toFixed(2)}%`;
-            if (limit !== Infinity) { details += ` (한도액: ${formatNumber(limit)}원)`; }
-            document.getElementById('commissionResultDetails').innerHTML = details + '<br>VAT 10%는 별도이며, 실제 보수는 협의를 통해 결정됩니다.';
+
+                const data = await response.json();
+
+                document.getElementById('commissionResultText').textContent = `${formatNumber(data.finalFee)} 원`;
+                let details = `적용 요율: ${(data.rate * 100).toFixed(2)}%`;
+                if (data.limit !== Infinity) {
+                    details += ` (한도액: ${formatNumber(data.limit)}원)`;
+                }
+                document.getElementById('commissionResultDetails').innerHTML = details + '<br>VAT 10%는 별도이며, 실제 보수는 협의를 통해 결정됩니다.';
+
+            } catch (error) {
+                console.error('Commission calculation error:', error);
+                errorText.textContent = '계산 중 오류가 발생했습니다.';
+            }
         });
         document.getElementById('copyCommissionBtn').addEventListener('click', () => copyToClipboard(document.getElementById('commissionResultText').textContent, 'copyCommissionMsg'));
     }
