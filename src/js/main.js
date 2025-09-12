@@ -282,18 +282,41 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 3. Age Calculator
     function setupAgeCalculator() {
-        document.getElementById('ageCalculateBtn').addEventListener('click', () => {
+        document.getElementById('ageCalculateBtn').addEventListener('click', async () => {
             const birthDateInput = document.getElementById('birthDate');
             const ageResultText = document.getElementById('ageResultText');
             const ageResultDetails = document.getElementById('ageResultDetails');
-            if (!birthDateInput.value) { ageResultDetails.textContent = "생년월일을 선택해주세요."; return; }
-            const birthDate = new Date(birthDateInput.value);
-            const today = new Date();
-            let age = today.getFullYear() - birthDate.getFullYear();
-            const monthDiff = today.getMonth() - birthDate.getMonth();
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) { age--; }
-            ageResultText.textContent = `${age} 세`;
-            ageResultDetails.textContent = `오늘 날짜: ${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
+            
+            if (!birthDateInput.value) {
+                ageResultDetails.textContent = "생년월일을 선택해주세요.";
+                return;
+            }
+
+            ageResultDetails.textContent = '계산 중...';
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-age', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ birthDate: birthDateInput.value }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('서버에서 나이를 계산하는 데 실패했습니다.');
+                }
+
+                const data = await response.json();
+                const today = new Date();
+                ageResultText.textContent = `${data.age} 세`;
+                ageResultDetails.textContent = `오늘 날짜: ${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
+
+            } catch (error) {
+                console.error('Age calculation error:', error);
+                ageResultText.textContent = '-';
+                ageResultDetails.textContent = '오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+            }
         });
         document.getElementById('copyAgeBtn').addEventListener('click', () => copyToClipboard(document.getElementById('ageResultText').textContent, 'copyAgeMsg'));
     }
