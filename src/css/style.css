@@ -1,0 +1,62 @@
+        body {
+            font-family: 'Noto Sans KR', 'Inter', sans-serif;
+        }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        .info-section h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        /* 활성화된 데스크톱 네비게이션 링크 스타일 */
+        .active-nav-link {
+            background-color: #f1f5f9;
+            color: #0f172a;
+        }
+        /* 활성화된 모바일 네비게이션 링크 스타일 */
+        .active-mobile-nav-link {
+            background-color: #3b82f6 !important;
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+        /* 모바일 가로 스크롤바 숨기기 */
+        .mobile-nav-container::-webkit-scrollbar {
+            display: none;
+        }
+        .mobile-nav-container {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        .coupang-banner {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        .copy-btn {
+            padding: 0.5rem;
+            color: #9ca3af;
+            transition: color 0.2s;
+        }
+        .copy-btn:hover {
+            color: #4b5563;
+        }
+        .copy-message {
+            font-size: 0.875rem;
+            color: #059669;
+            font-weight: 600;
+            position: absolute;
+            top: -1.5rem;
+            right: 0;
+        }
+        .result-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
