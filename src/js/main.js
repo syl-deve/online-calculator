@@ -573,22 +573,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 9. D-Day Calculator
     function setupDdayCalculator() {
-        document.getElementById('ddayCalculateBtn').addEventListener('click', () => {
+        document.getElementById('ddayCalculateBtn').addEventListener('click', async () => {
             const ddayDateInput = document.getElementById('ddayDate');
             const ddayResultText = document.getElementById('ddayResultText');
             const ddayResultDetails = document.getElementById('ddayResultDetails');
-            if (!ddayDateInput.value) { ddayResultDetails.textContent = "목표 날짜를 선택해주세요."; return; }
-            const targetDate = new Date(ddayDateInput.value);
-            const today = new Date();
-            today.setHours(0,0,0,0);
-            targetDate.setHours(0,0,0,0);
-            const diffTime = targetDate - today;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-            if(diffDays === 0) { ddayResultText.textContent = "D-Day"; }
-            else if (diffDays > 0) { ddayResultText.textContent = `D-${diffDays}`; }
-            else { ddayResultText.textContent = `D+${-diffDays}`; }
-            ddayResultDetails.textContent = `${targetDate.getFullYear()}년 ${targetDate.getMonth()+1}월 ${targetDate.getDate()}일`;
+            if (!ddayDateInput.value) {
+                ddayResultDetails.textContent = "목표 날짜를 선택해주세요.";
+                return;
+            }
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-dday', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ targetDateString: ddayDateInput.value }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('D-Day calculation failed on server.');
+                }
+
+                const data = await response.json();
+                const diffDays = data.diffDays;
+                const targetDate = new Date(ddayDateInput.value);
+
+                if (diffDays === 0) { ddayResultText.textContent = "D-Day"; }
+                else if (diffDays > 0) { ddayResultText.textContent = `D-${diffDays}`; }
+                else { ddayResultText.textContent = `D+${-diffDays}`; }
+                ddayResultDetails.textContent = `${targetDate.getFullYear()}년 ${targetDate.getMonth() + 1}월 ${targetDate.getDate()}일`;
+
+            } catch (error) {
+                console.error('D-Day calculation error:', error);
+                ddayResultText.textContent = '-';
+                ddayResultDetails.textContent = '오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+            }
         });
         document.getElementById('copyDdayBtn').addEventListener('click', () => copyToClipboard(document.getElementById('ddayResultText').textContent, 'copyDdayMsg'));
     }
