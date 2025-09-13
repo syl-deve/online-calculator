@@ -614,25 +614,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 10. Loan Calculator
     function setupLoanCalculator() {
-        document.getElementById('loanCalculateBtn').addEventListener('click', () => {
+        document.getElementById('loanCalculateBtn').addEventListener('click', async () => {
             const principal = parseFloat(unformatNumber(document.getElementById('loanPrincipal').value));
             const years = parseFloat(document.getElementById('loanPeriod').value);
             const annualRate = parseFloat(document.getElementById('loanRate').value);
             const errorText = document.getElementById('loanErrorText');
-            if(principal > 0 && years > 0 && annualRate > 0) {
-                errorText.textContent = "";
-                const monthlyRate = annualRate / 100 / 12;
-                const months = years * 12;
-                const monthlyPayment = principal * monthlyRate * (Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
-                const totalPayment = monthlyPayment * months;
-                const totalInterest = totalPayment - principal;
 
-                document.getElementById('loanResultTotal').textContent = `${formatNumber(Math.round(monthlyPayment))} 원`;
-                document.getElementById('loanResultPrincipal').textContent = `${formatNumber(principal)} 원`;
-                document.getElementById('loanResultInterest').textContent = `${formatNumber(Math.round(totalInterest))} 원`;
-                document.getElementById('loanResultGrandTotal').textContent = `${formatNumber(Math.round(totalPayment))} 원`;
-            } else {
+            if (principal <= 0 || years <= 0 || annualRate <= 0) {
                 errorText.textContent = "모든 값을 정확히 입력해주세요.";
+                return;
+            }
+            errorText.textContent = "";
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-loan', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ principal, years, annualRate }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Loan calculation failed on server.');
+                }
+
+                const data = await response.json();
+
+                document.getElementById('loanResultTotal').textContent = `${formatNumber(data.monthlyPayment)} 원`;
+                document.getElementById('loanResultPrincipal').textContent = `${formatNumber(data.principal)} 원`;
+                document.getElementById('loanResultInterest').textContent = `${formatNumber(data.totalInterest)} 원`;
+                document.getElementById('loanResultGrandTotal').textContent = `${formatNumber(data.totalPayment)} 원`;
+
+            } catch (error) {
+                console.error('Loan calculation error:', error);
+                errorText.textContent = '계산 중 오류가 발생했습니다.';
             }
         });
         document.getElementById('copyLoanBtn').addEventListener('click', () => copyToClipboard(document.getElementById('loanResultTotal').textContent, 'copyLoanMsg'));
