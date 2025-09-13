@@ -1,19 +1,25 @@
 exports.handler = async function(event, context) {
     try {
         const { sourceAsset, sourceValue } = JSON.parse(event.body);
+        const apiKey = process.env.COINGECKO_API_KEY;
+
+        if (!apiKey) {
+            throw new Error('API key is not configured on the server.');
+        }
 
         const coin_ids = 'bitcoin,ethereum,solana,binancecoin,ripple,dogecoin,cardano,the-open-network,avalanche-2,polkadot,tether,usd-coin';
-        const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coin_ids}&vs_currencies=usd,krw`);
+        const apiUrl = `https://api.coingecko.com/api/v3/simple/price?ids=${coin_ids}&vs_currencies=usd,krw&x_cg_demo_api_key=${apiKey}`;
+        
+        const response = await fetch(apiUrl);
 
         if (!response.ok) {
-            throw new Error('암호화폐 시세 정보를 가져오는 데 실패했습니다.');
+            throw new Error(`CoinGecko API responded with status: ${response.status}`);
         }
 
         const cryptoRates = await response.json();
 
-        // API 응답에 bitcoin 데이터가 있는지 확인 (KRW <-> USD 변환 기준)
         if (!cryptoRates.bitcoin || !cryptoRates.bitcoin.usd || !cryptoRates.bitcoin.krw) {
-            throw new Error('필수 변환 데이터(비트코인 시세)가 없습니다.');
+            throw new Error('Essential conversion rates (Bitcoin) are missing from API response.');
         }
 
         const btcToUsd = cryptoRates.bitcoin.usd;
@@ -37,14 +43,13 @@ exports.handler = async function(event, context) {
             if (cryptoRates[sourceAsset] && cryptoRates[sourceAsset].usd) {
                 valueInUsd = sourceValue * cryptoRates[sourceAsset].usd;
             } else {
-                 throw new Error(`지원되지 않는 자산입니다: ${sourceAsset}`);
+                 throw new Error(`Unsupported asset: ${sourceAsset}`);
             }
         }
 
         const results = {};
         const precisionMap = { KRW: 0, USD: 2, bitcoin: 8, ethereum: 8, solana: 4, binancecoin: 4, ripple: 4, dogecoin: 4, cardano: 4, 'the-open-network': 4, 'avalanche-2': 4, polkadot: 4, 'tether': 2, 'usd-coin': 2 };
 
-        // 모든 암호화폐에 대한 USD 가치 계산
         for (const assetId in cryptoRates) {
             if (cryptoRates[assetId] && cryptoRates[assetId].usd > 0) {
                 const precision = precisionMap[assetId] ?? 2;
@@ -52,7 +57,6 @@ exports.handler = async function(event, context) {
             }
         }
 
-        // KRW 및 USD 가치 추가
         results['KRW'] = Math.round(valueInUsd * usdToKrwRate);
         results['USD'] = parseFloat(valueInUsd.toFixed(2));
 
