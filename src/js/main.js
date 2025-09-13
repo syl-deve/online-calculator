@@ -146,22 +146,63 @@ document.addEventListener('DOMContentLoaded', function() {
         const cryptoInputs = document.querySelectorAll('.crypto-input');
         const cryptoRateInfoText = document.getElementById('cryptoRateInfoText');
         const cryptoInfoBox = document.getElementById('cryptoInfoBox');
-        let cryptoRates = {};
-        let isCryptoCalculating = false;
+        
+        // No need for cryptoRates or isCryptoCalculating on client-side anymore
 
-        async function fetchCryptoRates() {
+        async function updateCryptoCalculations(sourceAsset) {
+            const sourceInput = document.querySelector(`.crypto-input[data-asset="${sourceAsset}"]`);
+            const sourceValue = parseFloat(unformatNumber(sourceInput.value));
+
+            // Clear all other inputs if the source is empty or invalid
+            if (isNaN(sourceValue) || sourceInput.value === '') {
+                cryptoInputs.forEach(input => {
+                    if (input !== sourceInput) {
+                        input.value = '';
+                    }
+                });
+                cryptoRateInfoText.textContent = '실시간 코인 시세 정보를 불러오는 중입니다...';
+                cryptoInfoBox.className = 'bg-amber-50 border-l-4 border-amber-500 text-amber-700 p-4 rounded-lg mb-6';
+                return;
+            }
+
+            cryptoRateInfoText.textContent = '계산 중...';
+            cryptoInfoBox.className = 'bg-amber-50 border-l-4 border-amber-500 text-amber-700 p-4 rounded-lg mb-6';
+
             try {
-                const coin_ids = 'bitcoin,ethereum,solana,binancecoin,ripple,dogecoin,cardano,the-open-network,avalanche-2,polkadot,tether,usd-coin';
-                const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coin_ids}&vs_currencies=usd,krw`);
-                if (!response.ok) throw new Error('Network response was not ok');
-                cryptoRates = await response.json();
-                const btcPriceKrw = formatNumber(Math.round(cryptoRates.bitcoin.krw));
-                cryptoRateInfoText.textContent = `실시간 시세 적용 중 (예: 1 BTC = ${btcPriceKrw}원)`;
+                const response = await fetch('/.netlify/functions/calculate-crypto', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sourceAsset, sourceValue }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Crypto calculation failed on server.');
+                }
+
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                for (const asset in data.rates) {
+                    const input = document.querySelector(`.crypto-input[data-asset="${asset}"]`);
+                    if (input && asset !== sourceAsset) {
+                        if (asset === 'KRW') {
+                            input.value = formatNumber(data.rates[asset]);
+                        } else {
+                            input.value = data.rates[asset];
+                        }
+                    }
+                }
+                cryptoRateInfoText.textContent = `실시간 시세 적용 중 (예: 1 BTC = ${formatNumber(data.btcPriceKrw)}원)`;
+                cryptoInfoBox.className = 'bg-amber-50 border-l-4 border-amber-500 text-amber-700 p-4 rounded-lg mb-6';
+
             } catch (error) {
-                console.error("코인 시세 정보 가져오기 실패:", error);
+                console.error('Crypto calculation error:', error);
                 cryptoInfoBox.className = 'bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6';
-                cryptoRateInfoText.innerHTML = `<p class="font-bold">오류</p><p>실시간 코인 시세 로딩에 실패했습니다. 페이지를 새로고침하거나 잠시 후 다시 시도해주세요.</p>`;
-                document.querySelectorAll('.crypto-input').forEach(input => {
+                cryptoRateInfoText.innerHTML = `<p class="font-bold">오류</p><p>코인 시세 로딩 또는 계산에 실패했습니다. 잠시 후 다시 시도해주세요.</p>`;
+                cryptoInputs.forEach(input => {
                     input.disabled = true;
                     input.placeholder = '데이터 로딩 실패';
                     input.value = '';
@@ -169,54 +210,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        function updateCryptoCalculations(sourceAsset) {
-            if (isCryptoCalculating || Object.keys(cryptoRates).length === 0) return;
-            isCryptoCalculating = true;
-
-            const sourceInput = document.querySelector(`.crypto-input[data-asset="${sourceAsset}"]`);
-            const sourceValue = parseFloat(unformatNumber(sourceInput.value));
-            let valueInUsd = 0;
-            
-            const precisionMap = { KRW: 0, USD: 2, bitcoin: 8, ethereum: 8, solana: 4, binancecoin: 4, ripple: 4, dogecoin: 4, cardano: 4, 'the-open-network': 4, 'avalanche-2': 4, polkadot: 4, 'tether': 2, 'usd-coin': 2 };
-
-            if (!isNaN(sourceValue) && sourceInput.value !== '') {
-                if (sourceAsset === 'KRW') { valueInUsd = sourceValue / cryptoRates.bitcoin.krw * cryptoRates.bitcoin.usd; } 
-                else if (sourceAsset === 'USD') { valueInUsd = sourceValue; } 
-                else {
-                    if (cryptoRates[sourceAsset]) { valueInUsd = sourceValue * cryptoRates[sourceAsset].usd; } 
-                    else { isCryptoCalculating = false; return; }
-                }
-
-                cryptoInputs.forEach(input => {
-                    const targetAsset = input.dataset.asset;
-                    if (targetAsset !== sourceAsset) {
-                        let targetValue;
-                        if (targetAsset === 'KRW') { targetValue = valueInUsd / cryptoRates.bitcoin.usd * cryptoRates.bitcoin.krw; } 
-                        else if (targetAsset === 'USD') { targetValue = valueInUsd; } 
-                        else {
-                            if (cryptoRates[targetAsset]) { targetValue = valueInUsd / cryptoRates[targetAsset].usd; } 
-                            else { return; }
-                        }
-
-                        const precision = precisionMap[targetAsset] ?? 2;
-                        if(targetAsset === 'KRW') {
-                            input.value = formatNumber(Math.round(targetValue));
-                        } else {
-                            input.value = targetValue.toFixed(precision);
-                        }
-                    }
-                });
-            } else {
-                cryptoInputs.forEach(input => { if (input !== sourceInput) input.value = ''; });
-            }
-            isCryptoCalculating = false;
-        }
-        
         cryptoInputs.forEach(input => {
             input.addEventListener('input', () => updateCryptoCalculations(input.dataset.asset));
         });
         
-        fetchCryptoRates();
+        // Initial fetch to populate rates and info text
+        updateCryptoCalculations('KRW'); // Trigger an initial calculation with a dummy value to fetch rates
     }
     
     // 2. Exchange Rate Calculator
