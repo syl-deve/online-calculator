@@ -532,25 +532,40 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 8. BMI Calculator
     function setupBmiCalculator() {
-        document.getElementById('bmiCalculateBtn').addEventListener('click', () => {
+        document.getElementById('bmiCalculateBtn').addEventListener('click', async () => {
             const height = parseFloat(document.getElementById('height').value);
             const weight = parseFloat(document.getElementById('weight').value);
             const resultText = document.getElementById('bmiResultText');
             const resultDetails = document.getElementById('bmiResultDetails');
-            if (height > 0 && weight > 0) {
-                const bmi = weight / ((height / 100) ** 2);
-                resultText.textContent = bmi.toFixed(2);
-                let category = '', colorClass = '';
-                if (bmi < 18.5) { category = '저체중'; colorClass = 'text-blue-600'; }
-                else if (bmi < 23) { category = '정상'; colorClass = 'text-green-600'; }
-                else if (bmi < 25) { category = '과체중'; colorClass = 'text-yellow-600'; }
-                else if (bmi < 30) { category = '1단계 비만'; colorClass = 'text-orange-600'; }
-                else { category = '2단계 이상 비만'; colorClass = 'text-red-600'; }
-                resultDetails.textContent = category;
-                resultDetails.className = `text-lg font-semibold ${colorClass}`;
-            } else {
+
+            if (height <= 0 || weight <= 0) {
                 resultDetails.textContent = '키와 몸무게를 입력해주세요.';
                 resultDetails.className = 'text-lg font-semibold text-blue-600';
+                return;
+            }
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-bmi', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ height, weight }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('BMI calculation failed on server.');
+                }
+
+                const data = await response.json();
+
+                resultText.textContent = data.bmi;
+                resultDetails.textContent = data.category;
+                resultDetails.className = `text-lg font-semibold ${data.colorClass}`;
+
+            } catch (error) {
+                console.error('BMI calculation error:', error);
+                resultText.textContent = '-';
+                resultDetails.textContent = '오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+                resultDetails.className = 'text-lg font-semibold text-red-600';
             }
         });
         document.getElementById('copyBmiBtn').addEventListener('click', () => copyToClipboard(document.getElementById('bmiResultText').textContent, 'copyBmiMsg'));
