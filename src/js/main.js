@@ -223,24 +223,24 @@ document.addEventListener('DOMContentLoaded', function() {
         const currencyInputs = document.querySelectorAll('.currency-input');
         const exchangeRateInfoText = document.getElementById('exchangeRateInfoText');
         const exchangeRateInfoBox = document.getElementById('exchangeRateInfoBox');
-        let exchangeRates = {};
-        let isExchangeCalculating = false;
 
-        async function fetchExchangeRates() {
+        async function fetchInitialRates() {
             try {
-                const response = await fetch('https://open.er-api.com/v6/latest/USD');
+                const response = await fetch('/.netlify/functions/calculate-exchange-rate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sourceCurrency: 'FETCH_RATES' })
+                });
                 if (!response.ok) throw new Error('Network response was not ok');
                 const data = await response.json();
-                exchangeRates = data.rates;
-                exchangeRates['USD'] = 1;
-                const krwRate = formatNumber(exchangeRates['KRW'].toFixed(2));
-                const date = new Date(data.time_last_update_utc).toLocaleString('ko-KR');
+                const krwRate = formatNumber(data.rates['KRW'].toFixed(2));
+                const date = new Date(data.lastUpdated).toLocaleString('ko-KR');
                 exchangeRateInfoText.textContent = `기준: 1달러 = ${krwRate}원 (업데이트: ${date})`;
             } catch (error) {
                 console.error("환율 정보 가져오기 실패:", error);
                 exchangeRateInfoBox.className = 'bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6';
                 exchangeRateInfoText.innerHTML = `<p class="font-bold">오류</p><p>실시간 환율 정보 로딩에 실패했습니다. 페이지를 새로고침하거나 잠시 후 다시 시도해주세요.</p>`;
-                document.querySelectorAll('.currency-input').forEach(input => {
+                currencyInputs.forEach(input => {
                     input.disabled = true;
                     input.placeholder = '데이터 로딩 실패';
                     input.value = '';
@@ -248,35 +248,48 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        function updateExchangeCalculations(sourceCurrency) {
-            if (isExchangeCalculating || Object.keys(exchangeRates).length === 0) return;
-            isExchangeCalculating = true;
-
+        async function updateExchangeCalculations(sourceCurrency) {
             const sourceInput = document.querySelector(`.currency-input[data-currency="${sourceCurrency}"]`);
             const sourceValue = parseFloat(unformatNumber(sourceInput.value));
 
-            if (!isNaN(sourceValue) && sourceInput.value !== '') {
-                const valueInUsd = sourceValue / exchangeRates[sourceCurrency];
+            if (isNaN(sourceValue) || sourceInput.value === '') {
+                currencyInputs.forEach(input => {
+                    if (input !== sourceInput) input.value = '';
+                });
+                return;
+            }
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-exchange-rate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sourceCurrency, sourceValue })
+                });
+
+                if (!response.ok) throw new Error('Exchange rate calculation failed');
+                const data = await response.json();
+
                 currencyInputs.forEach(input => {
                     const targetCurrency = input.dataset.currency;
                     if (targetCurrency !== sourceCurrency) {
-                        const targetValue = valueInUsd * exchangeRates[targetCurrency];
+                        const targetValue = data.rates[targetCurrency];
                         if (targetCurrency === 'JPY') { input.value = Math.round(targetValue); } 
                         else if (targetCurrency === 'KRW') { input.value = formatNumber(targetValue.toFixed(0));}
                         else { input.value = targetValue.toFixed(2); }
                     }
                 });
-            } else {
-                currencyInputs.forEach(input => { if (input !== sourceInput) input.value = ''; });
+
+            } catch (error) {
+                console.error('Exchange calculation error:', error);
+                // Handle error display if necessary
             }
-            isExchangeCalculating = false;
         }
 
         currencyInputs.forEach(input => {
             input.addEventListener('input', () => updateExchangeCalculations(input.dataset.currency));
         });
         
-        fetchExchangeRates();
+        fetchInitialRates();
     }
     
     // 3. Age Calculator
