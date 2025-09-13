@@ -750,52 +750,56 @@ document.addEventListener('DOMContentLoaded', function() {
         const unitInputs = document.querySelectorAll('.unit-input');
         let isUnitCalculating = false;
 
-        const TB_TO_MB = 1024 * 1024;
-        const GB_TO_MB = 1024;
+        // Constants are now only used for client-side display logic if needed, not for calculation
+        // const TB_TO_MB = 1024 * 1024;
+        // const GB_TO_MB = 1024;
 
-        function updateUnitCalculations(sourceUnit) {
+        async function updateUnitCalculations(sourceUnit) {
             if (isUnitCalculating) return;
             isUnitCalculating = true;
 
             const sourceInput = document.querySelector(`.unit-input[data-unit="${sourceUnit}"]`);
             const sourceValue = parseFloat(unformatNumber(sourceInput.value));
 
-            if (!isNaN(sourceValue) && sourceInput.value !== '') {
-                let valueInMb = 0;
-                if (sourceUnit === 'TB') {
-                    valueInMb = sourceValue * TB_TO_MB;
-                } else if (sourceUnit === 'GB') {
-                    valueInMb = sourceValue * GB_TO_MB;
-                } else { // MB
-                    valueInMb = sourceValue;
-                }
-
-                unitInputs.forEach(input => {
-                    const targetUnit = input.dataset.unit;
-                    if (targetUnit !== sourceUnit) {
-                        let targetValue;
-                        if (targetUnit === 'TB') {
-                            targetValue = valueInMb / TB_TO_MB;
-                        } else if (targetUnit === 'GB') {
-                            targetValue = valueInMb / GB_TO_MB;
-                        } else { // MB
-                            targetValue = valueInMb;
-                        }
-                        
-                        const parts = targetValue.toString().split('.');
-                        parts[0] = formatNumber(parts[0]);
-                        input.value = parts.join('.');
-                    }
-                });
-            } else {
-                // Clear all other inputs if the source is empty
+            if (isNaN(sourceValue) || sourceInput.value === '') {
                 unitInputs.forEach(input => {
                     if (input !== sourceInput) {
                         input.value = '';
                     }
                 });
+                isUnitCalculating = false;
+                return;
             }
-            isUnitCalculating = false;
+
+            try {
+                const response = await fetch('/.netlify/functions/convert-unit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sourceUnit, sourceValue }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Unit conversion failed on server.');
+                }
+
+                const data = await response.json();
+
+                unitInputs.forEach(input => {
+                    const targetUnit = input.dataset.unit;
+                    let targetValue = data[targetUnit];
+                    
+                    // Format number for display
+                    const parts = targetValue.toString().split('.');
+                    parts[0] = formatNumber(parts[0]);
+                    input.value = parts.join('.');
+                });
+
+            } catch (error) {
+                console.error('Unit conversion error:', error);
+                // Optionally display an error message to the user
+            } finally {
+                isUnitCalculating = false;
+            }
         }
 
         unitInputs.forEach(input => {
