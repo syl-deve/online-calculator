@@ -470,78 +470,64 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 7. Robux Calculator
     function setupRobuxCalculator() {
-        const robuxInput = document.getElementById('robuxInput');
-        const krwInput_robux = document.getElementById('krwInputRobux');
+         const robuxInput = document.getElementById('robuxInput'); 
+        const krwInput_robux = document.getElementById('krwInputRobux'); 
         const usdInput_robux = document.getElementById('usdInput');
-        const robuxRateInfo = document.getElementById('robuxRateInfo');
+        const robuxRateInfo = document.getElementById('robuxRateInfo'); 
         const robuxInfoBox = document.getElementById('robuxInfoBox');
         const robuxStandardInfo = document.getElementById('robuxStandardInfo');
-        const platformSelector = document.getElementById('platformSelector');
-
+        const platformSelector = document.getElementById('platformSelector'); 
         const PC_KRW_PER_ROBUX = 15000 / 1200;
-        const MOBILE_KRW_PER_ROBUX = 7500 / 400;
+        const MOBILE_KRW_PER_ROBUX = 7500 / 400; 
+        let currentKrwPerRobux = PC_KRW_PER_ROBUX;
+        let robux_USD_TO_KRW = 1380; // Default
+        let isRobuxCalculating = false;
 
-        let currentKrwPerRobux = PC_KRW_PER_ROBUX; // Default to PC rate
-
+        async function fetchRobuxRate() {
+            try {
+                const response = await fetch('https://open.er-api.com/v6/latest/USD'); if (!response.ok) throw new Error('Network response was not ok');
+                const data = await response.json(); robux_USD_TO_KRW = data.rates.KRW;
+                robuxRateInfo.textContent = `현재 환율 적용 중: 1달러 = ${robux_USD_TO_KRW.toFixed(2)}원`;
+            } catch (error) { 
+                console.error("환율 정보 가져오기 실패:", error); 
+                robuxInfoBox.className = 'bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6';
+                robuxRateInfo.textContent = `실시간 환율 로딩 실패. 예상 환율(1달러 = ${robux_USD_TO_KRW}원)을 기준으로 계산합니다.`; 
+            }
+        }
+        
         function updateRobuxInfoText() {
             const selectedPlatform = platformSelector.querySelector('input[name="platform"]:checked').value;
             robuxStandardInfo.textContent = selectedPlatform === 'pc' ? '이 계산은 공식 PC/웹 구매가(1,200 R$ = 15,000원)를 기준으로 합니다.' : '이 계산은 공식 모바일 구매가(400 R$ = 7,500원)를 기준으로 합니다.';
         }
-
+        
         platformSelector.addEventListener('change', (e) => {
             if (e.target.name === 'platform') {
                 currentKrwPerRobux = e.target.value === 'pc' ? PC_KRW_PER_ROBUX : MOBILE_KRW_PER_ROBUX;
                 updateRobuxInfoText();
-                // Trigger recalculation based on the currently active input
                 if (robuxInput.value) updateRobuxCalculations('robux');
                 else if (krwInput_robux.value) updateRobuxCalculations('krw');
                 else if (usdInput_robux.value) updateRobuxCalculations('usd');
             }
         });
 
-        async function updateRobuxCalculations(source) {
-            const robuxVal = robuxInput.value;
-            const krwVal = unformatNumber(krwInput_robux.value);
-            const usdVal = usdInput_robux.value;
-            
-            try {
-                const response = await fetch('/.netlify/functions/calculate-robux', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        robuxInput: robuxVal,
-                        krwInputRobux: krwVal,
-                        usdInput: usdVal,
-                        platform: platformSelector.querySelector('input[name="platform"]:checked').value,
-                        source: source
-                    }),
-                });
-
-                if (!response.ok) {
-                    throw new Error('Robux calculation failed on server.');
-                }
-
-                const data = await response.json();
-
-                if (data.robux !== null) robuxInput.value = data.robux;
-                if (data.krw !== null) krwInput_robux.value = formatNumber(data.krw);
-                if (data.usd !== null) usdInput_robux.value = data.usd;
-                
-                robuxRateInfo.textContent = `현재 환율 적용 중: 1달러 = ${data.robux_USD_TO_KRW}원`;
-
-            } catch (error) {
-                console.error('Robux calculation error:', error);
-                robuxRateInfo.textContent = '계산 중 오류가 발생했습니다.';
-                robuxInfoBox.className = 'bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6';
+        function updateRobuxCalculations(source) {
+            if (isRobuxCalculating) return; isRobuxCalculating = true;
+            const robux = parseFloat(robuxInput.value); const krw = parseFloat(unformatNumber(krwInput_robux.value)); const usd = parseFloat(usdInput_robux.value);
+            if (source === 'robux') {
+                if (!isNaN(robux) && robuxInput.value !== '') { const calculatedKrw = robux * currentKrwPerRobux; krwInput_robux.value = formatNumber(Math.round(calculatedKrw)); usdInput_robux.value = (calculatedKrw / robux_USD_TO_KRW).toFixed(2); } else { krwInput_robux.value = ''; usdInput_robux.value = ''; }
+            } else if (source === 'krw') {
+                if (!isNaN(krw) && krwInput_robux.value !== '') { robuxInput.value = Math.round(krw / currentKrwPerRobux); usdInput_robux.value = (krw / robux_USD_TO_KRW).toFixed(2); } else { robuxInput.value = ''; usdInput_robux.value = ''; }
+            } else if (source === 'usd') {
+                if (!isNaN(usd) && usdInput_robux.value !== '') { const calculatedKrw = usd * robux_USD_TO_KRW; krwInput_robux.value = formatNumber(Math.round(calculatedKrw)); robuxInput.value = Math.round(calculatedKrw / currentKrwPerRobux); } else { robuxInput.value = ''; krwInput_robux.value = ''; }
             }
-        });
+            isRobuxCalculating = false;
+        }
+        
         robuxInput.addEventListener('input', () => updateRobuxCalculations('robux'));
         krwInput_robux.addEventListener('input', () => updateRobuxCalculations('krw'));
         usdInput_robux.addEventListener('input', () => updateRobuxCalculations('usd'));
-
-        // Initial setup
-        updateRobuxInfoText();
-        // No initial fetchRobuxRate call needed here, as it's handled by the backend function
+        
+        fetchRobuxRate().then(updateRobuxInfoText);
     }
     
     // 8. BMI Calculator
