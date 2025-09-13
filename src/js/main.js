@@ -653,7 +653,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // 11. GPA Calculator
-    let addGpaRow;
+    let addGpaRow; // Keep this global as it's used by reset button
     function setupGpaCalculator() {
         const container = document.getElementById('gpaRowsContainer');
         const addBtn = document.getElementById('addGpaRowBtn');
@@ -661,7 +661,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const resultText = document.getElementById('gpaResultText');
         const errorText = document.getElementById('gpaErrorText');
         
-        const gradeMap = { 'A+': 4.5, 'A0': 4.0, 'B+': 3.5, 'B0': 3.0, 'C+': 2.5, 'C0': 2.0, 'D+': 1.5, 'D0': 1.0, 'F': 0.0 };
+        // gradeMap is now in the backend function
 
         addGpaRow = () => {
             const row = document.createElement('div');
@@ -688,28 +688,54 @@ document.addEventListener('DOMContentLoaded', function() {
         
         addBtn.addEventListener('click', addGpaRow);
         
-        calcBtn.addEventListener('click', () => {
-            let totalCredits = 0;
-            let totalPoints = 0;
+        calcBtn.addEventListener('click', async () => { // Made async
             errorText.textContent = '';
+            const courses = [];
+            let hasInvalidInput = false;
 
             document.querySelectorAll('.gpa-row').forEach(row => {
-                const credit = parseFloat(row.querySelector('.gpa-credit').value);
-                const grade = row.querySelector('.gpa-grade').value;
-                const isPf = row.querySelector('.gpa-pf').checked;
+                const creditInput = row.querySelector('.gpa-credit');
+                const gradeSelect = row.querySelector('.gpa-grade');
+                const pfCheckbox = row.querySelector('.gpa-pf');
 
-                if(!isNaN(credit) && credit > 0 && !isPf) {
-                    totalCredits += credit;
-                    totalPoints += credit * gradeMap[grade];
+                const credit = parseFloat(creditInput.value);
+                const grade = gradeSelect.value;
+                const isPf = pfCheckbox.checked;
+
+                if (!isPf && (isNaN(credit) || credit <= 0)) {
+                    hasInvalidInput = true;
                 }
+                
+                courses.push({ credit, grade, isPf });
             });
 
-            if (totalCredits > 0) {
-                const gpa = (totalPoints / totalCredits).toFixed(2);
-                resultText.textContent = `${gpa} / 4.5`;
-            } else {
-                resultText.textContent = '0.00 / 4.5';
+            if (hasInvalidInput) {
+                errorText.textContent = '학점과 평점을 정확히 입력해주세요.';
+                return;
+            }
+            
+            if (courses.length === 0) {
                 errorText.textContent = '계산할 과목이 없습니다.';
+                return;
+            }
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-gpa', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ courses }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('GPA calculation failed on server.');
+                }
+
+                const data = await response.json();
+                resultText.textContent = `${data.gpa} / 4.5`;
+
+            } catch (error) {
+                console.error('GPA calculation error:', error);
+                errorText.textContent = '계산 중 오류가 발생했습니다.';
             }
         });
         
