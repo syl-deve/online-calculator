@@ -428,23 +428,42 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 6. Interest Calculator
     function setupInterestCalculator() {
-        document.getElementById('interestCalculateBtn').addEventListener('click', () => {
+        document.getElementById('interestCalculateBtn').addEventListener('click', async () => {
             const principal = Number(unformatNumber(document.getElementById('principal').value));
             const period = Number(document.getElementById('period').value);
-            const annualRate = Number(document.getElementById('rate').value) / 100;
+            const annualRate = Number(document.getElementById('rate').value);
             const depositType = document.querySelector('input[name="depositType"]:checked').value;
             const taxType = document.querySelector('input[name="taxType"]:checked').value;
             const errorText = document.getElementById('interestErrorText');
-            if (principal <= 0 || period <= 0 || annualRate <= 0) { errorText.textContent = "모든 값을 정확히 입력해주세요."; return; }
+
+            if (principal <= 0 || period <= 0 || annualRate <= 0) {
+                errorText.textContent = "모든 값을 정확히 입력해주세요.";
+                return;
+            }
             errorText.textContent = "";
 
-            let interestBeforeTax = (depositType === '단리') ? principal * annualRate * (period / 12) : principal * (Math.pow(1 + (annualRate / 12), period)) - principal;
-            const tax = Math.floor(interestBeforeTax * (taxType === '일반' ? 0.154 : 0));
-            const total = principal + interestBeforeTax - tax;
-            document.getElementById('interestResultTotal').textContent = `${formatNumber(Math.floor(total))} 원`;
-            document.getElementById('interestResultPrincipal').textContent = `${formatNumber(principal)} 원`;
-            document.getElementById('interestResultBeforeTax').textContent = `${formatNumber(Math.floor(interestBeforeTax))} 원`;
-            document.getElementById('interestResultTax').textContent = `- ${formatNumber(tax)} 원`;
+            try {
+                const response = await fetch('/.netlify/functions/calculate-interest', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ principal, period, annualRate, depositType, taxType }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Interest calculation failed on server.');
+                }
+
+                const data = await response.json();
+
+                document.getElementById('interestResultTotal').textContent = `${formatNumber(data.total)} 원`;
+                document.getElementById('interestResultPrincipal').textContent = `${formatNumber(data.principal)} 원`;
+                document.getElementById('interestResultBeforeTax').textContent = `${formatNumber(data.interestBeforeTax)} 원`;
+                document.getElementById('interestResultTax').textContent = `- ${formatNumber(data.tax)} 원`;
+
+            } catch (error) {
+                console.error('Interest calculation error:', error);
+                errorText.textContent = '계산 중 오류가 발생했습니다.';
+            }
         });
         document.getElementById('copyInterestBtn').addEventListener('click', () => copyToClipboard(document.getElementById('interestResultTotal').textContent, 'copyInterestMsg'));
     }
