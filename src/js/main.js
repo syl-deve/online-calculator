@@ -31,13 +31,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const allTabLinks = document.querySelectorAll('.tab-link-item');
     const desktopTitle = document.getElementById('currentCalculatorTitle');
     const calculatorTitles = {
-        unitConverter: '데이터 단위', crypto: '주요 코인 환율', exchangeRate: '세계 환율', age: '만 나이', salary: '연봉 실수령액', commission: '부동산 중개보수', interest: '예/적금 이자', robux: '로벅스 환율', bmi: 'BMI (비만도)', dday: 'D-Day', loan: '대출 이자', gpa: '학점'
+        unitConverter: '데이터 단위', crypto: '주요 코인 환율', exchangeRate: '세계 환율', age: '만 나이', salary: '연봉 실수령액', commission: '부동산 중개보수', interest: '예/적금 이자', robux: '로벅스 환율', bmi: 'BMI (비만도)', dday: 'D-Day', loan: '대출 이자', gpa: '학점', address: '우편번호 찾기'
     };
     const calculators = {
-        unitConverter: document.getElementById('unitConverterCalculator'), crypto: document.getElementById('cryptoCalculator'), exchangeRate: document.getElementById('exchangeRateCalculator'), age: document.getElementById('ageCalculator'), salary: document.getElementById('salaryCalculator'), commission: document.getElementById('commissionCalculator'), interest: document.getElementById('interestCalculator'), robux: document.getElementById('robuxCalculator'), bmi: document.getElementById('bmiCalculator'), dday: document.getElementById('ddayCalculator'), loan: document.getElementById('loanCalculator'), gpa: document.getElementById('gpaCalculator')
+        unitConverter: document.getElementById('unitConverterCalculator'), crypto: document.getElementById('cryptoCalculator'), exchangeRate: document.getElementById('exchangeRateCalculator'), age: document.getElementById('ageCalculator'), salary: document.getElementById('salaryCalculator'), commission: document.getElementById('commissionCalculator'), interest: document.getElementById('interestCalculator'), robux: document.getElementById('robuxCalculator'), bmi: document.getElementById('bmiCalculator'), dday: document.getElementById('ddayCalculator'), loan: document.getElementById('loanCalculator'), gpa: document.getElementById('gpaCalculator'), address: document.getElementById('addressCalculator')
     };
     const infoSections = {
-        unitConverter: document.getElementById('unitConverterInfo'), crypto: document.getElementById('cryptoInfo'), exchangeRate: document.getElementById('exchangeRateInfo'), age: document.getElementById('ageInfo'), salary: document.getElementById('salaryInfo'), commission: document.getElementById('commissionInfo'), interest: document.getElementById('interestInfo'), robux: document.getElementById('robuxInfo'), bmi: document.getElementById('bmiInfo'), dday: document.getElementById('ddayInfo'), loan: document.getElementById('loanInfo'), gpa: document.getElementById('gpaInfo')
+        unitConverter: document.getElementById('unitConverterInfo'), crypto: document.getElementById('cryptoInfo'), exchangeRate: document.getElementById('exchangeRateInfo'), age: document.getElementById('ageInfo'), salary: document.getElementById('salaryInfo'), commission: document.getElementById('commissionInfo'), interest: document.getElementById('interestInfo'), robux: document.getElementById('robuxInfo'), bmi: document.getElementById('bmiInfo'), dday: document.getElementById('ddayInfo'), loan: document.getElementById('loanInfo'), gpa: document.getElementById('gpaInfo'), address: document.getElementById('addressInfo')
     };
 
     function showTab(tabName) {
@@ -829,6 +829,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // 13. Address Finder
+    function setupAddressCalculator() {
+        document.getElementById('searchAddressBtn').addEventListener('click', () => {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    document.getElementById('postcode').value = data.zonecode; // 우편번호
+                    document.getElementById('address').value = data.roadAddress || data.jibunAddress; // 도로명 또는 지번 주소
+                    document.getElementById('detailAddress').focus(); // 상세주소로 포커스 이동
+                }
+            }).open();
+        });
+    }
+
     // --- Mobile Nav Scroll ---
     function setupMobileNavScroll() {
         const navContainer = document.querySelector('.mobile-nav-container');
@@ -880,6 +893,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setupDdayCalculator();
         setupLoanCalculator();
         setupGpaCalculator();
+        setupAddressCalculator();
         setupMobileNavScroll();
         
         showTab(initialTab);
