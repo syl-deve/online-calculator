@@ -31,13 +31,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const allTabLinks = document.querySelectorAll('.tab-link-item');
     const desktopTitle = document.getElementById('currentCalculatorTitle');
     const calculatorTitles = {
-        unitConverter: '데이터 단위', crypto: '주요 코인 환율', exchangeRate: '세계 환율', age: '만 나이', salary: '연봉 실수령액', commission: '부동산 중개보수', interest: '예/적금 이자', robux: '로벅스 환율', bmi: 'BMI (비만도)', dday: 'D-Day', loan: '대출 이자', gpa: '학점'
+        unitConverter: '데이터 단위', crypto: '주요 코인 환율', exchangeRate: '세계 환율', age: '만 나이', salary: '연봉 실수령액', commission: '부동산 중개보수', interest: '예/적금 이자', robux: '로벅스 환율', bmi: 'BMI (비만도)', dday: 'D-Day', loan: '대출 이자', gpa: '학점', address: '우편번호 찾기'
     };
     const calculators = {
-        unitConverter: document.getElementById('unitConverterCalculator'), crypto: document.getElementById('cryptoCalculator'), exchangeRate: document.getElementById('exchangeRateCalculator'), age: document.getElementById('ageCalculator'), salary: document.getElementById('salaryCalculator'), commission: document.getElementById('commissionCalculator'), interest: document.getElementById('interestCalculator'), robux: document.getElementById('robuxCalculator'), bmi: document.getElementById('bmiCalculator'), dday: document.getElementById('ddayCalculator'), loan: document.getElementById('loanCalculator'), gpa: document.getElementById('gpaCalculator')
+        unitConverter: document.getElementById('unitConverterCalculator'), crypto: document.getElementById('cryptoCalculator'), exchangeRate: document.getElementById('exchangeRateCalculator'), age: document.getElementById('ageCalculator'), salary: document.getElementById('salaryCalculator'), commission: document.getElementById('commissionCalculator'), interest: document.getElementById('interestCalculator'), robux: document.getElementById('robuxCalculator'), bmi: document.getElementById('bmiCalculator'), dday: document.getElementById('ddayCalculator'), loan: document.getElementById('loanCalculator'), gpa: document.getElementById('gpaCalculator'), address: document.getElementById('addressCalculator')
     };
     const infoSections = {
-        unitConverter: document.getElementById('unitConverterInfo'), crypto: document.getElementById('cryptoInfo'), exchangeRate: document.getElementById('exchangeRateInfo'), age: document.getElementById('ageInfo'), salary: document.getElementById('salaryInfo'), commission: document.getElementById('commissionInfo'), interest: document.getElementById('interestInfo'), robux: document.getElementById('robuxInfo'), bmi: document.getElementById('bmiInfo'), dday: document.getElementById('ddayInfo'), loan: document.getElementById('loanInfo'), gpa: document.getElementById('gpaInfo')
+        unitConverter: document.getElementById('unitConverterInfo'), crypto: document.getElementById('cryptoInfo'), exchangeRate: document.getElementById('exchangeRateInfo'), age: document.getElementById('ageInfo'), salary: document.getElementById('salaryInfo'), commission: document.getElementById('commissionInfo'), interest: document.getElementById('interestInfo'), robux: document.getElementById('robuxInfo'), bmi: document.getElementById('bmiInfo'), dday: document.getElementById('ddayInfo'), loan: document.getElementById('loanInfo'), gpa: document.getElementById('gpaInfo'), address: document.getElementById('addressInfo')
     };
 
     function showTab(tabName) {
@@ -829,6 +829,63 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // 13. Address Finder
+    function setupAddressCalculator() {
+        const searchBtn = document.getElementById('searchAddressBtn');
+        const keywordInput = document.getElementById('addressKeyword');
+        const resultContainer = document.getElementById('addressResultContainer');
+
+        searchBtn.addEventListener('click', async () => {
+            const keyword = keywordInput.value;
+            if (!keyword) {
+                resultContainer.innerHTML = '<p class="text-red-500">검색어를 입력해주세요.</p>';
+                return;
+            }
+
+            resultContainer.innerHTML = '<p>검색 중...</p>';
+
+            try {
+                const response = await fetch('/.netlify/functions/search-address', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ keyword }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Address search failed on server.');
+                }
+
+                const data = await response.json();
+
+                if (data.results.common.errorCode !== "0") {
+                    resultContainer.innerHTML = `<p class="text-red-500">검색 실패: ${data.results.common.errorMessage}</p>`;
+                    return;
+                }
+
+                if (!data.results.juso || data.results.juso.length === 0) {
+                    resultContainer.innerHTML = '<p class="text-gray-500">검색 결과가 없습니다.</p>';
+                    return;
+                }
+
+                let html = '';
+                data.results.juso.forEach(item => {
+                    html += `
+                        <div class="p-4 border rounded-lg hover:bg-gray-50">
+                            <p class="font-bold text-lg">${item.zipNo}</p>
+                            <p class="text-gray-700">${item.roadAddr}</p>
+                            <p class="text-sm text-gray-500">[지번] ${item.jibunAddr}</p>
+                        </div>
+                    `;
+                });
+                resultContainer.innerHTML = html;
+
+            } catch (error) {
+                console.error('Address search error:', error);
+                resultContainer.innerHTML = '<p class="text-red-500">검색 중 오류가 발생했습니다.</p>';
+            }
+        });
+    }
+
     // --- Mobile Nav Scroll ---
     function setupMobileNavScroll() {
         const navContainer = document.querySelector('.mobile-nav-container');
@@ -880,6 +937,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setupDdayCalculator();
         setupLoanCalculator();
         setupGpaCalculator();
+        setupAddressCalculator();
         setupMobileNavScroll();
         
         showTab(initialTab);
