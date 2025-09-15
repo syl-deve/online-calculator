@@ -18,7 +18,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="src/css/style.css">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://cdn.tailwindcss.com https://ads-partners.coupang.com https://partners.coupangcdn.com https://assets.coingecko.com https://s2.coinmarketcap.com https://open.er-api.com https://ep2.adtrafficquality.google https://t1.daumcdn.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://api.coingecko.com https://open.er-api.com https://ep1.adtrafficquality.google; frame-src https://googleads.g.doubleclick.net https://ads-partners.coupang.com https://ep2.adtrafficquality.google https://www.google.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://cdn.tailwindcss.com https://ads-partners.coupang.com https://partners.coupangcdn.com https://assets.coingecko.com https://s2.coinmarketcap.com https://open.er-api.com https://ep2.adtrafficquality.google; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://api.coingecko.com https://open.er-api.com https://ep1.adtrafficquality.google; frame-src https://googleads.g.doubleclick.net https://ads-partners.coupang.com https://ep2.adtrafficquality.google https://www.google.com;">
 </head>
 <body class="bg-gray-50">
 
@@ -81,10 +81,6 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-slate-500"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
                     학점
                 </a>
-                <a href="#" data-tab-link="address" class="flex items-center p-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 tab-link-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-slate-500"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                    우편번호 찾기
-                </a>
             </nav>
 
             <!-- Coupang Partners Banner for Desktop -->
@@ -119,7 +115,6 @@
                     <a href="#" data-tab-link="dday" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">D-Day</a>
                     <a href="#" data-tab-link="loan" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">대출 이자</a>
                     <a href="#" data-tab-link="gpa" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">학점</a>
-                    <a href="#" data-tab-link="address" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">우편번호</a>
                 </nav>
                 <button id="scroll-right-btn" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur-sm rounded-full p-1 shadow-md hidden">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-gray-600"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -555,27 +550,6 @@
                                 <a href="https://link.coupang.com/a/cNQaby" target="_blank" referrerpolicy="unsafe-url"><img src="https://ads-partners.coupang.com/banners/321206?subId=&traceId=V0-301-bae0f72e5e59e45f-I321206&w=728&h=90" alt=""></a>
                             </div>
                         </div>
-
-                        <!-- 우편번호 찾기 -->
-                        <div id="addressCalculator" class="hidden">
-                            <div class="space-y-4 max-w-lg mx-auto">
-                                <div class="flex gap-4">
-                                    <input type="text" id="postcode" placeholder="우편번호" class="w-1/3 p-3 border rounded-lg bg-gray-100" readonly>
-                                    <button id="searchAddressBtn" class="w-2/3 bg-blue-500 text-white font-bold py-3 rounded-lg hover:bg-blue-600 transition-colors">주소 검색</button>
-                                </div>
-                                <div>
-                                    <label for="address" class="font-semibold text-gray-700">주소</label>
-                                    <input type="text" id="address" placeholder="주소" class="w-full p-3 border rounded-lg mt-1 bg-gray-100" readonly>
-                                </div>
-                                <div>
-                                    <label for="detailAddress" class="font-semibold text-gray-700">상세주소</label>
-                                    <input type="text" id="detailAddress" placeholder="상세주소를 입력하세요" class="w-full p-3 border rounded-lg mt-1">
-                                </div>
-                                <div class="mt-6 flex justify-end">
-                                    <button data-calculator="address" class="reset-btn bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">초기화</button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -725,21 +699,12 @@
                             <li><strong class="block font-semibold text-gray-800">P/F 과목</strong><p class="mt-1 text-gray-600">Pass(합격) 또는 Fail(불합격)로만 평가되는 과목은 보통 평점 계산에서 제외됩니다. 계산 시 'P/F 과목'을 체크하면 해당 과목은 총 학점에서만 포함되고 평점 계산에서는 제외됩니다.</p></li>
                         </ul>
                     </div>
-                    <div id="addressInfo" class="info-content hidden">
-                        <h3>우편번호 찾기 Tip</h3>
-                        <ul class="space-y-5 text-sm">
-                            <li><strong class="block font-semibold text-gray-800">도로명주소 검색</strong><p class="mt-1 text-gray-600">정확한 검색을 위해 건물번호까지 입력하는 것이 좋습니다. (예: 테헤란로 212)</p></li>
-                            <li><strong class="block font-semibold text-gray-800">지번주소 검색</strong><p class="mt-1 text-gray-600">동/리와 번지수를 함께 입력하여 검색할 수 있습니다. (예: 역삼동 718-5)</p></li>
-                            <li><strong class="block font-semibold text-gray-800">건물명 검색</strong><p class="mt-1 text-gray-600">아파트, 빌딩 등 건물 이름으로도 검색이 가능합니다. (예: 역삼 하이츠)</p></li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </main>
     </div>
 
 
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="src/js/main.js" defer></script>
 
 </body>
