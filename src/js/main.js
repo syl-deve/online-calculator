@@ -925,6 +925,355 @@ document.addEventListener('DOMContentLoaded', function() {
     function initialize() {
         const initialTab = window.location.hash.substring(1) || 'unitConverter';
         
+        setupRouletteApp();
+        setupUnitConverter();
+        setupCryptoCalculator();
+        setupExchangeRateCalculator();
+        setupAgeCalculator();
+        setupSalaryCalculator();
+        setupCommissionCalculator();
+        setupInterestCalculator();
+        setupRobuxCalculator();
+        setupBmiCalculator();
+        setupDdayCalculator();
+        setupLoanCalculator();
+        setupGpaCalculator();
+        setupAddressCalculator();
+        setupMobileNavScroll();
+        
+        showTab(initialTab);
+    }
+    
+    initialize();
+});'ddayDate');
+            const ddayResultText = document.getElementById('ddayResultText');
+            const ddayResultDetails = document.getElementById('ddayResultDetails');
+
+            if (!ddayDateInput.value) {
+                ddayResultDetails.textContent = "목표 날짜를 선택해주세요.";
+                return;
+            }
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-dday', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ targetDateString: ddayDateInput.value }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('D-Day calculation failed on server.');
+                }
+
+                const data = await response.json();
+                const diffDays = data.diffDays;
+                const targetDate = new Date(ddayDateInput.value);
+
+                if (diffDays === 0) { ddayResultText.textContent = "D-Day"; }
+                else if (diffDays > 0) { ddayResultText.textContent = `D-${diffDays}`; }
+                else { ddayResultText.textContent = `D+${-diffDays}`; }
+                ddayResultDetails.textContent = `${targetDate.getFullYear()}년 ${targetDate.getMonth() + 1}월 ${targetDate.getDate()}일`;
+
+            } catch (error) {
+                console.error('D-Day calculation error:', error);
+                ddayResultText.textContent = '-';
+                ddayResultDetails.textContent = '오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+            }
+        });
+        document.getElementById('copyDdayBtn').addEventListener('click', () => copyToClipboard(document.getElementById('ddayResultText').textContent, 'copyDdayMsg'));
+    }
+
+    // 10. Loan Calculator
+    function setupLoanCalculator() {
+        document.getElementById('loanCalculateBtn').addEventListener('click', async () => {
+            const principal = parseFloat(unformatNumber(document.getElementById('loanPrincipal').value));
+            const years = parseFloat(document.getElementById('loanPeriod').value);
+            const annualRate = parseFloat(document.getElementById('loanRate').value);
+            const errorText = document.getElementById('loanErrorText');
+
+            if (principal <= 0 || years <= 0 || annualRate <= 0) {
+                errorText.textContent = "모든 값을 정확히 입력해주세요.";
+                return;
+            }
+            errorText.textContent = "";
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-loan', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ principal, years, annualRate }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Loan calculation failed on server.');
+                }
+
+                const data = await response.json();
+
+                document.getElementById('loanResultTotal').textContent = `${formatNumber(data.monthlyPayment)} 원`;
+                document.getElementById('loanResultPrincipal').textContent = `${formatNumber(data.principal)} 원`;
+                document.getElementById('loanResultInterest').textContent = `${formatNumber(data.totalInterest)} 원`;
+                document.getElementById('loanResultGrandTotal').textContent = `${formatNumber(data.totalPayment)} 원`;
+
+            } catch (error) {
+                console.error('Loan calculation error:', error);
+                errorText.textContent = '계산 중 오류가 발생했습니다.';
+            }
+        });
+        document.getElementById('copyLoanBtn').addEventListener('click', () => copyToClipboard(document.getElementById('loanResultTotal').textContent, 'copyLoanMsg'));
+    }
+    
+    // 11. GPA Calculator
+    let addGpaRow; // Keep this global as it's used by reset button
+    function setupGpaCalculator() {
+        const container = document.getElementById('gpaRowsContainer');
+        const addBtn = document.getElementById('addGpaRowBtn');
+        const calcBtn = document.getElementById('gpaCalculateBtn');
+        const resultText = document.getElementById('gpaResultText');
+        const errorText = document.getElementById('gpaErrorText');
+        
+        // gradeMap is now in the backend function
+
+        addGpaRow = () => {
+            const row = document.createElement('div');
+            row.className = 'gpa-row grid grid-cols-12 gap-2 items-center mb-2';
+            row.innerHTML = `
+                <input type="text" placeholder="과목명" class="col-span-4 p-2 border rounded">
+                <input type="number" placeholder="학점" class="col-span-2 p-2 border rounded gpa-credit">
+                <select class="col-span-3 p-2 border rounded gpa-grade">
+                    <option>A+</option><option>A0</option><option>B+</option><option>B0</option><option>C+</option><option>C0</option><option>D+</option><option>D0</option><option>F</option>
+                </select>
+                <div class="col-span-2 flex items-center justify-center">
+                    <input type="checkbox" class="gpa-pf"> <label class="ml-1 text-sm">P/F</label>
+                </div>
+                <button class="col-span-1 remove-gpa-row text-red-500 hover:text-red-700 font-bold">X</button>
+            `;
+            container.appendChild(row);
+        };
+
+        container.addEventListener('click', (e) => {
+            if (e.target.classList.contains('remove-gpa-row')) {
+                e.target.closest('.gpa-row').remove();
+            }
+        });
+        
+        addBtn.addEventListener('click', addGpaRow);
+        
+        calcBtn.addEventListener('click', async () => { // Made async
+            errorText.textContent = '';
+            const courses = [];
+            let hasInvalidInput = false;
+
+            document.querySelectorAll('.gpa-row').forEach(row => {
+                const creditInput = row.querySelector('.gpa-credit');
+                const gradeSelect = row.querySelector('.gpa-grade');
+                const pfCheckbox = row.querySelector('.gpa-pf');
+
+                const credit = parseFloat(creditInput.value);
+                const grade = gradeSelect.value;
+                const isPf = pfCheckbox.checked;
+
+                if (!isPf && (isNaN(credit) || credit <= 0)) {
+                    hasInvalidInput = true;
+                }
+                
+                courses.push({ credit, grade, isPf });
+            });
+
+            if (hasInvalidInput) {
+                errorText.textContent = '학점과 평점을 정확히 입력해주세요.';
+                return;
+            }
+            
+            if (courses.length === 0) {
+                errorText.textContent = '계산할 과목이 없습니다.';
+                return;
+            }
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-gpa', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ courses }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('GPA calculation failed on server.');
+                }
+
+                const data = await response.json();
+                resultText.textContent = `${data.gpa} / 4.5`;
+
+            } catch (error) {
+                console.error('GPA calculation error:', error);
+                errorText.textContent = '계산 중 오류가 발생했습니다.';
+            }
+        });
+        
+        document.getElementById('copyGpaBtn').addEventListener('click', () => copyToClipboard(document.getElementById('gpaResultText').textContent, 'copyGpaMsg'));
+
+        // Add initial rows
+        addGpaRow(); addGpaRow(); addGpaRow();
+    }
+    
+    // 12. Unit Converter
+    function setupUnitConverter() {
+        const unitInputs = document.querySelectorAll('.unit-input');
+        let isUnitCalculating = false;
+
+        // Constants are now only used for client-side display logic if needed, not for calculation
+        // const TB_TO_MB = 1024 * 1024;
+        // const GB_TO_MB = 1024;
+
+        async function updateUnitCalculations(sourceUnit) {
+            if (isUnitCalculating) return;
+            isUnitCalculating = true;
+
+            const sourceInput = document.querySelector(`.unit-input[data-unit="${sourceUnit}"]`);
+            const sourceValue = parseFloat(unformatNumber(sourceInput.value));
+
+            if (isNaN(sourceValue) || sourceInput.value === '') {
+                unitInputs.forEach(input => {
+                    if (input !== sourceInput) {
+                        input.value = '';
+                    }
+                });
+                isUnitCalculating = false;
+                return;
+            }
+
+            try {
+                const response = await fetch('/.netlify/functions/convert-unit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sourceUnit, sourceValue }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Unit conversion failed on server.');
+                }
+
+                const data = await response.json();
+
+                unitInputs.forEach(input => {
+                    const targetUnit = input.dataset.unit;
+                    let targetValue = data[targetUnit];
+                    
+                    // Format number for display
+                    const parts = targetValue.toString().split('.');
+                    parts[0] = formatNumber(parts[0]);
+                    input.value = parts.join('.');
+                });
+
+            } catch (error) {
+                console.error('Unit conversion error:', error);
+                // Optionally display an error message to the user
+            } finally {
+                isUnitCalculating = false;
+            }
+        }
+
+        unitInputs.forEach(input => {
+            input.addEventListener('input', () => updateUnitCalculations(input.dataset.unit));
+        });
+    }
+
+    // 13. Address Finder
+    function setupAddressCalculator() {
+        const searchBtn = document.getElementById('searchAddressBtn');
+        const keywordInput = document.getElementById('addressKeyword');
+        const resultContainer = document.getElementById('addressResultContainer');
+
+        searchBtn.addEventListener('click', async () => {
+            const keyword = keywordInput.value;
+            if (!keyword) {
+                resultContainer.innerHTML = '<p class="text-red-500">검색어를 입력해주세요.</p>';
+                return;
+            }
+
+            resultContainer.innerHTML = '<p>검색 중...</p>';
+
+            try {
+                const response = await fetch('/.netlify/functions/search-address', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ keyword }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Address search failed on server.');
+                }
+
+                const data = await response.json();
+
+                if (data.results.common.errorCode !== "0") {
+                    resultContainer.innerHTML = `<p class="text-red-500">검색 실패: ${data.results.common.errorMessage}</p>`;
+                    return;
+                }
+
+                if (!data.results.juso || data.results.juso.length === 0) {
+                    resultContainer.innerHTML = '<p class="text-gray-500">검색 결과가 없습니다.</p>';
+                    return;
+                }
+
+                let html = '';
+                data.results.juso.forEach(item => {
+                    html += `
+                        <div class="p-4 border rounded-lg hover:bg-gray-50">
+                            <p class="font-bold text-lg">${item.zipNo}</p>
+                            <p class="text-gray-700">${item.roadAddr}</p>
+                            <p class="text-sm text-gray-500">[지번] ${item.jibunAddr}</p>
+                        </div>
+                    `;
+                });
+                resultContainer.innerHTML = html;
+
+            } catch (error) {
+                console.error('Address search error:', error);
+                resultContainer.innerHTML = '<p class="text-red-500">검색 중 오류가 발생했습니다.</p>';
+            }
+        });
+    }
+
+    // --- Mobile Nav Scroll ---
+    function setupMobileNavScroll() {
+        const navContainer = document.querySelector('.mobile-nav-container');
+        const scrollLeftBtn = document.getElementById('scroll-left-btn');
+        const scrollRightBtn = document.getElementById('scroll-right-btn');
+
+        if (!navContainer || !scrollLeftBtn || !scrollRightBtn) return;
+
+        const updateScrollButtons = () => {
+            const { scrollLeft, scrollWidth, clientWidth } = navContainer;
+            // A small buffer is added to handle sub-pixel rendering issues
+            const buffer = 1; 
+            
+            scrollLeftBtn.classList.toggle('hidden', scrollLeft <= 0);
+            scrollRightBtn.classList.toggle('hidden', scrollLeft >= scrollWidth - clientWidth - buffer);
+        };
+
+        scrollLeftBtn.addEventListener('click', () => {
+            navContainer.scrollBy({ left: -200, behavior: 'smooth' });
+        });
+
+        scrollRightBtn.addEventListener('click', () => {
+            navContainer.scrollBy({ left: 200, behavior: 'smooth' });
+        });
+
+        navContainer.addEventListener('scroll', updateScrollButtons);
+        
+        // Use ResizeObserver to detect size changes of the container
+        new ResizeObserver(updateScrollButtons).observe(navContainer);
+        
+        // Initial check
+        updateScrollButtons();
+    }
+
+
+    // --- INITIALIZE ---
+    function initialize() {
+        const initialTab = window.location.hash.substring(1) || 'unitConverter';
+        
         setupUnitConverter();
         setupCryptoCalculator();
         setupExchangeRateCalculator();

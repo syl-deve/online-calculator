@@ -107,6 +107,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-gray-600"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </button>
                 <nav class="mobile-nav-container flex space-x-2 overflow-x-auto pb-2">
+                    <a href="#" data-tab-link="rouletteApp" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">룰렛 앱</a>
                     <a href="#" data-tab-link="unitConverter" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">데이터 단위</a>
                     <a href="#" data-tab-link="crypto" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">코인 환율</a>
                     <a href="#" data-tab-link="exchangeRate" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">세계 환율</a>
@@ -686,6 +687,54 @@
                                     <li><span class="font-bold text-green-600">18.5 ~ 22.9:</span> 정상</li>
                                     <li><span class="font-bold text-yellow-600">23.0 ~ 24.9:</span> 과체중</li>
                                     <li><span class="font-bold text-orange-600">25.0 ~ 29.9:</span> 1단계 비만</li>
+                                    <li><span class="font-bold text-red-600">30.0 이상:</span> 2단계 이상 비만</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="ddayInfo" class="info-content hidden">
+                        <h3>D-Day 계산기 활용법</h3>
+                        <ul class="space-y-5 text-sm">
+                            <li><strong class="block font-semibold text-gray-800">D-Day?</strong><p class="mt-1 text-gray-600">시험, 기념일, 여행 등 중요한 목표 날짜(Date)를 정해두고, 그날까지 남은 날짜(Day)를 세는 방법입니다.</p></li>
+                            <li><strong class="block font-semibold text-gray-800">날짜 계산 기준</strong><p class="mt-1 text-gray-600">오늘(계산하는 당일)은 포함하지 않고 계산합니다. 예를 들어 내일이 D-Day라면 'D-1'로 표시됩니다. 목표 날짜 당일은 'D-Day'가 됩니다.</p></li>
+                             <li><strong class="block font-semibold text-gray-800">과거 날짜</strong><p class="mt-1 text-gray-600">이미 지난 날짜를 선택하면, 그날로부터 며칠이 지났는지 'D+Day' 형식으로 표시해 줍니다. (예: D+7)</p></li>
+                        </ul>
+                    </div>
+                    <div id="loanInfo" class="info-content hidden">
+                        <h3>대출 이자 상환 방식</h3>
+                        <ul class="space-y-5 text-sm">
+                            <li><strong class="block font-semibold text-gray-800">원리금 균등분할상환</strong><p class="mt-1 text-gray-600">대출 기간 동안 매월 원금과 이자를 합쳐 동일한 금액을 상환하는 방식입니다. 본 계산기는 이 방식을 기준으로 합니다. 매달 상환액이 일정하여 자금 계획을 세우기 편리하다는 장점이 있습니다.</p></li>
+                            <li><strong class="block font-semibold text-gray-800">원금 균등분할상환</strong><p class="mt-1 text-gray-600">매월 동일한 원금을 상환하고, 남은 원금에 대한 이자를 납부하는 방식입니다. 초기 상환 부담은 크지만, 총 이자 금액은 원리금 균등방식보다 적습니다.</p></li>
+                            <li><strong class="block font-semibold text-gray-800">만기일시상환</strong><p class="mt-1 text-gray-600">대출 기간 동안에는 이자만 납부하고, 만기일에 원금 전액을 상환하는 방식입니다. 매달 상환 부담은 적지만 총 이자 부담이 가장 큽니다.</p></li>
+                        </ul>
+                    </div>
+                     <div id="gpaInfo" class="info-content hidden">
+                        <h3>학점 계산 관련 Tip</h3>
+                        <ul class="space-y-5 text-sm">
+                            <li><strong class="block font-semibold text-gray-800">학점(Credit)이란?</strong><p class="mt-1 text-gray-600">대학에서 한 과목을 얼마나 비중 있게 이수했는지를 나타내는 단위입니다. 보통 일주일에 한 시간 수업을 한 학기 동안 들으면 1학점이 됩니다.</p></li>
+                            <li><strong class="block font-semibold text-gray-800">평점(Grade Point Average) 계산법</strong><p class="mt-1 text-gray-600">'(각 과목의 학점 × 과목 평점)의 총합'을 '총 신청 학점'으로 나누어 계산합니다. 이 계산기는 일반적인 4.5 만점 기준으로 계산됩니다.</p></li>
+                            <li><strong class="block font-semibold text-gray-800">P/F 과목</strong><p class="mt-1 text-gray-600">Pass(합격) 또는 Fail(불합격)로만 평가되는 과목은 보통 평점 계산에서 제외됩니다. 계산 시 'P/F 과목'을 체크하면 해당 과목은 총 학점에서만 포함되고 평점 계산에서는 제외됩니다.</p></li>
+                        </ul>
+                    </div>
+                    <div id="addressInfo" class="info-content hidden">
+                        <h3>우편번호 찾기 Tip</h3>
+                        <ul class="space-y-5 text-sm">
+                            <li><strong class="block font-semibold text-gray-800">도로명주소 검색</strong><p class="mt-1 text-gray-600">정확한 검색을 위해 건물번호까지 입력하는 것이 좋습니다. (예: 테헤란로 212)</p></li>
+                            <li><strong class="block font-semibold text-gray-800">지번주소 검색</strong><p class="mt-1 text-gray-600">동/리와 번지수를 함께 입력하여 검색할 수 있습니다. (예: 역삼동 718-5)</p></li>
+                            <li><strong class="block font-semibold text-gray-800">건물명 검색</strong><p class="mt-1 text-gray-600">아파트, 빌딩 등 건물 이름으로도 검색이 가능합니다. (예: 역삼 하이츠)</p></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+
+<script src="src/js/main.js" defer></script>
+
+</body>
+</html>
+                   <li><span class="font-bold text-orange-600">25.0 ~ 29.9:</span> 1단계 비만</li>
                                     <li><span class="font-bold text-red-600">30.0 이상:</span> 2단계 이상 비만</li>
                                 </ul>
                             </li>
