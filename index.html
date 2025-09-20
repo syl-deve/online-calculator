@@ -97,6 +97,10 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-slate-500"><polyline points="17 2.1 21 6.1 17 10.1"/><path d="M3 12.1v-2a4 4 0 0 1 4-4h14"/><polyline points="7 21.9 3 17.9 7 13.9"/><path d="M21 11.9v2a4 4 0 0 1-4 4H3"/></svg>
                     한/영 주소 변환
                 </a>
+                <a href="#" data-tab-link="worldTime" class="flex items-center p-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 tab-link-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-slate-500"><circle cx="12" cy="12" r="10"></circle><line x1="2" x2="22" y1="12" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                    세계시간
+                </a>
             </nav>
 
             <!-- Coupang Partners Banner for Desktop -->
@@ -135,6 +139,7 @@
                     <a href="#" data-tab-link="gpa" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">학점</a>
                     <a href="#" data-tab-link="address" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">우편번호</a>
                     <a href="#" data-tab-link="addressConverter" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">한/영 주소 변환</a>
+                    <a href="#" data-tab-link="worldTime" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">세계시간</a>
                 </nav>
                 <button id="scroll-right-btn" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 backdrop-blur-sm rounded-full p-1 shadow-md hidden">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-gray-600"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -637,6 +642,37 @@
                             </div>
                         </div>
 
+                        <!-- 세계시간 계산기 -->
+                        <div id="worldTimeCalculator" class="hidden">
+                            <div class="space-y-4 max-w-lg mx-auto">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="sourceTimezone" class="font-semibold text-gray-700">기준 도시</label>
+                                        <select id="sourceTimezone" class="w-full p-3 border rounded-lg mt-2">
+                                            <option value="Asia/Seoul">서울</option>
+                                            <option value="America/New_York">뉴욕</option>
+                                            <option value="Europe/London">런던</option>
+                                            <option value="Asia/Tokyo">도쿄</option>
+                                            <option value="Asia/Shanghai">상하이</option>
+                                            <option value="Australia/Sydney">시드니</option>
+                                            <option value="Europe/Paris">파리</option>
+                                            <option value="America/Los_Angeles">로스앤젤레스</option>
+                                            <option value="Asia/Dubai">두바이</option>
+                                            <option value="Europe/Moscow">모스크바</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="sourceDateTime" class="font-semibold text-gray-700">기준 시간</label>
+                                        <input type="datetime-local" id="sourceDateTime" class="w-full p-3 border rounded-lg mt-2">
+                                    </div>
+                                </div>
+                                <div class="flex justify-end">
+                                    <button id="worldTimeCalculateBtn" class="bg-sky-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-600 transition-colors">변환</button>
+                                </div>
+                                <div id="worldTimeResultContainer" class="space-y-2 mt-4"></div>
+                            </div>
+                        </div>
+
                         <!-- 우편번호 찾기 -->
                         <div id="addressCalculator" class="hidden">
                             <div class="space-y-4 max-w-lg mx-auto">
@@ -823,6 +859,15 @@
                             <li><strong class="block font-semibold text-gray-800">P/F 과목</strong><p class="mt-1 text-gray-600">Pass(합격) 또는 Fail(불합격)로만 평가되는 과목은 보통 평점 계산에서 제외됩니다. 계산 시 'P/F 과목'을 체크하면 해당 과목은 총 학점에서만 포함되고 평점 계산에서는 제외됩니다.</p></li>
                         </ul>
                     </div>
+                    <div id="worldTimeInfo" class="info-content hidden">
+                        <h3>세계시간 변환기 사용 Tip</h3>
+                        <ul class="space-y-5 text-sm">
+                            <li><strong class="block font-semibold text-gray-800">타임존(Timezone)이란?</strong><p class="mt-1 text-gray-600">영국 그리니치 천문대를 기준으로 하는 협정 세계시(UTC)와의 시차를 이용하여 지역별로 공통된 시간을 사용하는 구역을 의미합니다. 예를 들어, 대한민국 표준시(KST)는 UTC보다 9시간 빠릅니다 (UTC+9).</p></li>
+                            <li><strong class="block font-semibold text-gray-800">서머타임(Daylight Saving Time)</strong><p class="mt-1 text-gray-600">일부 국가(주로 북미, 유럽)에서는 여름철에 시간을 1시간 앞당기는 서머타임 제도를 시행합니다. 이 계산기는 각 도시의 서머타임 적용 여부를 자동으로 계산하여 정확한 현재 시간을 표시합니다.</p></li>
+                            <li><strong class="block font-semibold text-gray-800">활용법</strong><p class="mt-1 text-gray-600">해외 지사와의 화상 회의, 해외 여행 일정 계획, 해외 스포츠 경기 시간 확인 등 다양한 상황에서 편리하게 사용할 수 있습니다.</p></li>
+                        </ul>
+                    </div>
+
                     <div id="addressInfo" class="info-content hidden">
                         <h3>우편번호 찾기 Tip</h3>
                         <ul class="space-y-5 text-sm">

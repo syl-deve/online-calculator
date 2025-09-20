@@ -32,15 +32,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const desktopTitle = document.getElementById('currentCalculatorTitle');
     const calculatorTitles = {
         percentage: '퍼센트 계산기',
-        unitConverter: '데이터 단위', crypto: '주요 코인 환율', exchangeRate: '세계 환율', age: '만 나이', salary: '연봉 실수령액', stock: '주식 수익률', commission: '부동산 중개보수', interest: '예/적금 이자', robux: '로벅스 환율', bmi: 'BMI (비만도)', dday: 'D-Day', loan: '대출 이자', gpa: '학점', address: '우편번호 찾기', addressConverter: '한/영 주소 변환기'
+        unitConverter: '데이터 단위', crypto: '주요 코인 환율', exchangeRate: '세계 환율', age: '만 나이', salary: '연봉 실수령액', stock: '주식 수익률', commission: '부동산 중개보수', interest: '예/적금 이자', robux: '로벅스 환율', bmi: 'BMI (비만도)', dday: 'D-Day', loan: '대출 이자', gpa: '학점', address: '우편번호 찾기', addressConverter: '한/영 주소 변환기', worldTime: '세계시간 변환기'
     };
     const calculators = {
         percentage: document.getElementById('percentageCalculator'),
-        unitConverter: document.getElementById('unitConverterCalculator'), crypto: document.getElementById('cryptoCalculator'), exchangeRate: document.getElementById('exchangeRateCalculator'), age: document.getElementById('ageCalculator'), salary: document.getElementById('salaryCalculator'), stock: document.getElementById('stockCalculator'), commission: document.getElementById('commissionCalculator'), interest: document.getElementById('interestCalculator'), robux: document.getElementById('robuxCalculator'), bmi: document.getElementById('bmiCalculator'), dday: document.getElementById('ddayCalculator'), loan: document.getElementById('loanCalculator'), gpa: document.getElementById('gpaCalculator'), address: document.getElementById('addressCalculator'), addressConverter: document.getElementById('addressConverterCalculator')
+        unitConverter: document.getElementById('unitConverterCalculator'), crypto: document.getElementById('cryptoCalculator'), exchangeRate: document.getElementById('exchangeRateCalculator'), age: document.getElementById('ageCalculator'), salary: document.getElementById('salaryCalculator'), stock: document.getElementById('stockCalculator'), commission: document.getElementById('commissionCalculator'), interest: document.getElementById('interestCalculator'), robux: document.getElementById('robuxCalculator'), bmi: document.getElementById('bmiCalculator'), dday: document.getElementById('ddayCalculator'), loan: document.getElementById('loanCalculator'), gpa: document.getElementById('gpaCalculator'), address: document.getElementById('addressCalculator'), addressConverter: document.getElementById('addressConverterCalculator'), worldTime: document.getElementById('worldTimeCalculator')
     };
     const infoSections = {
         percentage: document.getElementById('percentageInfo'),
-        unitConverter: document.getElementById('unitConverterInfo'), crypto: document.getElementById('cryptoInfo'), exchangeRate: document.getElementById('exchangeRateInfo'), age: document.getElementById('ageInfo'), salary: document.getElementById('salaryInfo'), stock: document.getElementById('stockInfo'), commission: document.getElementById('commissionInfo'), interest: document.getElementById('interestInfo'), robux: document.getElementById('robuxInfo'), bmi: document.getElementById('bmiInfo'), dday: document.getElementById('ddayInfo'), loan: document.getElementById('loanInfo'), gpa: document.getElementById('gpaInfo'), address: document.getElementById('addressInfo'), addressConverter: document.getElementById('addressConverterInfo')
+        unitConverter: document.getElementById('unitConverterInfo'), crypto: document.getElementById('cryptoInfo'), exchangeRate: document.getElementById('exchangeRateInfo'), age: document.getElementById('ageInfo'), salary: document.getElementById('salaryInfo'), stock: document.getElementById('stockInfo'), commission: document.getElementById('commissionInfo'), interest: document.getElementById('interestInfo'), robux: document.getElementById('robuxInfo'), bmi: document.getElementById('bmiInfo'), dday: document.getElementById('ddayInfo'), loan: document.getElementById('loanInfo'), gpa: document.getElementById('gpaInfo'), address: document.getElementById('addressInfo'), addressConverter: document.getElementById('addressConverterInfo'), worldTime: document.getElementById('worldTimeInfo')
     };
 
     function showTab(tabName) {
@@ -977,6 +977,63 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 14. Address Finder
+    function setupWorldTimeCalculator() {
+        const calculateBtn = document.getElementById('worldTimeCalculateBtn');
+        const sourceTimezoneSelect = document.getElementById('sourceTimezone');
+        const sourceDateTimeInput = document.getElementById('sourceDateTime');
+        const resultContainer = document.getElementById('worldTimeResultContainer');
+
+        calculateBtn.addEventListener('click', async () => {
+            const sourceTimezone = sourceTimezoneSelect.value;
+            const sourceDateTime = sourceDateTimeInput.value;
+
+            if (!sourceDateTime) {
+                resultContainer.innerHTML = '<p class="text-red-500">기준 시간을 입력해주세요.</p>';
+                return;
+            }
+
+            resultContainer.innerHTML = '<p>변환 중...</p>';
+
+            try {
+                const response = await fetch('/.netlify/functions/convert-time', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sourceTimezone, sourceDateTime }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('세계시간 변환에 실패했습니다.');
+                }
+
+                const data = await response.json();
+
+                if (data.error) {
+                    resultContainer.innerHTML = `<p class="text-red-500">오류: ${data.error}</p>`;
+                    return;
+                }
+
+                let html = '';
+                data.convertedTimes.forEach(item => {
+                    html += `
+                        <div class="p-4 border rounded-lg hover:bg-gray-50 flex justify-between items-center">
+                            <div>
+                                <p class="font-bold text-lg">${item.name}</p>
+                                <p class="text-gray-700">${item.time}</p>
+                            </div>
+                            <p class="text-sm text-gray-500">${item.tz}</p>
+                        </div>
+                    `;
+                });
+                resultContainer.innerHTML = html;
+
+            } catch (error) {
+                console.error('World time conversion error:', error);
+                resultContainer.innerHTML = '<p class="text-red-500">시간 변환 중 오류가 발생했습니다.</p>';
+            }
+        });
+    }
+
+
     function setupAddressCalculator() {
         const searchBtn = document.getElementById('searchAddressBtn');
         const keywordInput = document.getElementById('addressKeyword');
@@ -1180,6 +1237,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setupGpaCalculator();
         setupAddressCalculator();
         setupAddressConverter();
+        setupWorldTimeCalculator();
         setupMobileNavScroll();
         
         showTab(initialTab);
