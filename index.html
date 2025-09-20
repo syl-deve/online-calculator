@@ -49,6 +49,10 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-slate-500"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                     세계 환율
                 </a>
+                <a href="#" data-tab-link="timezone" class="flex items-center p-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 tab-link-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-slate-500"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    세계 시간 변환
+                </a>
                  <a href="#" data-tab-link="age" class="flex items-center p-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 tab-link-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-slate-500"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
                     만 나이
@@ -123,6 +127,7 @@
                     <a href="#" data-tab-link="unitConverter" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">데이터 단위</a>
                     <a href="#" data-tab-link="crypto" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">코인 환율</a>
                     <a href="#" data-tab-link="exchangeRate" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">세계 환율</a>
+                    <a href="#" data-tab-link="timezone" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">세계 시간</a>
                     <a href="#" data-tab-link="age" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">만 나이</a>
                     <a href="#" data-tab-link="salary" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">연봉</a>
                     <a href="#" data-tab-link="stock" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">주식</a>
@@ -280,6 +285,31 @@
                             </div>
                              <div class="coupang-banner">
                                 <a href="https://link.coupang.com/a/cNQaby" target="_blank" referrerpolicy="unsafe-url"><img src="https://ads-partners.coupang.com/banners/321206?subId=&traceId=V0-301-bae0f72e5e59e45f-I321206&w=728&h=90" alt=""></a>
+                            </div>
+                        </div>
+
+                        <!-- 세계 시간 변환기 -->
+                        <div id="timezoneCalculator" class="hidden">
+                            <div class="space-y-6 max-w-xl mx-auto">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="sourceZone" class="font-semibold text-gray-700">기준 시간대</label>
+                                        <select id="sourceZone" class="w-full p-3 border rounded-lg mt-1"></select>
+                                    </div>
+                                    <div>
+                                        <label for="targetZone" class="font-semibold text-gray-700">대상 시간대</label>
+                                        <select id="targetZone" class="w-full p-3 border rounded-lg mt-1"></select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="sourceTime" class="font-semibold text-gray-700">시간 입력</label>
+                                    <input type="datetime-local" id="sourceTime" class="w-full p-3 border rounded-lg mt-1">
+                                </div>
+                                <div class="mt-2 bg-blue-50 rounded-lg p-6 text-center">
+                                    <p class="text-gray-600">변환된 시간</p>
+                                    <div id="timezoneResultText" class="text-2xl sm:text-3xl font-bold my-2 text-blue-600">-</div>
+                                </div>
+                                <div id="timezoneErrorText" class="text-red-500 font-semibold pt-2 text-center"></div>
                             </div>
                         </div>
 
@@ -698,6 +728,14 @@
                             <li><strong class="block font-semibold text-gray-800">환율이란?</strong><p class="mt-1 text-gray-600">한 나라의 통화(돈)를 다른 나라의 통화와 교환할 때 적용되는 비율을 의미합니다. 환율은 외환 시장의 수요와 공급에 따라 계속해서 변동합니다.</p></li>
                             <li><strong class="block font-semibold text-gray-800">실시간 환율 vs 은행 고시 환율</strong><p class="mt-1 text-gray-600">본 계산기에서 제공하는 환율은 국제 외환 시장의 실시간 데이터입니다. 은행에서 환전할 때 적용되는 '고시 환율'은 실시간 환율에 수수료가 포함되어 있으므로 약간의 차이가 발생할 수 있습니다.</p></li>
                             <li><strong class="block font-semibold text-gray-800">환전 수수료 우대</strong><p class="mt-1 text-gray-600">주거래 은행이나 모바일 앱을 통해 환전할 경우 환전 수수료 우대(할인) 혜택을 받을 수 있습니다. 주요 통화(달러, 엔, 유로)는 보통 80~90%까지 우대받을 수 있으니 꼭 확인해보세요.</p></li>
+                        </ul>
+                    </div>
+                    <div id="timezoneInfo" class="info-content hidden">
+                        <h3>세계 시간 변환기 Tip</h3>
+                        <ul class="space-y-5 text-sm">
+                            <li><strong class="block font-semibold text-gray-800">시간대(Time Zone)</strong><p class="mt-1 text-gray-600">영국 그리니치 천문대를 기준으로 하는 협정 세계시(UTC)와의 시차를 의미합니다. 각 국가는 법률에 따라 표준시를 정합니다.</p></li>
+                            <li><strong class="block font-semibold text-gray-800">서머타임 (Daylight Saving Time)</strong><p class="mt-1 text-gray-600">여름철에 표준시를 한 시간 앞당겨 사용하는 제도입니다. 이 계산기는 각 국가의 서머타임(DST)을 자동으로 계산하여 정확한 시간을 표시합니다.</p></li>
+                            <li><strong class="block font-semibold text-gray-800">시간 입력</strong><p class="mt-1 text-gray-600">날짜와 시간을 직접 입력하거나, 현재 시간으로 자동 설정된 값을 기준으로 변환할 수 있습니다.</p></li>
                         </ul>
                     </div>
                     <div id="ageInfo" class="info-content hidden">
