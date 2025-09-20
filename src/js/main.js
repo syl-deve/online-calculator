@@ -32,60 +32,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const desktopTitle = document.getElementById('currentCalculatorTitle');
     const calculatorTitles = {
         percentage: '퍼센트 계산기',
-        unitConverter: '데이터 단위', 
-        crypto: '주요 코인 환율', 
-        exchangeRate: '세계 환율', 
-        timezone: '세계 시간 변환',
-        age: '만 나이', 
-        salary: '연봉 실수령액', 
-        stock: '주식 수익률', 
-        commission: '부동산 중개보수', 
-        interest: '예/적금 이자', 
-        robux: '로벅스 환율', 
-        bmi: 'BMI (비만도)', 
-        dday: 'D-Day', 
-        loan: '대출 이자', 
-        gpa: '학점', 
-        address: '우편번호 찾기', 
-        addressConverter: '한/영 주소 변환기'
+        unitConverter: '데이터 단위', crypto: '주요 코인 환율', exchangeRate: '세계 환율', age: '만 나이', salary: '연봉 실수령액', stock: '주식 수익률', commission: '부동산 중개보수', interest: '예/적금 이자', robux: '로벅스 환율', bmi: 'BMI (비만도)', dday: 'D-Day', loan: '대출 이자', gpa: '학점', address: '우편번호 찾기', addressConverter: '한/영 주소 변환기'
     };
     const calculators = {
         percentage: document.getElementById('percentageCalculator'),
-        unitConverter: document.getElementById('unitConverterCalculator'), 
-        crypto: document.getElementById('cryptoCalculator'), 
-        exchangeRate: document.getElementById('exchangeRateCalculator'), 
-        timezone: document.getElementById('timezoneCalculator'),
-        age: document.getElementById('ageCalculator'), 
-        salary: document.getElementById('salaryCalculator'), 
-        stock: document.getElementById('stockCalculator'), 
-        commission: document.getElementById('commissionCalculator'), 
-        interest: document.getElementById('interestCalculator'), 
-        robux: document.getElementById('robuxCalculator'), 
-        bmi: document.getElementById('bmiCalculator'), 
-        dday: document.getElementById('ddayCalculator'), 
-        loan: document.getElementById('loanCalculator'), 
-        gpa: document.getElementById('gpaCalculator'), 
-        address: document.getElementById('addressCalculator'), 
-        addressConverter: document.getElementById('addressConverterCalculator')
+        unitConverter: document.getElementById('unitConverterCalculator'), crypto: document.getElementById('cryptoCalculator'), exchangeRate: document.getElementById('exchangeRateCalculator'), age: document.getElementById('ageCalculator'), salary: document.getElementById('salaryCalculator'), stock: document.getElementById('stockCalculator'), commission: document.getElementById('commissionCalculator'), interest: document.getElementById('interestCalculator'), robux: document.getElementById('robuxCalculator'), bmi: document.getElementById('bmiCalculator'), dday: document.getElementById('ddayCalculator'), loan: document.getElementById('loanCalculator'), gpa: document.getElementById('gpaCalculator'), address: document.getElementById('addressCalculator'), addressConverter: document.getElementById('addressConverterCalculator')
     };
     const infoSections = {
         percentage: document.getElementById('percentageInfo'),
-        unitConverter: document.getElementById('unitConverterInfo'), 
-        crypto: document.getElementById('cryptoInfo'), 
-        exchangeRate: document.getElementById('exchangeRateInfo'), 
-        timezone: document.getElementById('timezoneInfo'),
-        age: document.getElementById('ageInfo'), 
-        salary: document.getElementById('salaryInfo'), 
-        stock: document.getElementById('stockInfo'), 
-        commission: document.getElementById('commissionInfo'), 
-        interest: document.getElementById('interestInfo'), 
-        robux: document.getElementById('robuxInfo'), 
-        bmi: document.getElementById('bmiInfo'), 
-        dday: document.getElementById('ddayInfo'), 
-        loan: document.getElementById('loanInfo'), 
-        gpa: document.getElementById('gpaInfo'), 
-        address: document.getElementById('addressInfo'), 
-        addressConverter: document.getElementById('addressConverterInfo')
+        unitConverter: document.getElementById('unitConverterInfo'), crypto: document.getElementById('cryptoInfo'), exchangeRate: document.getElementById('exchangeRateInfo'), age: document.getElementById('ageInfo'), salary: document.getElementById('salaryInfo'), stock: document.getElementById('stockInfo'), commission: document.getElementById('commissionInfo'), interest: document.getElementById('interestInfo'), robux: document.getElementById('robuxInfo'), bmi: document.getElementById('bmiInfo'), dday: document.getElementById('ddayInfo'), loan: document.getElementById('loanInfo'), gpa: document.getElementById('gpaInfo'), address: document.getElementById('addressInfo'), addressConverter: document.getElementById('addressConverterInfo')
     };
 
     function showTab(tabName) {
@@ -98,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (calculators[tabName]) calculators[tabName].classList.remove('hidden');
         if (infoSections[tabName]) infoSections[tabName].classList.remove('hidden');
         
+        // Handle active states for both desktop and mobile links
         document.querySelectorAll('aside .tab-link-item').forEach(link => {
             link.classList.remove('active-nav-link');
             if (link.dataset.tabLink === tabName) {
@@ -109,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
             link.classList.remove('active-mobile-nav-link');
             if (link.dataset.tabLink === tabName) {
                 link.classList.add('active-mobile-nav-link');
+                // Scroll the active link into view on mobile
                 link.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
             }
         });
@@ -123,6 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // --- Auto-formatting number inputs ---
     document.querySelectorAll('input[type="text"]').forEach(input => {
         const idsToFormat = ['cryptoKrw', 'krw', 'annualSalary', 'price', 'deposit', 'monthlyRent', 'principal', 'loanPrincipal', 'krwInputRobux', 'unitTb', 'unitGb', 'unitMb', 'buyPrice', 'sellPrice'];
         if(idsToFormat.includes(input.id)) {
@@ -139,13 +97,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // --- General Reset Button Logic ---
     document.querySelectorAll('.reset-btn').forEach(button => {
         button.addEventListener('click', (e) => {
             const calculatorId = e.target.dataset.calculator;
             const form = document.getElementById(`${calculatorId}Calculator`);
             if (form) {
                 form.querySelectorAll('input[type="text"], input[type="number"], input[type="date"]').forEach(input => { input.value = ''; });
-                if(calculatorId === 'age') {
+                // Reset specific result displays
+                 if(calculatorId === 'age') {
                     document.getElementById('ageResultText').textContent = '0 세';
                     document.getElementById('ageResultDetails').textContent = '생년월일을 입력해주세요.';
                 } else if (calculatorId === 'salary') {
@@ -272,75 +232,933 @@ document.addEventListener('DOMContentLoaded', function() {
         inputsContainer.addEventListener('input', calculate);
         document.getElementById('copyPercentageBtn').addEventListener('click', () => copyToClipboard(resultText.textContent, 'copyPercentageMsg'));
 
+        // Initial render
         renderInputs(currentMode);
     }
     
-    // ... (other calculator setups)
+    // 1. Crypto Calculator
+    function setupCryptoCalculator() {
+        const cryptoInputs = document.querySelectorAll('.crypto-input');
+        const cryptoRateInfoText = document.getElementById('cryptoRateInfoText');
+        const cryptoInfoBox = document.getElementById('cryptoInfoBox');
+        
+        // No need for cryptoRates or isCryptoCalculating on client-side anymore
 
-    // New Timezone Calculator Setup
-    async function setupTimezoneCalculator() {
-        const sourceZoneSelect = document.getElementById('sourceZone');
-        const targetZoneSelect = document.getElementById('targetZone');
-        const sourceTimeInput = document.getElementById('sourceTime');
-        const resultText = document.getElementById('timezoneResultText');
-        const errorText = document.getElementById('timezoneErrorText');
+        async function updateCryptoCalculations(sourceAsset) {
+            const sourceInput = document.querySelector(`.crypto-input[data-asset="${sourceAsset}"]`);
+            const sourceValue = parseFloat(unformatNumber(sourceInput.value));
 
-        async function convertTime() {
-            const dateTime = sourceTimeInput.value;
-            const sourceZone = sourceZoneSelect.value;
-            const targetZone = targetZoneSelect.value;
+            // Clear all other inputs if the source is empty or invalid
+            if (isNaN(sourceValue) || sourceInput.value === '') {
+                cryptoInputs.forEach(input => {
+                    if (input !== sourceInput) {
+                        input.value = '';
+                    }
+                });
+                cryptoRateInfoText.textContent = '실시간 코인 시세 정보를 불러오는 중입니다...';
+                cryptoInfoBox.className = 'bg-amber-50 border-l-4 border-amber-500 text-amber-700 p-4 rounded-lg mb-6';
+                return;
+            }
 
-            if (!dateTime || !sourceZone || !targetZone) {
+            cryptoRateInfoText.textContent = '계산 중...';
+            cryptoInfoBox.className = 'bg-amber-50 border-l-4 border-amber-500 text-amber-700 p-4 rounded-lg mb-6';
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-crypto', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sourceAsset, sourceValue }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Crypto calculation failed on server.');
+                }
+
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                for (const asset in data.rates) {
+                    const input = document.querySelector(`.crypto-input[data-asset="${asset}"]`);
+                    if (input && asset !== sourceAsset) {
+                        if (asset === 'KRW') {
+                            input.value = formatNumber(data.rates[asset]);
+                        } else {
+                            input.value = data.rates[asset];
+                        }
+                    }
+                }
+                cryptoRateInfoText.textContent = `실시간 시세 적용 중 (예: 1 BTC = ${formatNumber(data.btcPriceKrw)}원)`;
+                cryptoInfoBox.className = 'bg-amber-50 border-l-4 border-amber-500 text-amber-700 p-4 rounded-lg mb-6';
+
+            } catch (error) {
+                console.error('Crypto calculation error:', error);
+                cryptoInfoBox.className = 'bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6';
+                cryptoRateInfoText.innerHTML = `<p class="font-bold">오류</p><p>코인 시세 로딩 또는 계산에 실패했습니다. 잠시 후 다시 시도해주세요.</p>`;
+                cryptoInputs.forEach(input => {
+                    input.disabled = true;
+                    input.placeholder = '데이터 로딩 실패';
+                    input.value = '';
+                });
+            }
+        }
+
+        cryptoInputs.forEach(input => {
+            input.addEventListener('input', () => updateCryptoCalculations(input.dataset.asset));
+        });
+        
+        // Initial fetch to populate rates and info text
+        updateCryptoCalculations('KRW'); // Trigger an initial calculation with a dummy value to fetch rates
+    }
+    
+    // 2. Exchange Rate Calculator
+    function setupExchangeRateCalculator() {
+        const currencyInputs = document.querySelectorAll('.currency-input');
+        const exchangeRateInfoText = document.getElementById('exchangeRateInfoText');
+        const exchangeRateInfoBox = document.getElementById('exchangeRateInfoBox');
+
+        async function fetchInitialRates() {
+            try {
+                const response = await fetch('/.netlify/functions/calculate-exchange-rate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sourceCurrency: 'FETCH_RATES' })
+                });
+                if (!response.ok) throw new Error('Network response was not ok');
+                const data = await response.json();
+                const krwRate = formatNumber(data.rates['KRW'].toFixed(2));
+                const date = new Date(data.lastUpdated).toLocaleString('ko-KR');
+                exchangeRateInfoText.textContent = `기준: 1달러 = ${krwRate}원 (업데이트: ${date})`;
+            } catch (error) {
+                console.error("환율 정보 가져오기 실패:", error);
+                exchangeRateInfoBox.className = 'bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6';
+                exchangeRateInfoText.innerHTML = `<p class="font-bold">오류</p><p>실시간 환율 정보 로딩에 실패했습니다. 페이지를 새로고침하거나 잠시 후 다시 시도해주세요.</p>`;
+                currencyInputs.forEach(input => {
+                    input.disabled = true;
+                    input.placeholder = '데이터 로딩 실패';
+                    input.value = '';
+                });
+            }
+        }
+
+        async function updateExchangeCalculations(sourceCurrency) {
+            const sourceInput = document.querySelector(`.currency-input[data-currency="${sourceCurrency}"]`);
+            const sourceValue = parseFloat(unformatNumber(sourceInput.value));
+
+            if (isNaN(sourceValue) || sourceInput.value === '') {
+                currencyInputs.forEach(input => {
+                    if (input !== sourceInput) input.value = '';
+                });
                 return;
             }
 
             try {
-                const response = await fetch('/.netlify/functions/convert-timezone', {
+                const response = await fetch('/.netlify/functions/calculate-exchange-rate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ dateTime, sourceZone, targetZone })
+                    body: JSON.stringify({ sourceCurrency, sourceValue })
                 });
+
+                if (!response.ok) throw new Error('Exchange rate calculation failed');
                 const data = await response.json();
-                if (!response.ok) throw new Error(data.error);
-                resultText.textContent = data.result;
-                errorText.textContent = '';
-            } catch (err) {
-                resultText.textContent = '-';
-                errorText.textContent = err.message;
+
+                currencyInputs.forEach(input => {
+                    const targetCurrency = input.dataset.currency;
+                    if (targetCurrency !== sourceCurrency) {
+                        const targetValue = data.rates[targetCurrency];
+                        if (targetCurrency === 'JPY') { input.value = Math.round(targetValue); } 
+                        else if (targetCurrency === 'KRW') { input.value = formatNumber(targetValue.toFixed(0));}
+                        else { input.value = targetValue.toFixed(2); }
+                    }
+                });
+
+            } catch (error) {
+                console.error('Exchange calculation error:', error);
+                // Handle error display if necessary
             }
         }
 
-        try {
-            const response = await fetch('/.netlify/functions/convert-timezone');
-            const timezones = await response.json();
-            
-            timezones.forEach(tz => {
-                const option1 = new Option(tz.name, tz.value);
-                const option2 = new Option(tz.name, tz.value);
-                sourceZoneSelect.add(option1);
-                targetZoneSelect.add(option2);
-            });
-
-            const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            if (timezones.some(tz => tz.value === localTimeZone)) {
-                sourceZoneSelect.value = localTimeZone;
-            }
-            targetZoneSelect.value = 'America/New_York';
-
-            const now = new Date();
-            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-            sourceTimeInput.value = now.toISOString().slice(0,16);
-
-            [sourceZoneSelect, targetZoneSelect, sourceTimeInput].forEach(el => {
-                el.addEventListener('change', convertTime);
-            });
-
-            convertTime();
-
-        } catch (error) {
-            errorText.textContent = '시간대 정보를 불러오는 데 실패했습니다.';
-        }
+        currencyInputs.forEach(input => {
+            input.addEventListener('input', () => updateExchangeCalculations(input.dataset.currency));
+        });
+        
+        fetchInitialRates();
     }
+    
+    // 3. Age Calculator
+    function setupAgeCalculator() {
+        document.getElementById('ageCalculateBtn').addEventListener('click', async () => {
+            const birthDateInput = document.getElementById('birthDate');
+            const ageResultText = document.getElementById('ageResultText');
+            const ageResultDetails = document.getElementById('ageResultDetails');
+            
+            if (!birthDateInput.value) {
+                ageResultDetails.textContent = "생년월일을 선택해주세요.";
+                return;
+            }
+
+            ageResultDetails.textContent = '계산 중...';
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-age', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ birthDate: birthDateInput.value }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('서버에서 나이를 계산하는 데 실패했습니다.');
+                }
+
+                const data = await response.json();
+                const today = new Date();
+                ageResultText.textContent = `${data.age} 세`;
+                ageResultDetails.textContent = `오늘 날짜: ${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
+
+            } catch (error) {
+                console.error('Age calculation error:', error);
+                ageResultText.textContent = '-';
+                ageResultDetails.textContent = '오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+            }
+        });
+        document.getElementById('copyAgeBtn').addEventListener('click', () => copyToClipboard(document.getElementById('ageResultText').textContent, 'copyAgeMsg'));
+    }
+
+    // 4. Salary Calculator
+    function setupSalaryCalculator() {
+        const calculateBtn = document.getElementById('salaryCalculateBtn');
+        calculateBtn.addEventListener('click', async () => {
+            const annualSalary = Number(unformatNumber(document.getElementById('annualSalary').value));
+            const severancePay = document.querySelector('input[name="severancePay"]:checked').value;
+            let dependents = Number(document.getElementById('dependents').value);
+            let childrenUnder20 = Number(document.getElementById('childrenUnder20').value);
+            const errorText = document.getElementById('salaryErrorText');
+
+            if (annualSalary <= 0) {
+                errorText.textContent = "연봉을 정확히 입력해주세요.";
+                return;
+            }
+            errorText.textContent = "";
+            
+            try {
+                const response = await fetch('/.netlify/functions/calculate-salary', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ annualSalary, severancePay, dependents, childrenUnder20 }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Salary calculation failed on server.');
+                }
+
+                const data = await response.json();
+
+                document.getElementById('salaryResultNet').textContent = `${formatNumber(data.netIncome)} 원`;
+                document.getElementById('salaryResultGross').textContent = `${formatNumber(data.monthlySalary)} 원`;
+                document.getElementById('salaryResultDeductions').textContent = `- ${formatNumber(data.totalDeductions)} 원`;
+                document.getElementById('salaryDeductPension').textContent = `- ${formatNumber(data.nationalPension)} 원`;
+                document.getElementById('salaryDeductHealth').textContent = `- ${formatNumber(data.healthInsurance)} 원`;
+                document.getElementById('salaryDeductCare').textContent = `- ${formatNumber(data.longTermCare)} 원`;
+                document.getElementById('salaryDeductEmployment').textContent = `- ${formatNumber(data.employmentInsurance)} 원`;
+                document.getElementById('salaryDeductIncomeTax').textContent = `- ${formatNumber(data.incomeTax)} 원`;
+                document.getElementById('salaryDeductLocalTax').textContent = `- ${formatNumber(data.localTax)} 원`;
+
+            } catch (error) {
+                console.error('Salary calculation error:', error);
+                errorText.textContent = '계산 중 오류가 발생했습니다.';
+            }
+        });
+        document.getElementById('copySalaryBtn').addEventListener('click', () => copyToClipboard(document.getElementById('salaryResultNet').textContent, 'copySalaryMsg'));
+    }
+
+    // 5. Stock Profit/Loss Calculator
+    function setupStockCalculator() {
+        const calculateBtn = document.getElementById('stockCalculateBtn');
+        calculateBtn.addEventListener('click', async () => {
+            const buyPrice = Number(unformatNumber(document.getElementById('buyPrice').value));
+            const sellPrice = Number(unformatNumber(document.getElementById('sellPrice').value));
+            const quantity = Number(document.getElementById('quantity').value);
+            const commissionRate = Number(document.getElementById('commissionRate').value);
+            const errorText = document.getElementById('stockErrorText');
+
+            if (buyPrice <= 0 || sellPrice <= 0 || quantity <= 0) {
+                errorText.textContent = "매수/매도 단가와 수량을 정확히 입력해주세요.";
+                return;
+            }
+            errorText.textContent = "";
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-stock', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ buyPrice, sellPrice, quantity, commissionRate })
+                });
+
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({ error: '서버 응답 오류' }));
+                    throw new Error(errData.error || 'Stock calculation failed on server.');
+                }
+
+                const data = await response.json();
+
+                const profitEl = document.getElementById('stockResultProfit');
+                profitEl.textContent = `${formatNumber(data.profitOrLoss)} 원`;
+                profitEl.classList.toggle('text-red-600', data.profitOrLoss < 0);
+                profitEl.classList.toggle('text-blue-600', data.profitOrLoss > 0);
+
+                const roiEl = document.getElementById('stockResultRoi');
+                roiEl.textContent = `${data.returnOnInvestment} %`;
+                roiEl.classList.toggle('text-red-600', data.returnOnInvestment < 0);
+                roiEl.classList.toggle('text-blue-600', data.returnOnInvestment > 0);
+
+                document.getElementById('stockResultBuyAmount').textContent = `${formatNumber(data.totalBuyAmount)} 원`;
+                document.getElementById('stockResultSellAmount').textContent = `${formatNumber(data.totalSellAmount)} 원`;
+                document.getElementById('stockResultDeductions').textContent = `${formatNumber(data.totalDeductions)} 원`;
+
+            } catch (error) {
+                console.error('Stock calculation error:', error);
+                errorText.textContent = `계산 중 오류가 발생했습니다: ${error.message}`;
+            }
+        });
+        document.getElementById('copyStockProfitBtn').addEventListener('click', () => copyToClipboard(document.getElementById('stockResultProfit').textContent, 'copyStockProfitMsg'));
+    }
+    
+    // 6. Commission Calculator
+    function setupCommissionCalculator() {
+        const tradeTypeContainer = document.getElementById('tradeTypeContainer');
+        const priceContainer = document.getElementById('priceContainer');
+        const rentContainer = document.getElementById('rentContainer');
+        tradeTypeContainer.addEventListener('change', (e) => {
+            if (e.target.name === 'tradeType') {
+                if (e.target.value === '임대차') {
+                    priceContainer.classList.add('hidden');
+                    rentContainer.classList.remove('hidden');
+                } else {
+                    priceContainer.classList.remove('hidden');
+                    rentContainer.classList.add('hidden');
+                }
+            }
+        });
+
+        document.getElementById('commissionCalculateBtn').addEventListener('click', async () => {
+            const tradeType = document.querySelector('input[name="tradeType"]:checked').value;
+            const propertyType = document.querySelector('input[name="propertyType"]:checked').value;
+            const price = (tradeType === '매매') ? Number(unformatNumber(document.getElementById('price').value)) : Number(unformatNumber(document.getElementById('deposit').value));
+            const monthlyRent = (tradeType === '매매') ? 0 : Number(unformatNumber(document.getElementById('monthlyRent').value));
+            const errorText = document.getElementById('commissionErrorText');
+
+            if ((tradeType === '매매' && price <= 0) || (tradeType === '임대차' && (price < 0 || monthlyRent < 0 || (price === 0 && monthlyRent === 0)))) {
+                errorText.textContent = '금액을 정확히 입력해주세요.';
+                return;
+            }
+            errorText.textContent = '';
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-commission', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tradeType, propertyType, price, monthlyRent }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Commission calculation failed on server.');
+                }
+
+                const data = await response.json();
+
+                document.getElementById('commissionResultText').textContent = `${formatNumber(data.finalFee)} 원`;
+                let details = `적용 요율: ${(data.rate * 100).toFixed(2)}%`;
+                if (data.limit !== Infinity) {
+                    details += ` (한도액: ${formatNumber(data.limit)}원)`;
+                }
+                document.getElementById('commissionResultDetails').innerHTML = details + '<br>VAT 10%는 별도이며, 실제 보수는 협의를 통해 결정됩니다.';
+
+            } catch (error) {
+                console.error('Commission calculation error:', error);
+                errorText.textContent = '계산 중 오류가 발생했습니다.';
+            }
+        });
+        document.getElementById('copyCommissionBtn').addEventListener('click', () => copyToClipboard(document.getElementById('commissionResultText').textContent, 'copyCommissionMsg'));
+    }
+    
+    // 7. Interest Calculator
+    function setupInterestCalculator() {
+        document.getElementById('interestCalculateBtn').addEventListener('click', async () => {
+            const principal = Number(unformatNumber(document.getElementById('principal').value));
+            const period = Number(document.getElementById('period').value);
+            const annualRate = Number(document.getElementById('rate').value);
+            const depositType = document.querySelector('input[name="depositType"]:checked').value;
+            const taxType = document.querySelector('input[name="taxType"]:checked').value;
+            const errorText = document.getElementById('interestErrorText');
+
+            if (principal <= 0 || period <= 0 || annualRate <= 0) {
+                errorText.textContent = "모든 값을 정확히 입력해주세요.";
+                return;
+            }
+            errorText.textContent = "";
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-interest', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ principal, period, annualRate, depositType, taxType }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Interest calculation failed on server.');
+                }
+
+                const data = await response.json();
+
+                document.getElementById('interestResultTotal').textContent = `${formatNumber(data.total)} 원`;
+                document.getElementById('interestResultPrincipal').textContent = `${formatNumber(data.principal)} 원`;
+                document.getElementById('interestResultBeforeTax').textContent = `${formatNumber(data.interestBeforeTax)} 원`;
+                document.getElementById('interestResultTax').textContent = `- ${formatNumber(data.tax)} 원`;
+
+            } catch (error) {
+                console.error('Interest calculation error:', error);
+                errorText.textContent = '계산 중 오류가 발생했습니다.';
+            }
+        });
+        document.getElementById('copyInterestBtn').addEventListener('click', () => copyToClipboard(document.getElementById('interestResultTotal').textContent, 'copyInterestMsg'));
+    }
+    
+    // 8. Robux Calculator
+    function setupRobuxCalculator() {
+        const robuxInput = document.getElementById('robuxInput');
+        const krwInput_robux = document.getElementById('krwInputRobux');
+        const usdInput_robux = document.getElementById('usdInput');
+        const robuxRateInfo = document.getElementById('robuxRateInfo');
+        const robuxInfoBox = document.getElementById('robuxInfoBox');
+        const robuxStandardInfo = document.getElementById('robuxStandardInfo');
+        const platformSelector = document.getElementById('platformSelector');
+
+        async function fetchInitialRobuxRate() {
+            try {
+                const response = await fetch('/.netlify/functions/calculate-robux', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ source: 'FETCH_RATE' })
+                });
+                if (!response.ok) throw new Error('Network response was not ok');
+                const data = await response.json();
+                robuxRateInfo.textContent = `현재 환율 적용 중: 1달러 = ${data.usdToKrwRate.toFixed(2)}원`;
+            } catch (error) {
+                console.error("환율 정보 가져오기 실패:", error);
+                robuxInfoBox.className = 'bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6';
+                robuxRateInfo.textContent = `실시간 환율 로딩 실패. 예상 환율을 기준으로 계산합니다.`;
+            }
+        }
+
+        function updateRobuxInfoText() {
+            const selectedPlatform = platformSelector.querySelector('input[name="platform"]:checked').value;
+            robuxStandardInfo.textContent = selectedPlatform === 'pc' ? '이 계산은 공식 PC/웹 구매가(1,200 R$ = 15,000원)를 기준으로 합니다.' : '이 계산은 공식 모바일 구매가(400 R$ = 7,500원)를 기준으로 합니다.';
+        }
+
+        async function updateRobuxCalculations(source) {
+            const platform = platformSelector.querySelector('input[name="platform"]:checked').value;
+            let value;
+            if (source === 'robux') value = robuxInput.value;
+            else if (source === 'krw') value = unformatNumber(krwInput_robux.value);
+            else if (source === 'usd') value = usdInput_robux.value;
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-robux', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ source, value, platform })
+                });
+                if (!response.ok) throw new Error('Robux calculation failed');
+                const data = await response.json();
+
+                if (source !== 'robux') robuxInput.value = data.robux;
+                if (source !== 'krw') krwInput_robux.value = formatNumber(data.krw);
+                if (source !== 'usd') usdInput_robux.value = data.usd;
+
+            } catch (error) {
+                console.error('Robux calculation error:', error);
+            }
+        }
+
+        platformSelector.addEventListener('change', () => {
+            updateRobuxInfoText();
+            const activeInput = [robuxInput, krwInput_robux, usdInput_robux].find(input => input.value);
+            if (activeInput) {
+                updateRobuxCalculations(activeInput.id.replace('Input', '').replace('Robux', '').toLowerCase());
+            }
+        });
+
+        robuxInput.addEventListener('input', () => updateRobuxCalculations('robux'));
+        krwInput_robux.addEventListener('input', () => updateRobuxCalculations('krw'));
+        usdInput_robux.addEventListener('input', () => updateRobuxCalculations('usd'));
+
+        fetchInitialRobuxRate().then(updateRobuxInfoText);
+    }
+    
+    // 9. BMI Calculator
+    function setupBmiCalculator() {
+        document.getElementById('bmiCalculateBtn').addEventListener('click', async () => {
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const resultText = document.getElementById('bmiResultText');
+            const resultDetails = document.getElementById('bmiResultDetails');
+
+            if (height <= 0 || weight <= 0) {
+                resultDetails.textContent = '키와 몸무게를 입력해주세요.';
+                resultDetails.className = 'text-lg font-semibold text-blue-600';
+                return;
+            }
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-bmi', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ height, weight }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('BMI calculation failed on server.');
+                }
+
+                const data = await response.json();
+
+                resultText.textContent = data.bmi;
+                resultDetails.textContent = data.category;
+                resultDetails.className = `text-lg font-semibold ${data.colorClass}`;
+
+            } catch (error) {
+                console.error('BMI calculation error:', error);
+                resultText.textContent = '-';
+                resultDetails.textContent = '오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+                resultDetails.className = 'text-lg font-semibold text-red-600';
+            }
+        });
+        document.getElementById('copyBmiBtn').addEventListener('click', () => copyToClipboard(document.getElementById('bmiResultText').textContent, 'copyBmiMsg'));
+    }
+
+    // 10. D-Day Calculator
+    function setupDdayCalculator() {
+        document.getElementById('ddayCalculateBtn').addEventListener('click', async () => {
+            const ddayDateInput = document.getElementById('ddayDate');
+            const ddayResultText = document.getElementById('ddayResultText');
+            const ddayResultDetails = document.getElementById('ddayResultDetails');
+
+            if (!ddayDateInput.value) {
+                ddayResultDetails.textContent = "목표 날짜를 선택해주세요.";
+                return;
+            }
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-dday', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ targetDateString: ddayDateInput.value }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('D-Day calculation failed on server.');
+                }
+
+                const data = await response.json();
+                const diffDays = data.diffDays;
+                const targetDate = new Date(ddayDateInput.value);
+
+                if (diffDays === 0) { ddayResultText.textContent = "D-Day"; }
+                else if (diffDays > 0) { ddayResultText.textContent = `D-${diffDays}`; }
+                else { ddayResultText.textContent = `D+${-diffDays}`; }
+                ddayResultDetails.textContent = `${targetDate.getFullYear()}년 ${targetDate.getMonth() + 1}월 ${targetDate.getDate()}일`;
+
+            } catch (error) {
+                console.error('D-Day calculation error:', error);
+                ddayResultText.textContent = '-';
+                ddayResultDetails.textContent = '오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+            }
+        });
+        document.getElementById('copyDdayBtn').addEventListener('click', () => copyToClipboard(document.getElementById('ddayResultText').textContent, 'copyDdayMsg'));
+    }
+
+    // 11. Loan Calculator
+    function setupLoanCalculator() {
+        document.getElementById('loanCalculateBtn').addEventListener('click', async () => {
+            const principal = parseFloat(unformatNumber(document.getElementById('loanPrincipal').value));
+            const years = parseFloat(document.getElementById('loanPeriod').value);
+            const annualRate = parseFloat(document.getElementById('loanRate').value);
+            const errorText = document.getElementById('loanErrorText');
+
+            if (principal <= 0 || years <= 0 || annualRate <= 0) {
+                errorText.textContent = "모든 값을 정확히 입력해주세요.";
+                return;
+            }
+            errorText.textContent = "";
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-loan', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ principal, years, annualRate }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Loan calculation failed on server.');
+                }
+
+                const data = await response.json();
+
+                document.getElementById('loanResultTotal').textContent = `${formatNumber(data.monthlyPayment)} 원`;
+                document.getElementById('loanResultPrincipal').textContent = `${formatNumber(data.principal)} 원`;
+                document.getElementById('loanResultInterest').textContent = `${formatNumber(data.totalInterest)} 원`;
+                document.getElementById('loanResultGrandTotal').textContent = `${formatNumber(data.totalPayment)} 원`;
+
+            } catch (error) {
+                console.error('Loan calculation error:', error);
+                errorText.textContent = '계산 중 오류가 발생했습니다.';
+            }
+        });
+        document.getElementById('copyLoanBtn').addEventListener('click', () => copyToClipboard(document.getElementById('loanResultTotal').textContent, 'copyLoanMsg'));
+    }
+    
+    // 12. GPA Calculator
+    let addGpaRow; // Keep this global as it's used by reset button
+    function setupGpaCalculator() {
+        const container = document.getElementById('gpaRowsContainer');
+        const addBtn = document.getElementById('addGpaRowBtn');
+        const calcBtn = document.getElementById('gpaCalculateBtn');
+        const resultText = document.getElementById('gpaResultText');
+        const errorText = document.getElementById('gpaErrorText');
+        
+        // gradeMap is now in the backend function
+
+        addGpaRow = () => {
+            const row = document.createElement('div');
+            row.className = 'gpa-row grid grid-cols-12 gap-2 items-center mb-2';
+            row.innerHTML = `
+                <input type="text" placeholder="과목명" class="col-span-4 p-2 border rounded">
+                <input type="number" placeholder="학점" class="col-span-2 p-2 border rounded gpa-credit">
+                <select class="col-span-3 p-2 border rounded gpa-grade">
+                    <option>A+</option><option>A0</option><option>B+</option><option>B0</option><option>C+</option><option>C0</option><option>D+</option><option>D0</option><option>F</option>
+                </select>
+                <div class="col-span-2 flex items-center justify-center">
+                    <input type="checkbox" class="gpa-pf"> <label class="ml-1 text-sm">P/F</label>
+                </div>
+                <button class="col-span-1 remove-gpa-row text-red-500 hover:text-red-700 font-bold">X</button>
+            `;
+            container.appendChild(row);
+        };
+
+        container.addEventListener('click', (e) => {
+            if (e.target.classList.contains('remove-gpa-row')) {
+                e.target.closest('.gpa-row').remove();
+            }
+        });
+        
+        addBtn.addEventListener('click', addGpaRow);
+        
+        calcBtn.addEventListener('click', async () => { // Made async
+            errorText.textContent = '';
+            const courses = [];
+            let hasInvalidInput = false;
+
+            document.querySelectorAll('.gpa-row').forEach(row => {
+                const creditInput = row.querySelector('.gpa-credit');
+                const gradeSelect = row.querySelector('.gpa-grade');
+                const pfCheckbox = row.querySelector('.gpa-pf');
+
+                const credit = parseFloat(creditInput.value);
+                const grade = gradeSelect.value;
+                const isPf = pfCheckbox.checked;
+
+                if (!isPf && (isNaN(credit) || credit <= 0)) {
+                    hasInvalidInput = true;
+                }
+                
+                courses.push({ credit, grade, isPf });
+            });
+
+            if (hasInvalidInput) {
+                errorText.textContent = '학점과 평점을 정확히 입력해주세요.';
+                return;
+            }
+            
+            if (courses.length === 0) {
+                errorText.textContent = '계산할 과목이 없습니다.';
+                return;
+            }
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-gpa', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ courses }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('GPA calculation failed on server.');
+                }
+
+                const data = await response.json();
+                resultText.textContent = `${data.gpa} / 4.5`;
+
+            } catch (error) {
+                console.error('GPA calculation error:', error);
+                errorText.textContent = '계산 중 오류가 발생했습니다.';
+            }
+        });
+        
+        document.getElementById('copyGpaBtn').addEventListener('click', () => copyToClipboard(document.getElementById('gpaResultText').textContent, 'copyGpaMsg'));
+
+        // Add initial rows
+        addGpaRow(); addGpaRow(); addGpaRow();
+    }
+    
+    // 13. Unit Converter
+    function setupUnitConverter() {
+        const unitInputs = document.querySelectorAll('.unit-input');
+        let isUnitCalculating = false;
+
+        // Constants are now only used for client-side display logic if needed, not for calculation
+        // const TB_TO_MB = 1024 * 1024;
+        // const GB_TO_MB = 1024;
+
+        async function updateUnitCalculations(sourceUnit) {
+            if (isUnitCalculating) return;
+            isUnitCalculating = true;
+
+            const sourceInput = document.querySelector(`.unit-input[data-unit="${sourceUnit}"]`);
+            const sourceValue = parseFloat(unformatNumber(sourceInput.value));
+
+            if (isNaN(sourceValue) || sourceInput.value === '') {
+                unitInputs.forEach(input => {
+                    if (input !== sourceInput) {
+                        input.value = '';
+                    }
+                });
+                isUnitCalculating = false;
+                return;
+            }
+
+            try {
+                const response = await fetch('/.netlify/functions/convert-unit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sourceUnit, sourceValue }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Unit conversion failed on server.');
+                }
+
+                const data = await response.json();
+
+                unitInputs.forEach(input => {
+                    const targetUnit = input.dataset.unit;
+                    let targetValue = data[targetUnit];
+                    
+                    // Format number for display
+                    const parts = targetValue.toString().split('.');
+                    parts[0] = formatNumber(parts[0]);
+                    input.value = parts.join('.');
+                });
+
+            } catch (error) {
+                console.error('Unit conversion error:', error);
+                // Optionally display an error message to the user
+            } finally {
+                isUnitCalculating = false;
+            }
+        }
+
+        unitInputs.forEach(input => {
+            input.addEventListener('input', () => updateUnitCalculations(input.dataset.unit));
+        });
+    }
+
+    // 14. Address Finder
+    function setupAddressCalculator() {
+        const searchBtn = document.getElementById('searchAddressBtn');
+        const keywordInput = document.getElementById('addressKeyword');
+        const resultContainer = document.getElementById('addressResultContainer');
+
+        searchBtn.addEventListener('click', async () => {
+            const keyword = keywordInput.value;
+            if (!keyword) {
+                resultContainer.innerHTML = '<p class="text-red-500">검색어를 입력해주세요.</p>';
+                return;
+            }
+
+            resultContainer.innerHTML = '<p>검색 중...</p>';
+
+            try {
+                const response = await fetch('/.netlify/functions/search-address', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ keyword }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Address search failed on server.');
+                }
+
+                const data = await response.json();
+
+                if (data.results.common.errorCode !== "0") {
+                    resultContainer.innerHTML = `<p class="text-red-500">검색 실패: ${data.results.common.errorMessage}</p>`;
+                    return;
+                }
+
+                if (!data.results.juso || data.results.juso.length === 0) {
+                    resultContainer.innerHTML = '<p class="text-gray-500">검색 결과가 없습니다.</p>';
+                    return;
+                }
+
+                let html = '';
+                data.results.juso.forEach(item => {
+                    html += `
+                        <div class="p-4 border rounded-lg hover:bg-gray-50">
+                            <p class="font-bold text-lg">${item.zipNo}</p>
+                            <p class="text-gray-700">${item.roadAddr}</p>
+                            <p class="text-sm text-gray-500">[지번] ${item.jibunAddr}</p>
+                        </div>
+                    `;
+                });
+                resultContainer.innerHTML = html;
+
+            } catch (error) {
+                console.error('Address search error:', error);
+                resultContainer.innerHTML = '<p class="text-red-500">검색 중 오류가 발생했습니다.</p>';
+            }
+        });
+    }
+
+    // 15. Address Converter
+    function setupAddressConverter() {
+        const convertBtn = document.getElementById('convertAddressBtn');
+        const keywordInput = document.getElementById('addressConverterKeyword');
+        const resultContainer = document.getElementById('addressConverterResultContainer');
+
+        convertBtn.addEventListener('click', async () => {
+            const keyword = keywordInput.value;
+            if (!keyword) {
+                resultContainer.innerHTML = '<p class="text-red-500">주소를 입력해주세요.</p>';
+                return;
+            }
+
+            resultContainer.innerHTML = '<p>변환 중...</p>';
+
+            try {
+                const response = await fetch('/.netlify/functions/convert-address', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ keyword }),
+                });
+
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({ error: '서버 응답 오류' }));
+                    throw new Error(errData.error || 'Address conversion failed on server.');
+                }
+
+                const data = await response.json();
+
+                if (data.error) {
+                    resultContainer.innerHTML = `<p class="text-red-500">변환 실패: ${data.error}</p>`;
+                    return;
+                }
+
+                resultContainer.innerHTML = `
+                    <div class="p-4 border rounded-lg bg-gray-50 relative">
+                        <div class="flex justify-between items-start">
+                            <div class="pr-10">
+                                <p class="text-sm text-gray-500">도로명주소</p>
+                                <p id="roadAddrResult" class="font-semibold text-gray-800">${data.roadAddr}</p>
+                            </div>
+                            <button class="copy-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600" data-copy-target="roadAddrResult" data-copy-msg="copyRoadAddrMsg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                            </button>
+                        </div>
+                        <span id="copyRoadAddrMsg" class="copy-message hidden">복사 완료!</span>
+                    </div>
+                    <div class="p-4 border rounded-lg bg-gray-50 relative">
+                        <div class="flex justify-between items-start">
+                            <div class="pr-10">
+                                <p class="text-sm text-gray-500">지번주소</p>
+                                <p id="jibunAddrResult" class="font-semibold text-gray-800">${data.jibunAddr}</p>
+                            </div>
+                            <button class="copy-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600" data-copy-target="jibunAddrResult" data-copy-msg="copyJibunAddrMsg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                            </button>
+                        </div>
+                        <span id="copyJibunAddrMsg" class="copy-message hidden">복사 완료!</span>
+                    </div>
+                    <div class="p-4 border rounded-lg bg-blue-50 relative">
+                        <div class="flex justify-between items-start">
+                            <div class="pr-10">
+                                <p class="text-sm text-blue-500">영문주소 (도로명)</p>
+                                <p id="engAddrResult" class="font-bold text-blue-800">${data.engAddr}</p>
+                            </div>
+                            <button class="copy-btn absolute top-4 right-4 text-blue-400 hover:text-blue-600" data-copy-target="engAddrResult" data-copy-msg="copyEngAddrMsg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                            </button>
+                        </div>
+                        <span id="copyEngAddrMsg" class="copy-message hidden">복사 완료!</span>
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error('Address conversion error:', error);
+                resultContainer.innerHTML = `<p class="text-red-500">변환 중 오류 발생: ${error.message}</p>`;
+            }
+        });
+
+        resultContainer.addEventListener('click', (e) => {
+            const copyBtn = e.target.closest('.copy-btn');
+            if (copyBtn) {
+                const targetId = copyBtn.dataset.copyTarget;
+                const msgId = copyBtn.dataset.copyMsg;
+                const textToCopy = document.getElementById(targetId)?.textContent;
+                if (textToCopy) {
+                    copyToClipboard(textToCopy, msgId);
+                }
+            }
+        });
+    }
+
+    // --- Mobile Nav Scroll ---
+    function setupMobileNavScroll() {
+        const navContainer = document.querySelector('.mobile-nav-container');
+        const scrollLeftBtn = document.getElementById('scroll-left-btn');
+        const scrollRightBtn = document.getElementById('scroll-right-btn');
+
+        if (!navContainer || !scrollLeftBtn || !scrollRightBtn) return;
+
+        const updateScrollButtons = () => {
+            const { scrollLeft, scrollWidth, clientWidth } = navContainer;
+            // A small buffer is added to handle sub-pixel rendering issues
+            const buffer = 1; 
+            
+            scrollLeftBtn.classList.toggle('hidden', scrollLeft <= 0);
+            scrollRightBtn.classList.toggle('hidden', scrollLeft >= scrollWidth - clientWidth - buffer);
+        };
+
+        scrollLeftBtn.addEventListener('click', () => {
+            navContainer.scrollBy({ left: -200, behavior: 'smooth' });
+        });
+
+        scrollRightBtn.addEventListener('click', () => {
+            navContainer.scrollBy({ left: 200, behavior: 'smooth' });
+        });
+
+        navContainer.addEventListener('scroll', updateScrollButtons);
+        
+        // Use ResizeObserver to detect size changes of the container
+        new ResizeObserver(updateScrollButtons).observe(navContainer);
+        
+        // Initial check
+        updateScrollButtons();
+    }
+
 
     // --- INITIALIZE ---
     function initialize() {
@@ -350,7 +1168,6 @@ document.addEventListener('DOMContentLoaded', function() {
         setupUnitConverter();
         setupCryptoCalculator();
         setupExchangeRateCalculator();
-        setupTimezoneCalculator();
         setupAgeCalculator();
         setupSalaryCalculator();
         setupStockCalculator();
