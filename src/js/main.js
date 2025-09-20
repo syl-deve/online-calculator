@@ -31,13 +31,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const allTabLinks = document.querySelectorAll('.tab-link-item');
     const desktopTitle = document.getElementById('currentCalculatorTitle');
     const calculatorTitles = {
-        unitConverter: '데이터 단위', crypto: '주요 코인 환율', exchangeRate: '세계 환율', age: '만 나이', salary: '연봉 실수령액', commission: '부동산 중개보수', interest: '예/적금 이자', robux: '로벅스 환율', bmi: 'BMI (비만도)', dday: 'D-Day', loan: '대출 이자', gpa: '학점', address: '우편번호 찾기'
+        unitConverter: '데이터 단위', crypto: '주요 코인 환율', exchangeRate: '세계 환율', age: '만 나이', salary: '연봉 실수령액', commission: '부동산 중개보수', interest: '예/적금 이자', robux: '로벅스 환율', bmi: 'BMI (비만도)', dday: 'D-Day', loan: '대출 이자', gpa: '학점', address: '우편번호 찾기', addressConverter: '주소 변환기'
     };
     const calculators = {
-        unitConverter: document.getElementById('unitConverterCalculator'), crypto: document.getElementById('cryptoCalculator'), exchangeRate: document.getElementById('exchangeRateCalculator'), age: document.getElementById('ageCalculator'), salary: document.getElementById('salaryCalculator'), commission: document.getElementById('commissionCalculator'), interest: document.getElementById('interestCalculator'), robux: document.getElementById('robuxCalculator'), bmi: document.getElementById('bmiCalculator'), dday: document.getElementById('ddayCalculator'), loan: document.getElementById('loanCalculator'), gpa: document.getElementById('gpaCalculator'), address: document.getElementById('addressCalculator')
+        unitConverter: document.getElementById('unitConverterCalculator'), crypto: document.getElementById('cryptoCalculator'), exchangeRate: document.getElementById('exchangeRateCalculator'), age: document.getElementById('ageCalculator'), salary: document.getElementById('salaryCalculator'), commission: document.getElementById('commissionCalculator'), interest: document.getElementById('interestCalculator'), robux: document.getElementById('robuxCalculator'), bmi: document.getElementById('bmiCalculator'), dday: document.getElementById('ddayCalculator'), loan: document.getElementById('loanCalculator'), gpa: document.getElementById('gpaCalculator'), address: document.getElementById('addressCalculator'), addressConverter: document.getElementById('addressConverterCalculator')
     };
     const infoSections = {
-        unitConverter: document.getElementById('unitConverterInfo'), crypto: document.getElementById('cryptoInfo'), exchangeRate: document.getElementById('exchangeRateInfo'), age: document.getElementById('ageInfo'), salary: document.getElementById('salaryInfo'), commission: document.getElementById('commissionInfo'), interest: document.getElementById('interestInfo'), robux: document.getElementById('robuxInfo'), bmi: document.getElementById('bmiInfo'), dday: document.getElementById('ddayInfo'), loan: document.getElementById('loanInfo'), gpa: document.getElementById('gpaInfo'), address: document.getElementById('addressInfo')
+        unitConverter: document.getElementById('unitConverterInfo'), crypto: document.getElementById('cryptoInfo'), exchangeRate: document.getElementById('exchangeRateInfo'), age: document.getElementById('ageInfo'), salary: document.getElementById('salaryInfo'), commission: document.getElementById('commissionInfo'), interest: document.getElementById('interestInfo'), robux: document.getElementById('robuxInfo'), bmi: document.getElementById('bmiInfo'), dday: document.getElementById('ddayInfo'), loan: document.getElementById('loanInfo'), gpa: document.getElementById('gpaInfo'), address: document.getElementById('addressInfo'), addressConverter: document.getElementById('addressConverterInfo')
     };
 
     function showTab(tabName) {
@@ -886,6 +886,98 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // 14. Address Converter
+    function setupAddressConverter() {
+        const convertBtn = document.getElementById('convertAddressBtn');
+        const keywordInput = document.getElementById('addressConverterKeyword');
+        const resultContainer = document.getElementById('addressConverterResultContainer');
+
+        convertBtn.addEventListener('click', async () => {
+            const keyword = keywordInput.value;
+            if (!keyword) {
+                resultContainer.innerHTML = '<p class="text-red-500">주소를 입력해주세요.</p>';
+                return;
+            }
+
+            resultContainer.innerHTML = '<p>변환 중...</p>';
+
+            try {
+                const response = await fetch('/.netlify/functions/convert-address', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ keyword }),
+                });
+
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({ error: '서버 응답 오류' }));
+                    throw new Error(errData.error || 'Address conversion failed on server.');
+                }
+
+                const data = await response.json();
+
+                if (data.error) {
+                    resultContainer.innerHTML = `<p class="text-red-500">변환 실패: ${data.error}</p>`;
+                    return;
+                }
+
+                resultContainer.innerHTML = `
+                    <div class="p-4 border rounded-lg bg-gray-50 relative">
+                        <div class="flex justify-between items-start">
+                            <div class="pr-10">
+                                <p class="text-sm text-gray-500">도로명주소</p>
+                                <p id="roadAddrResult" class="font-semibold text-gray-800">${data.roadAddr}</p>
+                            </div>
+                            <button class="copy-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600" data-copy-target="roadAddrResult" data-copy-msg="copyRoadAddrMsg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                            </button>
+                        </div>
+                        <span id="copyRoadAddrMsg" class="copy-message hidden">복사 완료!</span>
+                    </div>
+                    <div class="p-4 border rounded-lg bg-gray-50 relative">
+                        <div class="flex justify-between items-start">
+                            <div class="pr-10">
+                                <p class="text-sm text-gray-500">지번주소</p>
+                                <p id="jibunAddrResult" class="font-semibold text-gray-800">${data.jibunAddr}</p>
+                            </div>
+                            <button class="copy-btn absolute top-4 right-4 text-gray-400 hover:text-gray-600" data-copy-target="jibunAddrResult" data-copy-msg="copyJibunAddrMsg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                            </button>
+                        </div>
+                        <span id="copyJibunAddrMsg" class="copy-message hidden">복사 완료!</span>
+                    </div>
+                    <div class="p-4 border rounded-lg bg-blue-50 relative">
+                        <div class="flex justify-between items-start">
+                            <div class="pr-10">
+                                <p class="text-sm text-blue-500">영문주소 (도로명)</p>
+                                <p id="engAddrResult" class="font-bold text-blue-800">${data.engAddr}</p>
+                            </div>
+                            <button class="copy-btn absolute top-4 right-4 text-blue-400 hover:text-blue-600" data-copy-target="engAddrResult" data-copy-msg="copyEngAddrMsg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                            </button>
+                        </div>
+                        <span id="copyEngAddrMsg" class="copy-message hidden">복사 완료!</span>
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error('Address conversion error:', error);
+                resultContainer.innerHTML = `<p class="text-red-500">변환 중 오류 발생: ${error.message}</p>`;
+            }
+        });
+
+        resultContainer.addEventListener('click', (e) => {
+            const copyBtn = e.target.closest('.copy-btn');
+            if (copyBtn) {
+                const targetId = copyBtn.dataset.copyTarget;
+                const msgId = copyBtn.dataset.copyMsg;
+                const textToCopy = document.getElementById(targetId)?.textContent;
+                if (textToCopy) {
+                    copyToClipboard(textToCopy, msgId);
+                }
+            }
+        });
+    }
+
     // --- Mobile Nav Scroll ---
     function setupMobileNavScroll() {
         const navContainer = document.querySelector('.mobile-nav-container');
@@ -938,6 +1030,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setupLoanCalculator();
         setupGpaCalculator();
         setupAddressCalculator();
+        setupAddressConverter();
         setupMobileNavScroll();
         
         showTab(initialTab);
