@@ -31,12 +31,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const allTabLinks = document.querySelectorAll('.tab-link-item');
     const desktopTitle = document.getElementById('currentCalculatorTitle');
     const calculatorTitles = {
+        percentage: '퍼센트 계산기',
         unitConverter: '데이터 단위', crypto: '주요 코인 환율', exchangeRate: '세계 환율', age: '만 나이', salary: '연봉 실수령액', commission: '부동산 중개보수', interest: '예/적금 이자', robux: '로벅스 환율', bmi: 'BMI (비만도)', dday: 'D-Day', loan: '대출 이자', gpa: '학점', address: '우편번호 찾기', addressConverter: '한/영 주소 변환기'
     };
     const calculators = {
+        percentage: document.getElementById('percentageCalculator'),
         unitConverter: document.getElementById('unitConverterCalculator'), crypto: document.getElementById('cryptoCalculator'), exchangeRate: document.getElementById('exchangeRateCalculator'), age: document.getElementById('ageCalculator'), salary: document.getElementById('salaryCalculator'), commission: document.getElementById('commissionCalculator'), interest: document.getElementById('interestCalculator'), robux: document.getElementById('robuxCalculator'), bmi: document.getElementById('bmiCalculator'), dday: document.getElementById('ddayCalculator'), loan: document.getElementById('loanCalculator'), gpa: document.getElementById('gpaCalculator'), address: document.getElementById('addressCalculator'), addressConverter: document.getElementById('addressConverterCalculator')
     };
     const infoSections = {
+        percentage: document.getElementById('percentageInfo'),
         unitConverter: document.getElementById('unitConverterInfo'), crypto: document.getElementById('cryptoInfo'), exchangeRate: document.getElementById('exchangeRateInfo'), age: document.getElementById('ageInfo'), salary: document.getElementById('salaryInfo'), commission: document.getElementById('commissionInfo'), interest: document.getElementById('interestInfo'), robux: document.getElementById('robuxInfo'), bmi: document.getElementById('bmiInfo'), dday: document.getElementById('ddayInfo'), loan: document.getElementById('loanInfo'), gpa: document.getElementById('gpaInfo'), address: document.getElementById('addressInfo'), addressConverter: document.getElementById('addressConverterInfo')
     };
 
@@ -140,6 +143,92 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // --- SETUP ALL CALCULATORS ---
+
+    // 0. Percentage Calculator
+    function setupPercentageCalculator() {
+        const modeContainer = document.getElementById('percentageModeContainer');
+        const inputsContainer = document.getElementById('percentageInputsContainer');
+        const resultText = document.getElementById('percentageResultText');
+        const errorText = document.getElementById('percentageErrorText');
+        let currentMode = 'percentOf';
+
+        const inputTemplates = {
+            percentOf: `
+                <div><label class="font-semibold text-gray-700">전체 값</label><input type="number" id="percentOf_value1" class="w-full p-3 border rounded-lg mt-1" placeholder="100,000"></div>
+                <div><label class="font-semibold text-gray-700">비율 (%)</label><input type="number" id="percentOf_value2" class="w-full p-3 border rounded-lg mt-1" placeholder="5"></div>
+            `,
+            whatPercent: `
+                <div><label class="font-semibold text-gray-700">일부 값</label><input type="number" id="whatPercent_value1" class="w-full p-3 border rounded-lg mt-1" placeholder="10"></div>
+                <div><label class="font-semibold text-gray-700">전체 값</label><input type="number" id="whatPercent_value2" class="w-full p-3 border rounded-lg mt-1" placeholder="200"></div>
+            `,
+            percentChange: `
+                <div><label class="font-semibold text-gray-700">이전 값</label><input type="number" id="percentChange_value1" class="w-full p-3 border rounded-lg mt-1" placeholder="100"></div>
+                <div><label class="font-semibold text-gray-700">나중 값</label><input type="number" id="percentChange_value2" class="w-full p-3 border rounded-lg mt-1" placeholder="120"></div>
+            `
+        };
+
+        function renderInputs(mode) {
+            inputsContainer.innerHTML = inputTemplates[mode];
+            resultText.textContent = '0';
+            errorText.textContent = '';
+            modeContainer.querySelectorAll('button').forEach(btn => {
+                btn.classList.remove('border-blue-600', 'text-blue-600');
+                btn.classList.add('border-transparent', 'text-gray-500');
+                if (btn.dataset.mode === mode) {
+                    btn.classList.add('border-blue-600', 'text-blue-600');
+                }
+            });
+        }
+
+        async function calculate() {
+            const value1 = parseFloat(document.getElementById(`${currentMode}_value1`).value);
+            const value2 = parseFloat(document.getElementById(`${currentMode}_value2`).value);
+
+            if (isNaN(value1) || isNaN(value2)) {
+                resultText.textContent = '0';
+                errorText.textContent = '';
+                return;
+            }
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-percentage', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mode: currentMode, value1, value2 })
+                });
+
+                const data = await response.json();
+
+                if (response.status !== 200) {
+                    throw new Error(data.error);
+                }
+
+                let finalResult = formatNumber(data.result);
+                if (currentMode === 'whatPercent' || currentMode === 'percentChange') {
+                    finalResult += ' %';
+                }
+                resultText.textContent = finalResult;
+                errorText.textContent = '';
+
+            } catch (err) {
+                resultText.textContent = '-';
+                errorText.textContent = err.message;
+            }
+        }
+
+        modeContainer.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                currentMode = e.target.dataset.mode;
+                renderInputs(currentMode);
+            }
+        });
+
+        inputsContainer.addEventListener('input', calculate);
+        document.getElementById('copyPercentageBtn').addEventListener('click', () => copyToClipboard(resultText.textContent, 'copyPercentageMsg'));
+
+        // Initial render
+        renderInputs(currentMode);
+    }
     
     // 1. Crypto Calculator
     function setupCryptoCalculator() {
@@ -1017,6 +1106,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function initialize() {
         const initialTab = window.location.hash.substring(1) || 'unitConverter';
         
+        setupPercentageCalculator();
         setupUnitConverter();
         setupCryptoCalculator();
         setupExchangeRateCalculator();
