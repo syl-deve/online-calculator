@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const allTabLinks = document.querySelectorAll('.tab-link-item');
     const desktopTitle = document.getElementById('currentCalculatorTitle');
     const calculatorTitles = {
-        unitConverter: '데이터 단위', crypto: '주요 코인 환율', exchangeRate: '세계 환율', age: '만 나이', salary: '연봉 실수령액', commission: '부동산 중개보수', interest: '예/적금 이자', robux: '로벅스 환율', bmi: 'BMI (비만도)', dday: 'D-Day', loan: '대출 이자', gpa: '학점', address: '우편번호 찾기', addressConverter: '주소 변환기'
+        unitConverter: '데이터 단위', crypto: '주요 코인 환율', exchangeRate: '세계 환율', age: '만 나이', salary: '연봉 실수령액', commission: '부동산 중개보수', interest: '예/적금 이자', robux: '로벅스 환율', bmi: 'BMI (비만도)', dday: 'D-Day', loan: '대출 이자', gpa: '학점', address: '우편번호 찾기', addressConverter: '한/영 주소 변환기'
     };
     const calculators = {
         unitConverter: document.getElementById('unitConverterCalculator'), crypto: document.getElementById('cryptoCalculator'), exchangeRate: document.getElementById('exchangeRateCalculator'), age: document.getElementById('ageCalculator'), salary: document.getElementById('salaryCalculator'), commission: document.getElementById('commissionCalculator'), interest: document.getElementById('interestCalculator'), robux: document.getElementById('robuxCalculator'), bmi: document.getElementById('bmiCalculator'), dday: document.getElementById('ddayCalculator'), loan: document.getElementById('loanCalculator'), gpa: document.getElementById('gpaCalculator'), address: document.getElementById('addressCalculator'), addressConverter: document.getElementById('addressConverterCalculator')
