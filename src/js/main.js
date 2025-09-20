@@ -32,15 +32,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const desktopTitle = document.getElementById('currentCalculatorTitle');
     const calculatorTitles = {
         percentage: '퍼센트 계산기',
-        unitConverter: '데이터 단위', crypto: '주요 코인 환율', exchangeRate: '세계 환율', age: '만 나이', salary: '연봉 실수령액', commission: '부동산 중개보수', interest: '예/적금 이자', robux: '로벅스 환율', bmi: 'BMI (비만도)', dday: 'D-Day', loan: '대출 이자', gpa: '학점', address: '우편번호 찾기', addressConverter: '한/영 주소 변환기'
+        unitConverter: '데이터 단위', crypto: '주요 코인 환율', exchangeRate: '세계 환율', age: '만 나이', salary: '연봉 실수령액', stock: '주식 수익률', commission: '부동산 중개보수', interest: '예/적금 이자', robux: '로벅스 환율', bmi: 'BMI (비만도)', dday: 'D-Day', loan: '대출 이자', gpa: '학점', address: '우편번호 찾기', addressConverter: '한/영 주소 변환기'
     };
     const calculators = {
         percentage: document.getElementById('percentageCalculator'),
-        unitConverter: document.getElementById('unitConverterCalculator'), crypto: document.getElementById('cryptoCalculator'), exchangeRate: document.getElementById('exchangeRateCalculator'), age: document.getElementById('ageCalculator'), salary: document.getElementById('salaryCalculator'), commission: document.getElementById('commissionCalculator'), interest: document.getElementById('interestCalculator'), robux: document.getElementById('robuxCalculator'), bmi: document.getElementById('bmiCalculator'), dday: document.getElementById('ddayCalculator'), loan: document.getElementById('loanCalculator'), gpa: document.getElementById('gpaCalculator'), address: document.getElementById('addressCalculator'), addressConverter: document.getElementById('addressConverterCalculator')
+        unitConverter: document.getElementById('unitConverterCalculator'), crypto: document.getElementById('cryptoCalculator'), exchangeRate: document.getElementById('exchangeRateCalculator'), age: document.getElementById('ageCalculator'), salary: document.getElementById('salaryCalculator'), stock: document.getElementById('stockCalculator'), commission: document.getElementById('commissionCalculator'), interest: document.getElementById('interestCalculator'), robux: document.getElementById('robuxCalculator'), bmi: document.getElementById('bmiCalculator'), dday: document.getElementById('ddayCalculator'), loan: document.getElementById('loanCalculator'), gpa: document.getElementById('gpaCalculator'), address: document.getElementById('addressCalculator'), addressConverter: document.getElementById('addressConverterCalculator')
     };
     const infoSections = {
         percentage: document.getElementById('percentageInfo'),
-        unitConverter: document.getElementById('unitConverterInfo'), crypto: document.getElementById('cryptoInfo'), exchangeRate: document.getElementById('exchangeRateInfo'), age: document.getElementById('ageInfo'), salary: document.getElementById('salaryInfo'), commission: document.getElementById('commissionInfo'), interest: document.getElementById('interestInfo'), robux: document.getElementById('robuxInfo'), bmi: document.getElementById('bmiInfo'), dday: document.getElementById('ddayInfo'), loan: document.getElementById('loanInfo'), gpa: document.getElementById('gpaInfo'), address: document.getElementById('addressInfo'), addressConverter: document.getElementById('addressConverterInfo')
+        unitConverter: document.getElementById('unitConverterInfo'), crypto: document.getElementById('cryptoInfo'), exchangeRate: document.getElementById('exchangeRateInfo'), age: document.getElementById('ageInfo'), salary: document.getElementById('salaryInfo'), stock: document.getElementById('stockInfo'), commission: document.getElementById('commissionInfo'), interest: document.getElementById('interestInfo'), robux: document.getElementById('robuxInfo'), bmi: document.getElementById('bmiInfo'), dday: document.getElementById('ddayInfo'), loan: document.getElementById('loanInfo'), gpa: document.getElementById('gpaInfo'), address: document.getElementById('addressInfo'), addressConverter: document.getElementById('addressConverterInfo')
     };
 
     function showTab(tabName) {
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- Auto-formatting number inputs ---
     document.querySelectorAll('input[type="text"]').forEach(input => {
-        const idsToFormat = ['cryptoKrw', 'krw', 'annualSalary', 'price', 'deposit', 'monthlyRent', 'principal', 'loanPrincipal', 'krwInputRobux', 'unitTb', 'unitGb', 'unitMb'];
+        const idsToFormat = ['cryptoKrw', 'krw', 'annualSalary', 'price', 'deposit', 'monthlyRent', 'principal', 'loanPrincipal', 'krwInputRobux', 'unitTb', 'unitGb', 'unitMb', 'buyPrice', 'sellPrice'];
         if(idsToFormat.includes(input.id)) {
             input.addEventListener('input', (e) => {
                 const unformatted = unformatNumber(e.target.value);
@@ -112,6 +112,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('salaryResultNet').textContent = '0 원';
                     document.getElementById('salaryResultGross').textContent = '0 원';
                     document.getElementById('salaryResultDeductions').textContent = '0 원';
+                } else if (calculatorId === 'stock') {
+                    document.getElementById('stockResultProfit').textContent = '0 원';
+                    document.getElementById('stockResultRoi').textContent = '0 %';
+                    document.getElementById('stockResultBuyAmount').textContent = '0 원';
+                    document.getElementById('stockResultSellAmount').textContent = '0 원';
+                    document.getElementById('stockResultDeductions').textContent = '0 원';
                 }
                 else if (calculatorId === 'commission') {
                     document.getElementById('commissionResultText').textContent = '0 원';
@@ -468,8 +474,60 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         document.getElementById('copySalaryBtn').addEventListener('click', () => copyToClipboard(document.getElementById('salaryResultNet').textContent, 'copySalaryMsg'));
     }
+
+    // 5. Stock Profit/Loss Calculator
+    function setupStockCalculator() {
+        const calculateBtn = document.getElementById('stockCalculateBtn');
+        calculateBtn.addEventListener('click', async () => {
+            const buyPrice = Number(unformatNumber(document.getElementById('buyPrice').value));
+            const sellPrice = Number(unformatNumber(document.getElementById('sellPrice').value));
+            const quantity = Number(document.getElementById('quantity').value);
+            const commissionRate = Number(document.getElementById('commissionRate').value);
+            const errorText = document.getElementById('stockErrorText');
+
+            if (buyPrice <= 0 || sellPrice <= 0 || quantity <= 0) {
+                errorText.textContent = "매수/매도 단가와 수량을 정확히 입력해주세요.";
+                return;
+            }
+            errorText.textContent = "";
+
+            try {
+                const response = await fetch('/.netlify/functions/calculate-stock', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ buyPrice, sellPrice, quantity, commissionRate })
+                });
+
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({ error: '서버 응답 오류' }));
+                    throw new Error(errData.error || 'Stock calculation failed on server.');
+                }
+
+                const data = await response.json();
+
+                const profitEl = document.getElementById('stockResultProfit');
+                profitEl.textContent = `${formatNumber(data.profitOrLoss)} 원`;
+                profitEl.classList.toggle('text-red-600', data.profitOrLoss < 0);
+                profitEl.classList.toggle('text-blue-600', data.profitOrLoss > 0);
+
+                const roiEl = document.getElementById('stockResultRoi');
+                roiEl.textContent = `${data.returnOnInvestment} %`;
+                roiEl.classList.toggle('text-red-600', data.returnOnInvestment < 0);
+                roiEl.classList.toggle('text-blue-600', data.returnOnInvestment > 0);
+
+                document.getElementById('stockResultBuyAmount').textContent = `${formatNumber(data.totalBuyAmount)} 원`;
+                document.getElementById('stockResultSellAmount').textContent = `${formatNumber(data.totalSellAmount)} 원`;
+                document.getElementById('stockResultDeductions').textContent = `${formatNumber(data.totalDeductions)} 원`;
+
+            } catch (error) {
+                console.error('Stock calculation error:', error);
+                errorText.textContent = `계산 중 오류가 발생했습니다: ${error.message}`;
+            }
+        });
+        document.getElementById('copyStockProfitBtn').addEventListener('click', () => copyToClipboard(document.getElementById('stockResultProfit').textContent, 'copyStockProfitMsg'));
+    }
     
-    // 5. Commission Calculator
+    // 6. Commission Calculator
     function setupCommissionCalculator() {
         const tradeTypeContainer = document.getElementById('tradeTypeContainer');
         const priceContainer = document.getElementById('priceContainer');
@@ -527,7 +585,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('copyCommissionBtn').addEventListener('click', () => copyToClipboard(document.getElementById('commissionResultText').textContent, 'copyCommissionMsg'));
     }
     
-    // 6. Interest Calculator
+    // 7. Interest Calculator
     function setupInterestCalculator() {
         document.getElementById('interestCalculateBtn').addEventListener('click', async () => {
             const principal = Number(unformatNumber(document.getElementById('principal').value));
@@ -569,7 +627,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('copyInterestBtn').addEventListener('click', () => copyToClipboard(document.getElementById('interestResultTotal').textContent, 'copyInterestMsg'));
     }
     
-    // 7. Robux Calculator
+    // 8. Robux Calculator
     function setupRobuxCalculator() {
         const robuxInput = document.getElementById('robuxInput');
         const krwInput_robux = document.getElementById('krwInputRobux');
@@ -641,7 +699,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fetchInitialRobuxRate().then(updateRobuxInfoText);
     }
     
-    // 8. BMI Calculator
+    // 9. BMI Calculator
     function setupBmiCalculator() {
         document.getElementById('bmiCalculateBtn').addEventListener('click', async () => {
             const height = parseFloat(document.getElementById('height').value);
@@ -682,7 +740,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('copyBmiBtn').addEventListener('click', () => copyToClipboard(document.getElementById('bmiResultText').textContent, 'copyBmiMsg'));
     }
 
-    // 9. D-Day Calculator
+    // 10. D-Day Calculator
     function setupDdayCalculator() {
         document.getElementById('ddayCalculateBtn').addEventListener('click', async () => {
             const ddayDateInput = document.getElementById('ddayDate');
@@ -723,7 +781,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('copyDdayBtn').addEventListener('click', () => copyToClipboard(document.getElementById('ddayResultText').textContent, 'copyDdayMsg'));
     }
 
-    // 10. Loan Calculator
+    // 11. Loan Calculator
     function setupLoanCalculator() {
         document.getElementById('loanCalculateBtn').addEventListener('click', async () => {
             const principal = parseFloat(unformatNumber(document.getElementById('loanPrincipal').value));
@@ -763,7 +821,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('copyLoanBtn').addEventListener('click', () => copyToClipboard(document.getElementById('loanResultTotal').textContent, 'copyLoanMsg'));
     }
     
-    // 11. GPA Calculator
+    // 12. GPA Calculator
     let addGpaRow; // Keep this global as it's used by reset button
     function setupGpaCalculator() {
         const container = document.getElementById('gpaRowsContainer');
@@ -856,7 +914,7 @@ document.addEventListener('DOMContentLoaded', function() {
         addGpaRow(); addGpaRow(); addGpaRow();
     }
     
-    // 12. Unit Converter
+    // 13. Unit Converter
     function setupUnitConverter() {
         const unitInputs = document.querySelectorAll('.unit-input');
         let isUnitCalculating = false;
@@ -918,7 +976,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 13. Address Finder
+    // 14. Address Finder
     function setupAddressCalculator() {
         const searchBtn = document.getElementById('searchAddressBtn');
         const keywordInput = document.getElementById('addressKeyword');
@@ -975,7 +1033,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 14. Address Converter
+    // 15. Address Converter
     function setupAddressConverter() {
         const convertBtn = document.getElementById('convertAddressBtn');
         const keywordInput = document.getElementById('addressConverterKeyword');
@@ -1104,7 +1162,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- INITIALIZE ---
     function initialize() {
-        const initialTab = window.location.hash.substring(1) || 'unitConverter';
+        const initialTab = window.location.hash.substring(1) || 'percentage';
         
         setupPercentageCalculator();
         setupUnitConverter();
@@ -1112,6 +1170,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setupExchangeRateCalculator();
         setupAgeCalculator();
         setupSalaryCalculator();
+        setupStockCalculator();
         setupCommissionCalculator();
         setupInterestCalculator();
         setupRobuxCalculator();

@@ -57,6 +57,10 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-slate-500"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                     연봉 실수령액
                 </a>
+                <a href="#" data-tab-link="stock" class="flex items-center p-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 tab-link-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-slate-500"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                    주식 수익률
+                </a>
                 <a href="#" data-tab-link="commission" class="flex items-center p-2 text-sm font-medium rounded-md text-slate-700 hover:bg-slate-100 tab-link-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-3 text-slate-500"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                     부동산 중개보수
@@ -121,6 +125,7 @@
                     <a href="#" data-tab-link="exchangeRate" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">세계 환율</a>
                     <a href="#" data-tab-link="age" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">만 나이</a>
                     <a href="#" data-tab-link="salary" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">연봉</a>
+                    <a href="#" data-tab-link="stock" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">주식</a>
                     <a href="#" data-tab-link="commission" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">부동산</a>
                     <a href="#" data-tab-link="interest" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">예/적금</a>
                     <a href="#" data-tab-link="robux" class="tab-link-item mobile-nav-link flex-shrink-0 px-4 py-2 text-sm rounded-full bg-slate-100 text-slate-700">로벅스</a>
@@ -351,6 +356,38 @@
                                         </div>
                                     </div>
                                      <div id="salaryErrorText" class="text-red-500 font-semibold pt-2"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 주식 수익률 계산기 -->
+                        <div id="stockCalculator" class="hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="space-y-4">
+                                    <div><label for="buyPrice" class="font-semibold text-gray-700">매수 단가</label><div class="relative mt-2"><input type="text" id="buyPrice" class="w-full p-3 border rounded-lg stock-input" placeholder="10,000"><span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">원</span></div></div>
+                                    <div><label for="sellPrice" class="font-semibold text-gray-700">매도 단가</label><div class="relative mt-2"><input type="text" id="sellPrice" class="w-full p-3 border rounded-lg stock-input" placeholder="12,000"><span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">원</span></div></div>
+                                    <div><label for="quantity" class="font-semibold text-gray-700">수량</label><div class="relative mt-2"><input type="number" id="quantity" class="w-full p-3 border rounded-lg stock-input" placeholder="100"><span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">주</span></div></div>
+                                    <div><label for="commissionRate" class="font-semibold text-gray-700">거래 수수료</label><div class="relative mt-2"><input type="number" id="commissionRate" class="w-full p-3 border rounded-lg stock-input" value="0.015" placeholder="0.015"><span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">%</span></div></div>
+                                    <div class="flex gap-4">
+                                        <button data-calculator="stock" class="reset-btn w-full bg-gray-200 text-gray-700 font-bold py-4 rounded-lg hover:bg-gray-300 transition-colors text-lg">초기화</button>
+                                        <button id="stockCalculateBtn" class="w-full bg-red-500 text-white font-bold py-4 rounded-lg hover:bg-red-600 transition-colors text-lg">수익률 계산하기</button>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-6 flex flex-col justify-center text-center space-y-3">
+                                    <div class="result-container">
+                                        <div><p class="text-gray-600 text-lg">실현 손익</p><div id="stockResultProfit" class="text-4xl font-bold text-gray-800">0 원</div></div>
+                                        <button id="copyStockProfitBtn" class="copy-btn" title="손익 복사">
+                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                        </button>
+                                        <span id="copyStockProfitMsg" class="copy-message hidden">복사 완료!</span>
+                                    </div>
+                                    <div><p class="text-gray-600 text-lg mt-2">수익률</p><div id="stockResultRoi" class="text-3xl font-bold text-gray-800">0 %</div></div>
+                                    <div class="w-full pt-3 border-t text-sm mt-4">
+                                        <div class="flex justify-between"><span class="text-gray-500">총 매수금액</span><span id="stockResultBuyAmount" class="font-semibold text-gray-700">0 원</span></div>
+                                        <div class="flex justify-between mt-1"><span class="text-gray-500">총 매도금액</span><span id="stockResultSellAmount" class="font-semibold text-gray-700">0 원</span></div>
+                                        <div class="flex justify-between mt-1"><span class="text-gray-500">수수료+세금</span><span id="stockResultDeductions" class="font-semibold text-red-500">0 원</span></div>
+                                    </div>
+                                     <div id="stockErrorText" class="text-red-500 font-semibold pt-2"></div>
                                 </div>
                             </div>
                         </div>
@@ -685,6 +722,14 @@
                              <li><strong class="block font-semibold text-gray-800">근로소득세 (소득세)</strong><p class="mt-1 text-gray-600">국세청의 '근로소득 간이세액표'에 따라 월 급여와 공제대상 가족 수(부양가족, 20세 이하 자녀)를 기준으로 정해진 세금을 원천징수합니다.</p></li>
                              <li><strong class="block font-semibold text-gray-800">지방소득세</strong><p class="mt-1 text-gray-600">위에서 계산된 근로소득세의 <span class="font-bold text-indigo-600">10%</span>가 지방소득세로 추가 공제됩니다.</p></li>
                              <li><strong class="block font-semibold text-gray-800">참고 사항</strong><p class="mt-1 text-gray-600">본 계산기는 비과세 소득(예: 식대, 차량유지비 등)을 고려하지 않은 결과이며, 실제 수령액은 개인의 조건에 따라 다소 차이가 있을 수 있습니다.</p></li>
+                        </ul>
+                    </div>
+                    <div id="stockInfo" class="info-content hidden">
+                        <h3>주식 수익률 계산 Tip</h3>
+                        <ul class="space-y-5 text-sm">
+                            <li><strong class="block font-semibold text-gray-800">거래수수료</strong><p class="mt-1 text-gray-600">증권사마다 상이하며, 보통 0.015%로 설정되어 있습니다. 이용하는 증권사의 수수료율을 확인하여 입력하면 더 정확한 결과를 얻을 수 있습니다.</p></li>
+                            <li><strong class="block font-semibold text-gray-800">증권거래세</strong><p class="mt-1 text-gray-600">주식 매도 시에만 부과되는 세금입니다. 2025년 기준 국내 상장주식(코스피, 코스닥)의 증권거래세율은 <span class="font-bold text-red-600">0.18%</span>이며, 계산기에 자동으로 반영됩니다.</p></li>
+                            <li><strong class="block font-semibold text-gray-800">참고 사항</strong><p class="mt-1 text-gray-600">이 계산기는 일반적인 국내 주식 거래를 기준으로 하며, 배당금, 해외 주식 양도소득세 등은 고려되지 않은 결과입니다.</p></li>
                         </ul>
                     </div>
                     <div id="commissionInfo" class="info-content">
