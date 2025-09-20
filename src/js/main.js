@@ -241,27 +241,58 @@ document.addEventListener('DOMContentLoaded', function() {
         const cryptoInputs = document.querySelectorAll('.crypto-input');
         const cryptoRateInfoText = document.getElementById('cryptoRateInfoText');
         const cryptoInfoBox = document.getElementById('cryptoInfoBox');
-        
-        // No need for cryptoRates or isCryptoCalculating on client-side anymore
+
+        async function fetchInitialCryptoRates() {
+            cryptoRateInfoText.textContent = '실시간 코인 시세 정보를 불러오는 중입니다...';
+            try {
+                const response = await fetch('/.netlify/functions/calculate-crypto', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sourceAsset: 'KRW', sourceValue: NaN }), // Send NaN to get just the rates
+                });
+
+                if (!response.ok) {
+                    throw new Error('Crypto rate fetch failed on server.');
+                }
+
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                if (data.btcPriceKrw) {
+                    cryptoRateInfoText.textContent = `실시간 시세 적용 중 (예: 1 BTC = ${formatNumber(data.btcPriceKrw)}원)`;
+                    cryptoInfoBox.className = 'bg-amber-50 border-l-4 border-amber-500 text-amber-700 p-4 rounded-lg mb-6';
+                }
+
+            } catch (error) {
+                console.error('Crypto rate fetch error:', error);
+                cryptoInfoBox.className = 'bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6';
+                cryptoRateInfoText.innerHTML = `<p class="font-bold">오류</p><p>코인 시세 로딩에 실패했습니다. 잠시 후 다시 시도해주세요.</p>`;
+                cryptoInputs.forEach(input => {
+                    input.disabled = true;
+                    input.placeholder = '데이터 로딩 실패';
+                    input.value = '';
+                });
+            }
+        }
 
         async function updateCryptoCalculations(sourceAsset) {
             const sourceInput = document.querySelector(`.crypto-input[data-asset="${sourceAsset}"]`);
             const sourceValue = parseFloat(unformatNumber(sourceInput.value));
 
-            // Clear all other inputs if the source is empty or invalid
             if (isNaN(sourceValue) || sourceInput.value === '') {
                 cryptoInputs.forEach(input => {
                     if (input !== sourceInput) {
                         input.value = '';
                     }
                 });
-                cryptoRateInfoText.textContent = '실시간 코인 시세 정보를 불러오는 중입니다...';
-                cryptoInfoBox.className = 'bg-amber-50 border-l-4 border-amber-500 text-amber-700 p-4 rounded-lg mb-6';
+                // Don't reset the info text, just clear other inputs
                 return;
             }
 
             cryptoRateInfoText.textContent = '계산 중...';
-            cryptoInfoBox.className = 'bg-amber-50 border-l-4 border-amber-500 text-amber-700 p-4 rounded-lg mb-6';
 
             try {
                 const response = await fetch('/.netlify/functions/calculate-crypto', {
@@ -294,14 +325,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 cryptoInfoBox.className = 'bg-amber-50 border-l-4 border-amber-500 text-amber-700 p-4 rounded-lg mb-6';
 
             } catch (error) {
+                // Error handling is already covered by fetchInitialCryptoRates for the initial load
                 console.error('Crypto calculation error:', error);
-                cryptoInfoBox.className = 'bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6';
-                cryptoRateInfoText.innerHTML = `<p class="font-bold">오류</p><p>코인 시세 로딩 또는 계산에 실패했습니다. 잠시 후 다시 시도해주세요.</p>`;
-                cryptoInputs.forEach(input => {
-                    input.disabled = true;
-                    input.placeholder = '데이터 로딩 실패';
-                    input.value = '';
-                });
+                cryptoRateInfoText.textContent = '계산 중 오류가 발생했습니다.';
             }
         }
 
@@ -309,8 +335,7 @@ document.addEventListener('DOMContentLoaded', function() {
             input.addEventListener('input', () => updateCryptoCalculations(input.dataset.asset));
         });
         
-        // Initial fetch to populate rates and info text
-        updateCryptoCalculations('KRW'); // Trigger an initial calculation with a dummy value to fetch rates
+        fetchInitialCryptoRates();
     }
     
     // 2. Exchange Rate Calculator

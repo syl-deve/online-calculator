@@ -31,7 +31,10 @@ exports.handler = async function(event, context) {
         if (isNaN(sourceValue) || sourceValue === '') {
              return {
                 statusCode: 200,
-                body: JSON.stringify({ rates: {} }),
+                body: JSON.stringify({
+                    rates: {},
+                    btcPriceKrw: Math.round(btcToKrw)
+                }),
             };
         }
 
